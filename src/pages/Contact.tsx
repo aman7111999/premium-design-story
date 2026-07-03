@@ -1,7 +1,9 @@
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Seo } from "@/lib/seo";
 import { site } from "@/lib/content";
 import { Reveal } from "@/components/Reveal";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Check, Copy } from "lucide-react";
 
 export default function Contact() {
   return (
