@@ -1,0 +1,14 @@
+[
+  {
+    "group": "Craft",
+    "items": ["Interaction design", "Visual design", "Prototyping", "Motion", "Design systems", "Accessibility"]
+  },
+  {
+    "group": "Process",
+    "items": ["User research", "Jobs-to-be-done", "Service blueprints", "IA", "Usability testing", "Metrics-informed design"]
+  },
+  {
+    "group": "Tools",
+    "items": ["Figma", "Principle", "Framer", "Rive", "Notion", "Linear", "Amplitude", "Maze"]
+  }
+]

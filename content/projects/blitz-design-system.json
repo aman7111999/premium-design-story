@@ -1,0 +1,45 @@
+{
+  "slug": "blitz-design-system",
+  "title": "Blitz — Building a design system for six product surfaces",
+  "company": "Razorpay",
+  "role": "Design Lead",
+  "duration": "10 months · 2024",
+  "category": "Design System",
+  "cover": "gradient-1",
+  "summary": "How I led the design and rollout of Blitz, a unified design system that replaced three inconsistent libraries and reduced ship time across six teams.",
+  "team": ["1 Design Lead (me)", "2 Product Designers", "3 Engineers", "1 PM"],
+  "timeline": "Q1 – Q4 2024",
+  "constraints": ["Zero regressions in live merchant flows", "Ship on top of existing tokens", "Full a11y AA within v1"],
+  "metrics": [
+    { "label": "Ship time", "value": "-38%" },
+    { "label": "Duplicate components removed", "value": "146" },
+    { "label": "Accessibility coverage", "value": "AA" },
+    { "label": "Teams adopted", "value": "6/6" }
+  ],
+  "sections": [
+    {
+      "heading": "Overview",
+      "body": "Razorpay's merchant products had grown organically. Three parallel component libraries, four spacing scales, and every team maintaining its own button. Every new feature paid an interest tax. Blitz set out to remove that tax without slowing anyone down."
+    },
+    {
+      "heading": "Problem",
+      "body": "Designers were spending ~30% of every sprint re-solving problems the system should have already answered. Engineers were reimplementing the same primitives with subtle drift. The cost was invisible on any single feature — obvious across the roadmap."
+    },
+    {
+      "heading": "Research",
+      "body": "I audited 218 screens across six surfaces, tagged every component, and mapped drift. Interviewed 14 designers and 9 engineers about what a system needed to become the default choice. Two insights shaped everything after: adoption is a UX problem, not a compliance problem; and tokens are political — every team wants theirs to be the base."
+    },
+    {
+      "heading": "Approach",
+      "body": "We rebuilt tokens as a three-tier hierarchy (primitive → semantic → component) so teams could compose without forking. Components shipped with usage guidelines, an accessibility contract, and a Figma-to-code parity test. A weekly office hour turned complaints into upstream fixes."
+    },
+    {
+      "heading": "Outcome",
+      "body": "Six surfaces migrated in ten months. Design QA time dropped nearly 40%. The system now ships a release every two weeks with contributions from four different teams. More importantly, Blitz stopped being 'the system team's project' — it became the way we work."
+    },
+    {
+      "heading": "Reflection",
+      "body": "The hardest work was not the tokens or the components. It was earning trust, one PR review at a time, until people stopped asking permission to use the system and started asking permission to extend it."
+    }
+  ]
+}

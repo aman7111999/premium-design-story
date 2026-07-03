@@ -1,0 +1,45 @@
+{
+  "slug": "meera-ai",
+  "title": "Meera — Making an AI assistant feel trustworthy",
+  "company": "CRED",
+  "role": "Lead Product Designer",
+  "duration": "6 months · 2023",
+  "category": "AI Product",
+  "cover": "gradient-2",
+  "summary": "Designing conversation, confidence, and correction for a financial AI assistant serving 4M+ users.",
+  "team": ["1 Lead Designer (me)", "1 Design Researcher", "4 Engineers", "1 PM", "1 ML Lead"],
+  "timeline": "Aug 2023 – Feb 2024",
+  "constraints": ["Regulatory: no financial advice", "Latency budget ≤ 800ms first token", "Fallback path for every intent"],
+  "metrics": [
+    { "label": "Task success", "value": "+27%" },
+    { "label": "First-response satisfaction", "value": "4.6/5" },
+    { "label": "Escalation to support", "value": "-31%" },
+    { "label": "Weekly active users", "value": "1.9M" }
+  ],
+  "sections": [
+    {
+      "heading": "Overview",
+      "body": "Meera was CRED's first user-facing AI product. It had to answer real money questions — 'why did my payment fail' — with humility, precision, and an obvious way out when it was wrong."
+    },
+    {
+      "heading": "Problem",
+      "body": "Early prototypes were fluent but overconfident. Users treated Meera's guesses as facts, then blamed the product when a guess was wrong. Trust, once broken, was expensive to rebuild."
+    },
+    {
+      "heading": "Research",
+      "body": "Diary studies with 22 users showed that confidence is a visual language: hedging phrases, source citations, and 'I don't know' options changed how people used the tool. I designed a confidence scale that mapped model uncertainty to explicit UI states."
+    },
+    {
+      "heading": "Approach",
+      "body": "Every Meera response now shows one of three states: answer with source, best guess with 'verify' CTA, or a graceful handoff to a human. Micro-interactions — the way a suggestion settles, the way a correction is acknowledged — became part of the trust contract."
+    },
+    {
+      "heading": "Outcome",
+      "body": "Task success rose 27% and support escalations dropped by nearly a third, even as usage grew. Users started forgiving mistakes because the product had already told them mistakes were possible."
+    },
+    {
+      "heading": "Reflection",
+      "body": "AI design is less about surface polish and more about the honesty of the interaction. What the model says matters less than how the product carries what it doesn't know."
+    }
+  ]
+}

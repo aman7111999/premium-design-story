@@ -1,0 +1,45 @@
+{
+  "slug": "fintech-dashboard",
+  "title": "Reimagining the merchant dashboard from first principles",
+  "company": "Razorpay",
+  "role": "Senior Product Designer",
+  "duration": "8 months · 2023",
+  "category": "Fintech",
+  "cover": "gradient-3",
+  "summary": "A ground-up redesign of the merchant home built around jobs, not features. Now the default surface for 800k+ businesses.",
+  "team": ["1 Sr. Designer (me)", "1 Researcher", "6 Engineers", "2 PMs"],
+  "timeline": "Feb – Sep 2023",
+  "constraints": ["No breaking API changes", "Progressive rollout", "Must serve both first-time and pro users"],
+  "metrics": [
+    { "label": "Time to first action", "value": "-52%" },
+    { "label": "Weekly active merchants", "value": "+18%" },
+    { "label": "Support tickets on home", "value": "-44%" },
+    { "label": "NPS delta", "value": "+11" }
+  ],
+  "sections": [
+    {
+      "heading": "Overview",
+      "body": "The old dashboard was a launchpad — a wall of links to features. New merchants bounced. Power users built their own workflows outside it. We rebuilt the surface around the five jobs merchants actually did every week."
+    },
+    {
+      "heading": "Problem",
+      "body": "Analytics showed 43% of new merchants never returned after signing up. Interviews confirmed the reason: the dashboard was optimized for the org chart, not the user. Nothing on the home screen told a merchant what to do next."
+    },
+    {
+      "heading": "Research",
+      "body": "We shadowed 12 merchants for a week each. Every session ended with the same finding: the merchant needed one number, one alert, and one next step. Everything else was noise pretending to be signal."
+    },
+    {
+      "heading": "Approach",
+      "body": "The new home is a single column. A headline metric that changes with the merchant's stage. An action queue driven by anomalies and opportunities, not features. A quiet system tray for everything else. Density scales with maturity — pros unlock more, beginners see less."
+    },
+    {
+      "heading": "Outcome",
+      "body": "Time to first meaningful action fell by more than half. Weekly active merchants rose 18% within a quarter. The pattern — 'headline · queue · tray' — is now the shared vocabulary for every merchant surface we design."
+    },
+    {
+      "heading": "Reflection",
+      "body": "Dashboards fail when they answer 'what can I do?' instead of 'what should I do?'. Every good product I've worked on has this trait: it has a point of view about the next best action."
+    }
+  ]
+}

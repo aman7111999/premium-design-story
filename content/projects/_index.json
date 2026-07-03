@@ -1,0 +1,6 @@
+[
+  { "slug": "blitz-design-system", "featured": true, "order": 1 },
+  { "slug": "meera-ai", "featured": true, "order": 2 },
+  { "slug": "fintech-dashboard", "featured": true, "order": 3 },
+  { "slug": "research-home", "featured": false, "order": 4 }
+]

@@ -1,0 +1,40 @@
+{
+  "slug": "research-home",
+  "title": "A research repository that people actually use",
+  "company": "CRED",
+  "role": "Product Designer",
+  "duration": "4 months · 2022",
+  "category": "Internal Tool",
+  "cover": "gradient-4",
+  "summary": "Turning a graveyard of research reports into a queryable knowledge base — used weekly by design, PM, and engineering.",
+  "team": ["1 Designer (me)", "2 Engineers", "1 Research Ops"],
+  "timeline": "Sep – Dec 2022",
+  "constraints": ["Build on existing Notion database", "No dedicated eng team long-term", "Must be maintained by researchers themselves"],
+  "metrics": [
+    { "label": "Weekly active viewers", "value": "184" },
+    { "label": "Reports linked in PRDs", "value": "3.2x" },
+    { "label": "Time to find an insight", "value": "-71%" }
+  ],
+  "sections": [
+    {
+      "heading": "Overview",
+      "body": "The research team was producing excellent work no one could find. Reports lived in Notion, decks lived in Drive, insights lived in slack threads. This project turned that mess into a single home."
+    },
+    {
+      "heading": "Problem",
+      "body": "In interviews, 8 out of 10 PMs said they'd 'probably re-run research that already existed'. The cost was not just wasted studies — it was decisions made without prior context."
+    },
+    {
+      "heading": "Approach",
+      "body": "Insights, not reports, are the atomic unit. Each insight has a claim, a source, a confidence level, and a tag graph. The home surface is a query builder disguised as search: 'insights about onboarding, high confidence, from the last 6 months'."
+    },
+    {
+      "heading": "Outcome",
+      "body": "Weekly viewers grew to nearly 200 people across three functions. PRDs began linking research inline. The research team stopped feeling like a service desk and started acting like a knowledge network."
+    },
+    {
+      "heading": "Reflection",
+      "body": "Internal tools are the highest-leverage design work most companies never invest in. The ROI on a good one is measured in years."
+    }
+  ]
+}
