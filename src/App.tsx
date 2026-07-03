@@ -5,6 +5,8 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { PageTransition } from "@/components/PageTransition";
+import { CursorFollower } from "@/components/CursorFollower";
+import { NoiseOverlay } from "@/components/BackgroundFX";
 import { useLenis } from "@/lib/lenis";
 import Home from "@/pages/Home";
 import Work from "@/pages/Work";
@@ -32,6 +34,8 @@ export default function App() {
       >
         Skip to content
       </a>
+      <NoiseOverlay />
+      <CursorFollower />
       <ReadingProgress />
       <Navbar />
       <ScrollToTop />
