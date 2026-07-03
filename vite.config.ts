@@ -2,11 +2,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { writeFileSync, copyFileSync, existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import mdx from "@mdx-js/rollup";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkMdxFrontmatter from "remark-mdx-frontmatter";
+import remarkGfm from "remark-gfm";
+import { writeFileSync, copyFileSync, existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { resolve, join } from "node:path";
 
-// Small plugin: after build, emit sitemap.xml and copy index.html -> 404.html
-// for GitHub Pages SPA deep-link fallback.
+// Post-build: emit sitemap.xml, copy index.html -> 404.html for GH Pages SPA fallback.
 function ghPagesStatic() {
   return {
     name: "gh-pages-static",
@@ -17,18 +20,16 @@ function ghPagesStatic() {
       if (existsSync(indexPath)) {
         copyFileSync(indexPath, resolve(outDir, "404.html"));
       }
-      // Read project index to build sitemap
-      // Kept intentionally simple: home + static routes + one entry per project slug.
       const site = process.env.VITE_SITE_URL ?? "";
       const staticRoutes = ["/", "/work", "/about", "/contact"];
-      const idxPath = resolve(process.cwd(), "content/projects/_index.json");
-      const projects: { slug: string }[] = existsSync(idxPath)
-        ? JSON.parse(readFileSync(idxPath, "utf8"))
+      const projectsDir = resolve(process.cwd(), "content/projects");
+      const slugs: string[] = existsSync(projectsDir)
+        ? readdirSync(projectsDir).filter((name) => {
+            const full = join(projectsDir, name);
+            return statSync(full).isDirectory() && existsSync(join(full, "index.mdx"));
+          })
         : [];
-      const urls = [
-        ...staticRoutes,
-        ...projects.map((p) => `/projects/${p.slug}`),
-      ]
+      const urls = [...staticRoutes, ...slugs.map((s) => `/projects/${s}`)]
         .map(
           (path) =>
             `  <url><loc>${site}${path}</loc><changefreq>monthly</changefreq></url>`,
@@ -46,15 +47,23 @@ ${urls}
 
 export default defineConfig({
   base: process.env.VITE_BASE ?? "/",
-  plugins: [react(), tailwindcss(), tsconfigPaths(), ghPagesStatic()],
-  server: {
-    host: "::",
-    port: 8080,
-    strictPort: true,
-  },
-  preview: {
-    host: "::",
-    port: 8080,
-    strictPort: true,
-  },
+  plugins: [
+    {
+      enforce: "pre",
+      ...mdx({
+        providerImportSource: "@mdx-js/react",
+        remarkPlugins: [
+          remarkGfm,
+          remarkFrontmatter,
+          [remarkMdxFrontmatter, { name: "frontmatter" }],
+        ],
+      }),
+    },
+    react({ include: /\.(jsx|tsx|mdx)$/ }),
+    tailwindcss(),
+    tsconfigPaths(),
+    ghPagesStatic(),
+  ],
+  server: { host: "::", port: 8080, strictPort: true },
+  preview: { host: "::", port: 8080, strictPort: true },
 });
