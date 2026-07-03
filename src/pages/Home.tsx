@@ -37,14 +37,17 @@ export default function Home() {
             >
               {site.role} · {site.location}
             </motion.p>
-            <h1 className="display-hero mt-6 text-[13vw] leading-[0.9] md:text-[9.5rem]">
+            <h1
+              className="display-hero mt-8"
+              style={{ fontSize: "clamp(3.5rem, 10.5vw, 9rem)" }}
+            >
               {["Product", "you can", "feel."].map((word, i) => (
                 <motion.span
                   key={word}
                   initial={reduce ? false : { y: "110%" }}
                   animate={{ y: "0%" }}
-                  transition={{ duration: 0.9, delay: 0.15 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  className="block overflow-hidden"
+                  transition={{ duration: 1, delay: 0.2 + i * 0.09, ease: [0.22, 1, 0.36, 1] }}
+                  className="block overflow-hidden pb-[0.05em]"
                 >
                   <span className="block">{word}</span>
                 </motion.span>
