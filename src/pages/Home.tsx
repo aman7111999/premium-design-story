@@ -5,6 +5,8 @@ import { site, featuredProjects, experience, skills, testimonials } from "@/lib/
 import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
 import { MagneticButton } from "@/components/MagneticButton";
+import { HeroStage } from "@/components/HeroStage";
+import { DotGrid } from "@/components/BackgroundFX";
 
 export default function Home() {
   const reduce = useReducedMotion();
@@ -23,8 +25,10 @@ export default function Home() {
       <Seo title={`${site.name} — ${site.role}`} description={site.tagline} path="/" jsonLd={jsonLd} />
 
       {/* Hero */}
-      <section className="container-page pt-24 pb-32 md:pt-40 md:pb-48">
-        <div className="grid gap-12 md:grid-cols-12">
+      <section className="relative container-page pt-24 pb-32 md:pt-40 md:pb-48">
+        <DotGrid className="-z-0 opacity-40" />
+        <div className="relative grid gap-12 md:grid-cols-12">
+          <div className="md:col-span-8">
           <div className="md:col-span-9">
             <motion.p
               initial={reduce ? false : { opacity: 0, y: 10 }}
@@ -70,23 +74,13 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <div className="hidden md:col-span-3 md:block">
+          <div className="hidden md:col-span-4 md:block">
             <motion.div
-              initial={reduce ? false : { opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.5 }}
-              className="relative aspect-[3/4] w-full overflow-hidden rounded-lg border border-hairline"
-              style={{
-                background:
-                  "conic-gradient(from 220deg at 60% 40%, #F1EDE4, #E5C7B8, #B6C5BE, #C6BEDA, #F1EDE4)",
-              }}
-              aria-hidden
+              initial={reduce ? false : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
-              <motion.div
-                animate={reduce ? undefined : { rotate: 360 }}
-                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-8 rounded-full border border-white/40"
-              />
+              <HeroStage />
             </motion.div>
           </div>
         </div>
