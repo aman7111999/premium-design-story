@@ -1,8 +1,10 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { ReadingProgress } from "@/components/ReadingProgress";
+import { PageTransition } from "@/components/PageTransition";
 import { useLenis } from "@/lib/lenis";
 import Home from "@/pages/Home";
 import Work from "@/pages/Work";
@@ -21,6 +23,7 @@ function ScrollToTop() {
 
 export default function App() {
   useLenis();
+  const location = useLocation();
   return (
     <>
       <a
@@ -29,17 +32,22 @@ export default function App() {
       >
         Skip to content
       </a>
+      <ReadingProgress />
       <Navbar />
       <ScrollToTop />
       <main id="main" className="pt-16">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/work" element={<Work />} />
-          <Route path="/projects/:slug" element={<ProjectPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnimatePresence mode="wait" initial={false}>
+          <PageTransition key={location.pathname}>
+            <Routes location={location}>
+              <Route path="/" element={<Home />} />
+              <Route path="/work" element={<Work />} />
+              <Route path="/projects/:slug" element={<ProjectPage />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </PageTransition>
+        </AnimatePresence>
       </main>
       <Footer />
     </>
