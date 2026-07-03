@@ -1,6 +1,14 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useReducedMotion, useScroll, useTransform, useSpring } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValue,
+  type MotionValue,
+} from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/lib/content";
 
@@ -26,21 +34,47 @@ export function ProjectCard({ project, index = 0 }: { project: Project; index?: 
   const rawY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
   const y = useSpring(rawY, { stiffness: 80, damping: 20, mass: 0.4 });
 
+  // 3D tilt on pointer
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const rx = useSpring(tiltX, { stiffness: 200, damping: 20 });
+  const ry = useSpring(tiltY, { stiffness: 200, damping: 20 });
+  const onTiltMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (reduce || !ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    tiltY.set(px * 8); // rotateY
+    tiltX.set(-py * 6); // rotateX
+  };
+  const onTiltLeave = () => {
+    tiltX.set(0);
+    tiltY.set(0);
+  };
+
   return (
     <Link
       to={`/projects/${project.slug}`}
       className="group block"
       aria-label={`${project.title} — ${project.company}`}
+      data-cursor="View case"
     >
       <motion.div
         ref={ref}
+        onPointerMove={onTiltMove}
+        onPointerLeave={onTiltLeave}
         initial={reduce ? false : { opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.8, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
         whileHover={reduce ? undefined : { y: -6 }}
         className="relative aspect-[4/3] w-full overflow-hidden rounded-lg border border-hairline transition-shadow duration-500 group-hover:shadow-[0_30px_60px_-30px_rgba(11,11,12,0.25)]"
-        style={{ background: gradients[project.cover] ?? gradients["gradient-1"] }}
+        style={{
+          background: gradients[project.cover] ?? gradients["gradient-1"],
+          rotateX: rx as unknown as MotionValue<number>,
+          rotateY: ry as unknown as MotionValue<number>,
+          transformPerspective: 1000,
+        }}
       >
         {/* Parallax visual layer */}
         <motion.div
