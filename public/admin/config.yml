@@ -1,0 +1,166 @@
+# ─────────────────────────────────────────────────────────────────
+# Decap CMS configuration
+#
+# 1. Replace `repo` below with your GitHub username/repository.
+# 2. After deploying the Cloudflare Worker in /decap-oauth,
+#    replace `base_url` with your Worker URL.
+# 3. Visit /admin on the live site and sign in with GitHub.
+# ─────────────────────────────────────────────────────────────────
+
+backend:
+  name: github
+  repo: your-username/your-repo         # ← CHANGE ME
+  branch: main
+  base_url: https://YOUR-WORKER.workers.dev   # ← CHANGE ME (no trailing slash)
+  auth_endpoint: auth
+
+# Where uploaded images live in the repo.
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+publish_mode: simple
+site_url: /
+display_url: /
+show_preview_links: true
+
+collections:
+  # ── Case studies ──────────────────────────────────────────────
+  - name: projects
+    label: Case studies
+    label_singular: Case study
+    folder: content/projects
+    path: "{{slug}}/index"
+    extension: mdx
+    format: frontmatter
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{title}} — {{company}}"
+    sortable_fields: [order, title, company]
+    view_groups:
+      - { label: Featured, field: featured }
+    fields:
+      - { label: "Slug (URL)",  name: slug,     widget: string, hint: "Lowercase, hyphenated. E.g. blitz-design-system" }
+      - { label: Title,         name: title,    widget: string }
+      - { label: Company,       name: company,  widget: string }
+      - { label: Role,          name: role,     widget: string }
+      - { label: Category,      name: category, widget: string, hint: "E.g. Design System, Fintech, AI Product" }
+      - { label: Duration,      name: duration, widget: string, hint: "E.g. 10 months · 2024" }
+      - { label: Timeline,      name: timeline, widget: string, hint: "E.g. Q1 – Q4 2024" }
+      - label: Cover
+        name: cover
+        widget: string
+        default: gradient-1
+        hint: "Either 'gradient-1'…'gradient-4' or a full image path like /uploads/cover.jpg"
+      - { label: Summary,       name: summary,  widget: text }
+      - { label: Featured on homepage, name: featured, widget: boolean, default: false }
+      - { label: Order,         name: order,    widget: number, default: 99, value_type: int }
+      - label: Team
+        name: team
+        widget: list
+        field: { label: Member, name: member, widget: string }
+      - label: Constraints
+        name: constraints
+        widget: list
+        field: { label: Constraint, name: constraint, widget: string }
+      - label: Metrics
+        name: metrics
+        widget: list
+        fields:
+          - { label: Label, name: label, widget: string }
+          - { label: Value, name: value, widget: string, hint: "E.g. -38% or 1.9M" }
+      - label: Chapter anchors
+        name: sections
+        widget: list
+        hint: "Anchors that appear in the sticky table of contents."
+        fields:
+          - { label: "ID (anchor)", name: id, widget: string }
+          - { label: Label, name: label, widget: string }
+      - label: Body
+        name: body
+        widget: markdown
+        hint: |
+          Rich MDX body. You can use these components:
+          <Section id="…" eyebrow="…" title="…">…</Section>
+          <PullQuote author="…" role="…">…</PullQuote>
+          <Callout kind="insight|decision|warning|learning" title="…">…</Callout>
+          <MetricGrid items={[{label:"…",value:"…"}]} />
+          <Figure src="/uploads/x.jpg" caption="…" />
+          <Gallery images={[{src:"/uploads/x.jpg", caption:"…"}]} />
+          <BeforeAfter before="/uploads/a.jpg" after="/uploads/b.jpg" />
+          <Timeline steps={[{label:"Feb", title:"…", body:"…"}]} />
+          <Steps items={[{title:"…", body:"…"}]} />
+          <Prototype src="https://embed.figma.com/…" />
+          <Divider label="Impact" />
+
+  # ── Global site settings, About, Experience, etc. ─────────────
+  - name: site
+    label: Site & pages
+    files:
+      - label: Site info
+        name: site
+        file: content/site.json
+        fields:
+          - { label: Name,         name: name,     widget: string }
+          - { label: Role,         name: role,     widget: string }
+          - { label: Location,     name: location, widget: string }
+          - { label: Email,        name: email,    widget: string }
+          - { label: Résumé URL,   name: resumeUrl, widget: string }
+          - { label: Tagline,      name: tagline,  widget: text }
+          - { label: Availability, name: availability, widget: string }
+          - label: Socials
+            name: socials
+            widget: object
+            fields:
+              - { label: LinkedIn, name: linkedin, widget: string, required: false }
+              - { label: Twitter,  name: twitter,  widget: string, required: false }
+              - { label: Read.cv,  name: read,     widget: string, required: false }
+              - { label: GitHub,   name: github,   widget: string, required: false }
+
+      - label: About page
+        name: about
+        file: content/about.mdx
+        fields:
+          - { label: Title,    name: title,    widget: string }
+          - { label: Role,     name: role,     widget: string }
+          - { label: Location, name: location, widget: string }
+          - { label: Body,     name: body,     widget: markdown }
+
+      - label: Experience
+        name: experience
+        file: content/experience.json
+        fields:
+          - label: Roles
+            name: roles
+            widget: list
+            fields:
+              - { label: Role,    name: role,    widget: string }
+              - { label: Company, name: company, widget: string }
+              - { label: Period,  name: period,  widget: string }
+              - { label: Summary, name: summary, widget: text }
+
+      - label: Skills
+        name: skills
+        file: content/skills.json
+        fields:
+          - label: Groups
+            name: groups
+            widget: list
+            fields:
+              - { label: Group, name: group, widget: string }
+              - label: Items
+                name: items
+                widget: list
+                field: { label: Item, name: item, widget: string }
+
+      - label: Testimonials
+        name: testimonials
+        file: content/testimonials.json
+        fields:
+          - label: Quotes
+            name: quotes
+            widget: list
+            fields:
+              - { label: Quote,  name: quote,  widget: text }
+              - { label: Author, name: author, widget: string }
+              - { label: Role,   name: role,   widget: string }

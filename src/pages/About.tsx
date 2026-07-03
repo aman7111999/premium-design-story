@@ -1,6 +1,8 @@
+import { MDXProvider } from "@mdx-js/react";
 import { Seo } from "@/lib/seo";
-import { site, experience, skills } from "@/lib/content";
+import { site, experience, skills, About as AboutMDX } from "@/lib/content";
 import { Reveal } from "@/components/Reveal";
+import { mdxComponents } from "@/components/mdx";
 
 export default function About() {
   return (
@@ -27,28 +29,19 @@ export default function About() {
             aria-label="Portrait placeholder"
           />
           <p className="mt-4 text-xs text-[var(--color-muted)]">
-            Portrait placeholder — replace with a real photo.
+            Portrait placeholder — replace with a real photo via /admin.
           </p>
         </Reveal>
 
         <Reveal className="md:col-span-7 md:col-start-6">
           <div className="space-y-6 text-lg leading-relaxed">
-            <p>
-              I'm {site.name}, a product designer based in {site.location}. I've spent the
-              last five years working across fintech, AI, and design systems at companies
-              like Razorpay and CRED.
-            </p>
-            <p>
-              My path into design was slow and non-linear. I studied engineering, worked
-              briefly in research, then found my way to product design through the side
-              door of front-end code. That path shows up in how I work: I care about
-              why the thing exists, how the system supports it, and how the code
-              eventually ships.
-            </p>
-            <p>
-              Outside of work I read too much fiction, take photographs on film, and
-              try to run before it gets hot in Bengaluru.
-            </p>
+            {AboutMDX ? (
+              <MDXProvider components={mdxComponents}>
+                <AboutMDX />
+              </MDXProvider>
+            ) : (
+              <p>About content lives in <code>content/about.mdx</code>.</p>
+            )}
           </div>
         </Reveal>
       </section>

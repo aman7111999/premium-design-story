@@ -1,0 +1,12 @@
+name = "decap-oauth"
+main = "worker.js"
+compatibility_date = "2024-06-01"
+
+# Optional: override the auto-generated Workers subdomain later.
+# routes = [{ pattern = "auth.yourdomain.com/*", zone_name = "yourdomain.com" }]
+
+[vars]
+# The origin allowed to receive the postMessage. Set this to your live site once known.
+# "*" works during setup but tighten it before shipping to production.
+ALLOWED_ORIGIN = "*"
+SCOPE = "repo,user"
