@@ -1,9 +1,10 @@
+import { useRef } from "react";
 import { Link, useParams } from "react-router-dom";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { Seo } from "@/lib/seo";
 import { Reveal } from "@/components/Reveal";
-import { ReadingProgress } from "@/components/ReadingProgress";
+import { CountUp } from "@/components/CountUp";
 import { getProject, getAdjacentProjects, site } from "@/lib/content";
 import NotFound from "./NotFound";
 
