@@ -1,4 +1,4 @@
-import "@fontsource-variable/geist";
+import "@fontsource-variable/geist/index.css";
 import "@fontsource/inter-tight/400.css";
 import "@fontsource/inter-tight/500.css";
 import "@fontsource/inter-tight/600.css";
