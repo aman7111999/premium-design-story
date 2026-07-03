@@ -6,6 +6,17 @@ import { Reveal } from "@/components/Reveal";
 import { ArrowUpRight, Check, Copy } from "lucide-react";
 
 export default function Contact() {
+  const [copied, setCopied] = useState(false);
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(site.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* noop */
+    }
+  };
+
   return (
     <>
       <Seo title="Contact" description={`Get in touch with ${site.name}.`} path="/contact" />
@@ -35,7 +46,41 @@ export default function Contact() {
             {site.email}
             <ArrowUpRight size={28} />
           </a>
+
+          <button
+            type="button"
+            onClick={copyEmail}
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-hairline px-4 py-2 text-xs uppercase tracking-widest text-[var(--color-muted)] transition-colors hover:border-[var(--color-ink)] hover:text-[var(--color-ink)]"
+            aria-live="polite"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {copied ? (
+                <motion.span
+                  key="copied"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.25 }}
+                  className="inline-flex items-center gap-2"
+                >
+                  <Check size={14} /> Copied
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="copy"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  transition={{ duration: 0.25 }}
+                  className="inline-flex items-center gap-2"
+                >
+                  <Copy size={14} /> Copy email
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
         </Reveal>
+
 
         <Reveal className="md:col-span-4 md:col-start-9">
           <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Elsewhere</p>
