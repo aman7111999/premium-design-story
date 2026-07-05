@@ -1,14 +1,14 @@
 import { defineTool } from "@lovable.dev/mcp-js";
-import { siteInfo, skills } from "../data";
+import { fetchSiteInfo, fetchSkills } from "../data";
 
 export default defineTool({
   name: "get_about",
-  title: "About Aman Mishra",
-  description:
-    "Return a concise profile: name, current role, location, tagline, availability, social links, and skill groups.",
+  title: "About the site owner",
+  description: "Return profile info: name, tagline, bio, location, email, socials, and skill groups.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: () => {
+  handler: async () => {
+    const [siteInfo, skills] = await Promise.all([fetchSiteInfo(), fetchSkills()]);
     const about = { ...siteInfo, skills };
     return {
       content: [{ type: "text", text: JSON.stringify(about, null, 2) }],

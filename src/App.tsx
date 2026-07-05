@@ -14,6 +14,21 @@ import ProjectPage from "@/pages/Project";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import NotFound from "@/pages/NotFound";
+import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminLayout from "@/pages/admin/AdminLayout";
+import AdminOverview from "@/pages/admin/Overview";
+import AdminProjectsList from "@/pages/admin/ProjectsList";
+import AdminProjectEditor from "@/pages/admin/ProjectEditor";
+import AdminBlogList from "@/pages/admin/BlogList";
+import AdminBlogEditor from "@/pages/admin/BlogEditor";
+import AdminExperience from "@/pages/admin/ExperienceAdmin";
+import AdminEducation from "@/pages/admin/EducationAdmin";
+import AdminSkills from "@/pages/admin/SkillsAdmin";
+import AdminTestimonials from "@/pages/admin/TestimonialsAdmin";
+import AdminResume from "@/pages/admin/ResumeAdmin";
+import AdminMedia from "@/pages/admin/MediaAdmin";
+import AdminSeo from "@/pages/admin/SeoAdmin";
+import AdminSettings from "@/pages/admin/SettingsAdmin";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -23,9 +38,7 @@ function ScrollToTop() {
   return null;
 }
 
-export default function App() {
-  useLenis();
-  const location = useLocation();
+function PublicShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <a
@@ -38,22 +51,59 @@ export default function App() {
       <CursorFollower />
       <ReadingProgress />
       <Navbar />
-      <ScrollToTop />
       <main id="main" className="pt-16">
-        <AnimatePresence mode="wait" initial={false}>
-          <PageTransition key={location.pathname}>
-            <Routes location={location}>
-              <Route path="/" element={<Home />} />
-              <Route path="/work" element={<Work />} />
-              <Route path="/projects/:slug" element={<ProjectPage />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </PageTransition>
-        </AnimatePresence>
+        {children}
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function App() {
+  useLenis();
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+
+  if (isAdmin) {
+    return (
+      <Routes>
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/*" element={<AdminLayout />}>
+          <Route index element={<AdminOverview />} />
+          <Route path="projects" element={<AdminProjectsList />} />
+          <Route path="projects/new" element={<AdminProjectEditor />} />
+          <Route path="projects/:id" element={<AdminProjectEditor />} />
+          <Route path="blog" element={<AdminBlogList />} />
+          <Route path="blog/new" element={<AdminBlogEditor />} />
+          <Route path="blog/:id" element={<AdminBlogEditor />} />
+          <Route path="experience" element={<AdminExperience />} />
+          <Route path="education" element={<AdminEducation />} />
+          <Route path="skills" element={<AdminSkills />} />
+          <Route path="testimonials" element={<AdminTestimonials />} />
+          <Route path="resume" element={<AdminResume />} />
+          <Route path="media" element={<AdminMedia />} />
+          <Route path="seo" element={<AdminSeo />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
+      </Routes>
+    );
+  }
+
+  return (
+    <PublicShell>
+      <ScrollToTop />
+      <AnimatePresence mode="wait" initial={false}>
+        <PageTransition key={location.pathname}>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/work" element={<Work />} />
+            <Route path="/projects/:slug" element={<ProjectPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </PageTransition>
+      </AnimatePresence>
+    </PublicShell>
   );
 }

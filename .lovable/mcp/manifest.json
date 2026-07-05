@@ -15,7 +15,7 @@
       {
         "name": "list_projects",
         "title": "List case studies",
-        "description": "List Aman Mishra's product design case studies with title, company, role, category, summary, key metrics, and a link.",
+        "description": "List published product design case studies with title, company, role, category, summary, and key metrics.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -26,7 +26,7 @@
           "type": "object",
           "properties": {
             "featuredOnly": {
-              "description": "If true, return only projects marked as featured.",
+              "description": "If true, return only featured projects.",
               "type": "boolean"
             }
           }
@@ -36,7 +36,7 @@
       {
         "name": "get_project",
         "title": "Get case study",
-        "description": "Return the full case study for a given slug, including the MDX body content, metrics, team, constraints, and public URL.",
+        "description": "Return the full case study for a given slug, including the full body content, metrics, and public URL.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -60,8 +60,8 @@
       },
       {
         "name": "get_about",
-        "title": "About Aman Mishra",
-        "description": "Return a concise profile: name, current role, location, tagline, availability, social links, and skill groups.",
+        "title": "About the site owner",
+        "description": "Return profile info: name, tagline, bio, location, email, socials, and skill groups.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -77,7 +77,7 @@
       {
         "name": "get_experience",
         "title": "Work experience",
-        "description": "Return Aman Mishra's work experience — roles, companies, timelines, and highlights.",
+        "description": "Return work experience — roles, companies, timelines, and descriptions.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,

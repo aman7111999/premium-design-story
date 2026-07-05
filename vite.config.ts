@@ -2,13 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import mdx from "@mdx-js/rollup";
-import remarkFrontmatter from "remark-frontmatter";
-import remarkMdxFrontmatter from "remark-mdx-frontmatter";
-import remarkGfm from "remark-gfm";
 import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/supabase/vite";
-import { writeFileSync, copyFileSync, existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { resolve, join } from "node:path";
+import { writeFileSync, copyFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 
 // Post-build: emit sitemap.xml, copy index.html -> 404.html for GH Pages SPA fallback.
 function ghPagesStatic() {
@@ -23,18 +19,8 @@ function ghPagesStatic() {
       }
       const site = process.env.VITE_SITE_URL ?? "";
       const staticRoutes = ["/", "/work", "/about", "/contact"];
-      const projectsDir = resolve(process.cwd(), "content/projects");
-      const slugs: string[] = existsSync(projectsDir)
-        ? readdirSync(projectsDir).filter((name) => {
-            const full = join(projectsDir, name);
-            return statSync(full).isDirectory() && existsSync(join(full, "index.mdx"));
-          })
-        : [];
-      const urls = [...staticRoutes, ...slugs.map((s) => `/projects/${s}`)]
-        .map(
-          (path) =>
-            `  <url><loc>${site}${path}</loc><changefreq>monthly</changefreq></url>`,
-        )
+      const urls = staticRoutes
+        .map((path) => `  <url><loc>${site}${path}</loc><changefreq>monthly</changefreq></url>`)
         .join("\n");
       const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -48,24 +34,7 @@ ${urls}
 
 export default defineConfig({
   base: process.env.VITE_BASE ?? "/",
-  plugins: [
-    {
-      enforce: "pre",
-      ...mdx({
-        providerImportSource: "@mdx-js/react",
-        remarkPlugins: [
-          remarkGfm,
-          remarkFrontmatter,
-          [remarkMdxFrontmatter, { name: "frontmatter" }],
-        ],
-      }),
-    },
-    react({ include: /\.(jsx|tsx|mdx)$/ }),
-    tailwindcss(),
-    tsconfigPaths(),
-    mcpPlugin(),
-    ghPagesStatic(),
-  ],
+  plugins: [react(), tailwindcss(), tsconfigPaths(), mcpPlugin(), ghPagesStatic()],
   server: { host: "::", port: 8080, strictPort: true },
   preview: { host: "::", port: 8080, strictPort: true },
 });

@@ -10,126 +10,90 @@ import { defineTool } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z } from "npm:zod@^4.4.3";
 
 // src/lib/mcp/data.ts
-import matter from "npm:gray-matter@^4.0.3";
-
-// content/site.json
-var site_default = {
-  name: "Aman Mishra",
-  role: "Senior Product Designer",
-  location: "Bengaluru, India",
-  email: "hello@amanmishra.design",
-  resumeUrl: "/resume.pdf",
-  socials: {
-    linkedin: "https://linkedin.com/in/amanmishra",
-    twitter: "https://twitter.com/amanmishra",
-    read: "https://read.cv/amanmishra",
-    github: "https://github.com/amanmishra"
-  },
-  tagline: "Designing thoughtful digital products through research, systems thinking, and interaction craft.",
-  availability: "Open to Senior Product Designer roles"
-};
-
-// content/experience.json
-var experience_default = {
-  roles: [
-    {
-      role: "Senior Product Designer",
-      company: "Razorpay",
-      period: "2023 \u2014 Present",
-      summary: "Leading design for merchant onboarding and risk. Built the Blitz design system now used across 6 product surfaces."
-    },
-    {
-      role: "Product Designer",
-      company: "CRED",
-      period: "2021 \u2014 2023",
-      summary: "Owned end-to-end design for credit card management. Shipped features touching 4M+ MAUs."
-    },
-    {
-      role: "Product Designer",
-      company: "Zeta",
-      period: "2020 \u2014 2021",
-      summary: "Enterprise banking flows. Cut onboarding drop-off from 41% to 17% through research-led iteration."
-    },
-    {
-      role: "Design Intern",
-      company: "Freshworks",
-      period: "2019 \u2014 2020",
-      summary: "First real design job. Learned how systems, patterns, and constraints compose good products."
-    }
-  ]
-};
-
-// content/skills.json
-var skills_default = {
-  groups: [
-    {
-      group: "Craft",
-      items: ["Interaction design", "Visual design", "Prototyping", "Motion", "Design systems", "Accessibility"]
-    },
-    {
-      group: "Process",
-      items: ["User research", "Jobs-to-be-done", "Service blueprints", "Information architecture", "Usability testing", "Metrics-informed design"]
-    },
-    {
-      group: "Tools",
-      items: ["Figma", "Principle", "Framer", "Rive", "Notion", "Linear", "Amplitude", "Maze"]
-    }
-  ]
-};
-
-// src/lib/mcp/data.ts
-var rawProjects = import.meta.glob("../../../content/projects/*/index.mdx", {
-  eager: true,
-  query: "?raw",
-  import: "default"
-});
-function slugFromPath(path) {
-  return path.match(/\/projects\/([^/]+)\/index\.mdx$/)?.[1] ?? "";
+import { createClient } from "npm:@supabase/supabase-js@^2.110.0";
+var SUPABASE_URL = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  typeof globalThis.Deno !== "undefined" && globalThis.Deno.env.get("SUPABASE_URL") || "https://wqaduhgfqgdcejrbzzuc.supabase.co"
+);
+var SUPABASE_KEY = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  typeof globalThis.Deno !== "undefined" && globalThis.Deno.env.get("SUPABASE_ANON_KEY") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxYWR1aGdmcWdkY2VqcmJ6enVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyNTc3MzIsImV4cCI6MjA5ODgzMzczMn0.hyVwYDZ5si7ok5YAUi8urePfID34M3dRM2pwIjdPh0c"
+);
+var sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+async function fetchProjects(opts = {}) {
+  let q = sb.from("projects").select("slug,title,company,role,duration,timeline,category,short_description,featured,metrics").eq("published", true).order("sort_order");
+  if (opts.featuredOnly) q = q.eq("featured", true);
+  const { data, error } = await q;
+  if (error) throw error;
+  return (data ?? []).map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    company: p.company,
+    role: p.role,
+    duration: p.duration,
+    timeline: p.timeline,
+    category: p.category,
+    summary: p.short_description,
+    featured: p.featured,
+    metrics: p.metrics ?? [],
+    url: `/projects/${p.slug}`
+  }));
 }
-var parsed = Object.entries(rawProjects).map(([path, raw]) => {
-  const { data, content } = matter(raw);
-  const slug = data.slug ?? slugFromPath(path);
+async function fetchProject(slug) {
+  const { data, error } = await sb.from("projects").select("*").eq("slug", slug).eq("published", true).maybeSingle();
+  if (error) throw error;
+  if (!data) return null;
+  const p = data;
+  const body = [
+    p.overview,
+    p.problem_statement,
+    p.research,
+    p.design_process,
+    p.solution,
+    p.outcome,
+    p.learnings
+  ].filter(Boolean).join("\n\n---\n\n");
   return {
-    slug,
-    title: data.title ?? slug,
-    company: data.company ?? "",
-    role: data.role ?? "",
-    duration: data.duration ?? "",
-    timeline: data.timeline ?? "",
-    category: data.category ?? "",
-    summary: data.summary ?? "",
-    featured: Boolean(data.featured),
-    order: typeof data.order === "number" ? data.order : 99,
-    metrics: Array.isArray(data.metrics) ? data.metrics : [],
-    team: Array.isArray(data.team) ? data.team : [],
-    constraints: Array.isArray(data.constraints) ? data.constraints : [],
-    url: `https://amanmishra.design/projects/${slug}`,
-    body: content.trim()
+    slug: p.slug,
+    title: p.title,
+    company: p.company,
+    role: p.role,
+    duration: p.duration,
+    timeline: p.timeline,
+    category: p.category,
+    summary: p.short_description,
+    featured: p.featured,
+    metrics: p.metrics ?? [],
+    url: `/projects/${p.slug}`,
+    body
   };
-});
-var projects = parsed.sort((a, b) => a.order - b.order);
-function toSummary(p) {
-  const { body, ...rest } = p;
-  void body;
-  return rest;
 }
-var siteInfo = site_default;
-var experience = experience_default.roles;
-var skills = skills_default.groups;
+async function fetchSiteInfo() {
+  const { data } = await sb.from("site_settings").select("*").eq("id", 1).maybeSingle();
+  return data ?? {};
+}
+async function fetchExperience() {
+  const { data } = await sb.from("experience").select("*").eq("published", true).order("sort_order");
+  return data ?? [];
+}
+async function fetchSkills() {
+  const { data } = await sb.from("skills").select("*").order("sort_order");
+  const groups = {};
+  for (const row of data ?? []) (groups[row.group_name] ??= []).push(row.name);
+  return Object.entries(groups).map(([group, items]) => ({ group, items }));
+}
 
 // src/lib/mcp/tools/list-projects.ts
 var list_projects_default = defineTool({
   name: "list_projects",
   title: "List case studies",
-  description: "List Aman Mishra's product design case studies with title, company, role, category, summary, key metrics, and a link.",
+  description: "List published product design case studies with title, company, role, category, summary, and key metrics.",
   inputSchema: {
-    featuredOnly: z.boolean().optional().describe("If true, return only projects marked as featured.")
+    featuredOnly: z.boolean().optional().describe("If true, return only featured projects.")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: ({ featuredOnly }) => {
-    const items = (featuredOnly ? projects.filter((p) => p.featured) : projects).map(
-      toSummary
-    );
+  handler: async ({ featuredOnly }) => {
+    const items = await fetchProjects({ featuredOnly });
     return {
       content: [{ type: "text", text: JSON.stringify(items, null, 2) }],
       structuredContent: { projects: items }
@@ -143,13 +107,13 @@ import { z as z2 } from "npm:zod@^4.4.3";
 var get_project_default = defineTool2({
   name: "get_project",
   title: "Get case study",
-  description: "Return the full case study for a given slug, including the MDX body content, metrics, team, constraints, and public URL.",
+  description: "Return the full case study for a given slug, including the full body content, metrics, and public URL.",
   inputSchema: {
     slug: z2.string().min(1).describe("The project slug, e.g. 'meera-ai'. Use list_projects to discover slugs.")
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: ({ slug }) => {
-    const project = projects.find((p) => p.slug === slug);
+  handler: async ({ slug }) => {
+    const project = await fetchProject(slug);
     if (!project) {
       return {
         content: [{ type: "text", text: `No project found with slug "${slug}".` }],
@@ -167,11 +131,12 @@ var get_project_default = defineTool2({
 import { defineTool as defineTool3 } from "npm:@lovable.dev/mcp-js@0.20.0";
 var get_about_default = defineTool3({
   name: "get_about",
-  title: "About Aman Mishra",
-  description: "Return a concise profile: name, current role, location, tagline, availability, social links, and skill groups.",
+  title: "About the site owner",
+  description: "Return profile info: name, tagline, bio, location, email, socials, and skill groups.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: () => {
+  handler: async () => {
+    const [siteInfo, skills] = await Promise.all([fetchSiteInfo(), fetchSkills()]);
     const about = { ...siteInfo, skills };
     return {
       content: [{ type: "text", text: JSON.stringify(about, null, 2) }],
@@ -185,24 +150,27 @@ import { defineTool as defineTool4 } from "npm:@lovable.dev/mcp-js@0.20.0";
 var get_experience_default = defineTool4({
   name: "get_experience",
   title: "Work experience",
-  description: "Return Aman Mishra's work experience \u2014 roles, companies, timelines, and highlights.",
+  description: "Return work experience \u2014 roles, companies, timelines, and descriptions.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-  handler: () => ({
-    content: [{ type: "text", text: JSON.stringify(experience, null, 2) }],
-    structuredContent: { experience }
-  })
+  handler: async () => {
+    const experience = await fetchExperience();
+    return {
+      content: [{ type: "text", text: JSON.stringify(experience, null, 2) }],
+      structuredContent: { experience }
+    };
+  }
 });
 
 // src/lib/mcp/tools/contact-inquiry.ts
 import { defineTool as defineTool5 } from "npm:@lovable.dev/mcp-js@0.20.0";
 import { z as z3 } from "npm:zod@^4.4.3";
-import { createClient } from "npm:@supabase/supabase-js@^2.110.0";
+import { createClient as createClient2 } from "npm:@supabase/supabase-js@^2.110.0";
 function getSupabase() {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_ANON_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) throw new Error("Backend is not configured.");
-  return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  return createClient2(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 }
 var contact_inquiry_default = defineTool5({
   name: "contact_inquiry",
