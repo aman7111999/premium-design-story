@@ -6,6 +6,7 @@ import mdx from "@mdx-js/rollup";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import remarkGfm from "remark-gfm";
+import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/supabase/vite";
 import { writeFileSync, copyFileSync, existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { resolve, join } from "node:path";
 
@@ -62,6 +63,7 @@ export default defineConfig({
     react({ include: /\.(jsx|tsx|mdx)$/ }),
     tailwindcss(),
     tsconfigPaths(),
+    mcpPlugin(),
     ghPagesStatic(),
   ],
   server: { host: "::", port: 8080, strictPort: true },
