@@ -60,7 +60,7 @@ function PublicShell({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  useLenis();
+  // useLenis() is disabled temporarily to debug a render loop on /admin
   const location = useLocation();
   const isAdmin = location.pathname.startsWith("/admin");
 
