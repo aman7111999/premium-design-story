@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -18,29 +18,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      if (!mounted) return;
       setSession(s);
       setLoading(false);
     });
     supabase.auth.getSession().then(({ data }) => {
+      if (!mounted) return;
       setSession(data.session);
       setLoading(false);
     });
-    return () => sub.subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
-  const value: AuthCtx = {
-    user: session?.user ?? null,
-    session,
-    loading,
-    async signIn(email, password) {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      return error ? { error: error.message } : {};
-    },
-    async signOut() {
-      await supabase.auth.signOut();
-    },
-  };
+  const value = useMemo<AuthCtx>(
+    () => ({
+      user: session?.user ?? null,
+      session,
+      loading,
+      async signIn(email: string, password: string) {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        return error ? { error: error.message } : {};
+      },
+      async signOut() {
+        await supabase.auth.signOut();
+      },
+    }),
+    [session, loading]
+  );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
