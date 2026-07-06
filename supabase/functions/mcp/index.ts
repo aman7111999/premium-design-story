@@ -13,11 +13,13 @@ import { z } from "npm:zod@^4.4.3";
 import { createClient } from "npm:@supabase/supabase-js@^2.110.0";
 var SUPABASE_URL = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  typeof globalThis.Deno !== "undefined" && globalThis.Deno.env.get("SUPABASE_URL") || "https://wqaduhgfqgdcejrbzzuc.supabase.co"
+  typeof globalThis.Deno !== "undefined" && globalThis.Deno.env.get("SUPABASE_URL") || // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  "https://wqaduhgfqgdcejrbzzuc.supabase.co"
 );
 var SUPABASE_KEY = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  typeof globalThis.Deno !== "undefined" && globalThis.Deno.env.get("SUPABASE_ANON_KEY") || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxYWR1aGdmcWdkY2VqcmJ6enVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyNTc3MzIsImV4cCI6MjA5ODgzMzczMn0.hyVwYDZ5si7ok5YAUi8urePfID34M3dRM2pwIjdPh0c"
+  typeof globalThis.Deno !== "undefined" && globalThis.Deno.env.get("SUPABASE_ANON_KEY") || // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxYWR1aGdmcWdkY2VqcmJ6enVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyNTc3MzIsImV4cCI6MjA5ODgzMzczMn0.hyVwYDZ5si7ok5YAUi8urePfID34M3dRM2pwIjdPh0c"
 );
 var sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 async function fetchProjects(opts = {}) {

@@ -1,15 +1,24 @@
 import { createClient } from "@supabase/supabase-js";
 
+// Public fallback values for build environments that don't inject a .env file (e.g. Vercel).
+const DEFAULT_SUPABASE_URL = "https://wqaduhgfqgdcejrbzzuc.supabase.co";
+const DEFAULT_SUPABASE_PUBLISHABLE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxYWR1aGdmcWdkY2VqcmJ6enVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyNTc3MzIsImV4cCI6MjA5ODgzMzczMn0.hyVwYDZ5si7ok5YAUi8urePfID34M3dRM2pwIjdPh0c";
+
 // Runtime Supabase client. In the MCP edge function these are available via Deno.env.
 // In the local Vite bundle, they come from import.meta.env.
 const SUPABASE_URL =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (typeof (globalThis as any).Deno !== "undefined" && (globalThis as any).Deno.env.get("SUPABASE_URL")) ||
-  (import.meta as any).env?.VITE_SUPABASE_URL;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (import.meta as any).env?.VITE_SUPABASE_URL ||
+  DEFAULT_SUPABASE_URL;
 const SUPABASE_KEY =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (typeof (globalThis as any).Deno !== "undefined" && (globalThis as any).Deno.env.get("SUPABASE_ANON_KEY")) ||
-  (import.meta as any).env?.VITE_SUPABASE_PUBLISHABLE_KEY;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (import.meta as any).env?.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  DEFAULT_SUPABASE_PUBLISHABLE_KEY;
 
 export const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
 
