@@ -14,7 +14,6 @@ import ProjectPage from "@/pages/Project";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import NotFound from "@/pages/NotFound";
-import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminOverview from "@/pages/admin/Overview";
 import AdminProjectsList from "@/pages/admin/ProjectsList";
@@ -67,7 +66,6 @@ export default function App() {
   if (isAdmin) {
     return (
       <Routes>
-        <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/*" element={<AdminLayout />}>
           <Route index element={<AdminOverview />} />
           <Route path="projects" element={<AdminProjectsList />} />

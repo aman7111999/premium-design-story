@@ -3,6 +3,7 @@ import { useAuth, useIsAdmin } from "@/lib/auth";
 import { Loader2, LayoutDashboard, FolderKanban, Newspaper, Briefcase, GraduationCap, Sparkles, MessageSquareQuote, FileText, Image as ImageIcon, Search, Settings, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import AdminLogin from "./AdminLogin";
 
 const nav = [
   { to: "/admin/overview", label: "Overview", icon: LayoutDashboard },
@@ -30,8 +31,14 @@ export default function AdminLayout() {
       </div>
     );
   }
-  if (!user) return <Navigate to="/admin" state={{ from: loc }} replace />;
-  if (!isAdmin) return <Navigate to="/admin" replace />;
+  if (!user) {
+    if (loc.pathname === "/admin") return <AdminLogin />;
+    return <Navigate to="/admin" state={{ from: loc }} replace />;
+  }
+  if (!isAdmin) {
+    if (loc.pathname === "/admin") return <AdminAccessDenied email={user.email} />;
+    return <Navigate to="/admin" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -75,6 +82,22 @@ export default function AdminLayout() {
             <Outlet />
           </div>
         </main>
+      </div>
+    </div>
+  );
+}
+
+function AdminAccessDenied({ email }: { email?: string }) {
+  return (
+    <div className="min-h-screen grid place-items-center bg-[var(--color-paper)] p-6">
+      <div className="max-w-md text-center space-y-4">
+        <h1 className="font-display text-3xl">Not an admin</h1>
+        <p className="text-[var(--color-muted)]">
+          You're signed in as <strong>{email}</strong> but this account has no admin role.
+        </p>
+        <p className="text-sm text-[var(--color-muted)]">
+          Grant the <code>admin</code> role to this user in the <code>user_roles</code> table.
+        </p>
       </div>
     </div>
   );
