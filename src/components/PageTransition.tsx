@@ -1,15 +1,12 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { variants } from "@/lib/motion";
 
 export function PageTransition({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion();
+  if (reduce) return <>{children}</>;
   return (
-    <motion.div
-      initial={reduce ? false : { opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={reduce ? undefined : { opacity: 0, y: -8 }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <motion.div variants={variants.page} initial="hidden" animate="visible" exit="exit">
       {children}
     </motion.div>
   );

@@ -1,14 +1,6 @@
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
-
-const variants: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
-};
+import { variants, viewport } from "@/lib/motion";
 
 type Props = {
   children: ReactNode;
@@ -17,16 +9,20 @@ type Props = {
   once?: boolean;
 };
 
+/**
+ * Legacy Reveal — kept for backwards compatibility.
+ * New code should import { FadeUp, BlurReveal, ScaleReveal } from "@/components/motion".
+ */
 export function Reveal({ children, className, delay = 0, once = true }: Props) {
   const reduce = useReducedMotion();
   if (reduce) return <div className={className}>{children}</div>;
   return (
     <motion.div
       className={className}
-      variants={variants}
+      variants={variants.fadeUp}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "-80px" }}
+      viewport={{ ...viewport, once }}
       transition={{ delay }}
     >
       {children}
