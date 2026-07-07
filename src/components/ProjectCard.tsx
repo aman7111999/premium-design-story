@@ -76,12 +76,13 @@ export function ProjectCard({
       initial={reduce ? false : { opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
+      whileHover={reduce ? undefined : { scale: 1.02 }}
       transition={{
         duration: 0.9,
         delay: index * 0.08,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative"
+      className="group relative will-change-transform"
     >
       <Link
         to={`/projects/${project.slug}`}
