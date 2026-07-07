@@ -99,16 +99,33 @@ export function HeroStage() {
         </div>
       </motion.div>
 
-      {/* Card 2 — metric */}
+      {/* Card 2 — metric (drifts + line draws in on mount) */}
       <motion.div
         style={{ x: l2x, y: l2y }}
+        animate={reduce ? undefined : { y: [0, -3, 0] }}
+        transition={reduce ? undefined : { duration: 6, repeat: Infinity, ease: "easeInOut" }}
         className="absolute right-[6%] top-[28%] w-[52%] rounded-md border border-black/10 bg-white p-4 shadow-[0_20px_50px_-30px_rgba(11,11,12,0.35)]"
       >
         <p className="text-[10px] uppercase tracking-widest text-[var(--color-muted)]">Ship time</p>
         <p className="font-display text-3xl leading-none mt-2">−38%</p>
         <svg viewBox="0 0 100 30" className="mt-3 h-8 w-full">
-          <path d="M0 22 L15 18 L30 20 L45 12 L60 14 L75 8 L100 4" fill="none" stroke="#0b0b0c" strokeWidth="1.2" />
-          <path d="M0 22 L15 18 L30 20 L45 12 L60 14 L75 8 L100 4 L100 30 L0 30 Z" fill="#ff5a1f" opacity="0.12" />
+          <motion.path
+            d="M0 22 L15 18 L30 20 L45 12 L60 14 L75 8 L100 4"
+            fill="none"
+            stroke="#0b0b0c"
+            strokeWidth="1.2"
+            initial={reduce ? false : { pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+          />
+          <motion.path
+            d="M0 22 L15 18 L30 20 L45 12 L60 14 L75 8 L100 4 L100 30 L0 30 Z"
+            fill="#ff5a1f"
+            opacity="0.12"
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: 0.12 }}
+            transition={{ duration: 0.6, delay: 1.6 }}
+          />
         </svg>
       </motion.div>
 
