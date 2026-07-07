@@ -74,11 +74,20 @@ export default function Contact() {
           )}
 
           <form onSubmit={(e) => { e.preventDefault(); submit.mutate(); }} className="mt-12 max-w-lg space-y-4">
-            <div><Label>Name</Label><Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
-            <div><Label>Email</Label><Input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
-            <div><Label>Message</Label><Textarea rows={5} required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} /></div>
-            <Button type="submit" disabled={submit.isPending}>
-              {submit.isPending ? <Loader2 size={14} className="animate-spin" /> : "Send message"}
+            <div>
+              <Label htmlFor="contact-name">Name</Label>
+              <Input id="contact-name" name="name" autoComplete="name" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            </div>
+            <div>
+              <Label htmlFor="contact-email">Email</Label>
+              <Input id="contact-email" name="email" type="email" autoComplete="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+            </div>
+            <div>
+              <Label htmlFor="contact-message">Message</Label>
+              <Textarea id="contact-message" name="message" rows={5} required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} />
+            </div>
+            <Button type="submit" disabled={submit.isPending} aria-label="Send message">
+              {submit.isPending ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : "Send message"}
             </Button>
           </form>
         </Reveal>

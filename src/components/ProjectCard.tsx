@@ -204,7 +204,7 @@ export function ProjectCard({
         </motion.div>
 
         {/* ---------------- Meta rail below the media ---------------- */}
-        <div className="mt-[var(--space-6)] grid gap-[var(--space-6)] md:grid-cols-[1.4fr_1fr]">
+        <div className="mt-[var(--space-6)] grid gap-[var(--space-6)]">
           {/* Left: description + facts */}
           <div className="min-w-0">
             {project.short_description && (
@@ -252,20 +252,20 @@ export function ProjectCard({
 
           {/* Right: impact metrics */}
           {metrics.length > 0 && (
-            <div className="grid grid-cols-3 gap-[var(--space-4)] rounded-[var(--radius-lg)] border border-hairline bg-[var(--color-surface)] p-[var(--space-4)] md:p-[var(--space-5)]">
+            <div className="grid grid-cols-1 gap-[var(--space-4)] rounded-[var(--radius-lg)] border border-hairline bg-[var(--color-surface)] p-[var(--space-4)] sm:grid-cols-3 md:p-[var(--space-5)]">
               {metrics.map((m, i) => (
                 <div
                   key={`${m.label}-${i}`}
-                  className="min-w-0 border-r border-hairline pr-[var(--space-3)] last:border-none last:pr-0"
+                  className="min-w-0 border-b border-hairline pb-[var(--space-3)] last:border-none last:pb-0 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-[var(--space-3)] sm:last:pr-0"
                 >
                   <p className="font-display text-[clamp(1.25rem,2vw,1.75rem)] leading-none tracking-[var(--tracking-tight)] text-[var(--color-text)]">
                     {m.value}
                   </p>
-                  <p className="mt-[var(--space-2)] text-[11px] uppercase tracking-[var(--tracking-widest)] text-[var(--color-muted)]">
+                  <p className="mt-[var(--space-2)] text-[10px] uppercase leading-[1.4] tracking-[0.08em] text-[var(--color-muted)]">
                     {m.label}
                   </p>
                   {m.hint && (
-                    <p className="mt-1 truncate text-[11px] text-[var(--color-subtle)]">
+                    <p className="mt-1 text-[11px] leading-[1.4] text-[var(--color-subtle)]">
                       {m.hint}
                     </p>
                   )}

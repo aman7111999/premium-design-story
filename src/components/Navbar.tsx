@@ -18,7 +18,7 @@ export function Navbar() {
     { to: "/", label: "Home" },
     { to: "/work", label: "Work" },
     { to: "/about", label: "About" },
-    { to: "/writing", label: "Writing" },
+    // Writing/blog is not yet a public route — hidden from nav to avoid dead links
     ...(site?.resume_url ? [{ to: site.resume_url, label: "Resume", external: true }] : []),
     { to: "/contact", label: "Contact" },
   ];
