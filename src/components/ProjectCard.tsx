@@ -261,11 +261,11 @@ export function ProjectCard({
                   <p className="font-display text-[clamp(1.25rem,2vw,1.75rem)] leading-none tracking-[var(--tracking-tight)] text-[var(--color-text)]">
                     {m.value}
                   </p>
-                  <p className="mt-[var(--space-2)] text-[11px] uppercase tracking-[var(--tracking-widest)] text-[var(--color-muted)]">
+                  <p className="mt-[var(--space-2)] break-words text-[11px] uppercase leading-[1.35] tracking-[0.12em] text-[var(--color-muted)]">
                     {m.label}
                   </p>
                   {m.hint && (
-                    <p className="mt-1 truncate text-[11px] text-[var(--color-subtle)]">
+                    <p className="mt-1 break-words text-[11px] text-[var(--color-subtle)]">
                       {m.hint}
                     </p>
                   )}
