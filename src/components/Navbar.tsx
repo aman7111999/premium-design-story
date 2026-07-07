@@ -51,10 +51,34 @@ export function Navbar() {
               : "max-w-[1120px] bg-transparent py-2.5")
           }
         >
-          <NavLink to="/" className="flex items-center gap-2 font-display text-[15px]">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-            <span>{site?.name ?? "Aman Mishra"}</span>
+          <NavLink to="/" aria-label={`${site?.name ?? "Aman Mishra"} — Home`} className="group flex items-center gap-2.5">
+            <span
+              aria-hidden
+              className="relative grid h-7 w-7 place-items-center rounded-[8px] border border-[var(--color-hairline-strong)] font-display text-[11px] font-medium tracking-[-0.06em] text-[var(--color-text)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
+              style={{
+                background:
+                  "linear-gradient(140deg, var(--color-elevated) 0%, var(--color-surface) 100%)",
+              }}
+            >
+              <span
+                className="pointer-events-none absolute -inset-px rounded-[9px] opacity-60"
+                style={{
+                  background:
+                    "radial-gradient(120% 120% at 30% 0%, var(--color-accent-glow) 0%, transparent 55%)",
+                }}
+              />
+              <span className="relative">AM</span>
+            </span>
+            <span className="flex items-baseline gap-2">
+              <span className="font-display text-[15px] tracking-[-0.01em] text-[var(--color-text)]">
+                {site?.name ?? "Aman Mishra"}
+              </span>
+              <span className="mono hidden text-[10px] uppercase tracking-[0.18em] text-[var(--color-subtle)] lg:inline">
+                / Product Designer
+              </span>
+            </span>
           </NavLink>
+
 
           <ul className="hidden items-center gap-1 md:flex">
             {links.map((l) =>

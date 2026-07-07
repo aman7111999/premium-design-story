@@ -204,6 +204,13 @@
     0 20px 60px -30px var(--color-accent-glow);
 }
 
+/* Concentric ring pulse — signal indicator (not notification dot). */
+@keyframes ring-pulse {
+  0%   { transform: scale(1);   opacity: 0.75; }
+  70%  { transform: scale(2.4); opacity: 0;    }
+  100% { transform: scale(2.4); opacity: 0;    }
+}
+
 /* View-transition for theme swap (Chromium). */
 ::view-transition-old(root),
 ::view-transition-new(root) {

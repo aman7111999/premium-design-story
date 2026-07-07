@@ -1,17 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
-// Global cursor: solid accent-red dot with a soft trailing delay.
-// Scales up over interactive elements. Hidden on touch / reduced motion.
+/**
+ * Focus-reticle cursor: outer trailing ring + near-instant inner core.
+ * On interactive elements the ring scales up and the core fades, creating
+ * a targeting-reticle feel instead of a blob. Hidden on touch / reduced-motion.
+ */
 export function CursorFollower() {
   const [enabled, setEnabled] = useState(false);
   const [active, setActive] = useState(false);
 
-  const x = useMotionValue(-100);
-  const y = useMotionValue(-100);
-  // Softer spring => visible trailing delay.
-  const sx = useSpring(x, { stiffness: 180, damping: 22, mass: 0.9 });
-  const sy = useSpring(y, { stiffness: 180, damping: 22, mass: 0.9 });
+  // Ring (trailing)
+  const rx = useMotionValue(-100);
+  const ry = useMotionValue(-100);
+  const srx = useSpring(rx, { stiffness: 170, damping: 22, mass: 0.9 });
+  const sry = useSpring(ry, { stiffness: 170, damping: 22, mass: 0.9 });
+
+  // Core (near-instant)
+  const cx = useMotionValue(-100);
+  const cy = useMotionValue(-100);
+  const scx = useSpring(cx, { stiffness: 800, damping: 40, mass: 0.4 });
+  const scy = useSpring(cy, { stiffness: 800, damping: 40, mass: 0.4 });
+
   const raf = useRef(0);
   const pending = useRef<{ x: number; y: number } | null>(null);
 
@@ -23,8 +33,10 @@ export function CursorFollower() {
 
     const flush = () => {
       if (pending.current) {
-        x.set(pending.current.x);
-        y.set(pending.current.y);
+        rx.set(pending.current.x);
+        ry.set(pending.current.y);
+        cx.set(pending.current.x);
+        cy.set(pending.current.y);
         pending.current = null;
       }
       raf.current = 0;
@@ -35,7 +47,7 @@ export function CursorFollower() {
 
       const target = e.target as HTMLElement | null;
       const clickable = !!target?.closest(
-        "a, button, [role='button'], input, textarea, select, label, [data-cursor], .group"
+        "a, button, [role='button'], input, textarea, select, label, [data-cursor]"
       );
       setActive(clickable);
     };
@@ -48,24 +60,49 @@ export function CursorFollower() {
       window.removeEventListener("pointerleave", onLeave);
       if (raf.current) cancelAnimationFrame(raf.current);
     };
-  }, [x, y]);
+  }, [rx, ry, cx, cy]);
 
   if (!enabled) return null;
 
   return (
     <>
+      {/* Outer ring — trailing, scales on hover */}
       <motion.div
         aria-hidden
-        style={{ x: sx, y: sy }}
+        style={{ x: srx, y: sry }}
         className="pointer-events-none fixed left-0 top-0 z-[80] -translate-x-1/2 -translate-y-1/2"
       >
         <motion.div
-          animate={{ scale: active ? 1.5 : 1 }}
-          transition={{ type: "spring", stiffness: 300, damping: 22 }}
-          className="h-2 w-2 rounded-full"
+          animate={{
+            scale: active ? 1.5 : 1,
+            opacity: active ? 0.9 : 0.55,
+          }}
+          transition={{ type: "spring", stiffness: 260, damping: 24 }}
+          className="h-[18px] w-[18px] rounded-full border"
+          style={{
+            borderColor: "var(--color-accent)",
+            boxShadow: "0 0 12px -2px var(--color-accent-glow)",
+          }}
+        />
+      </motion.div>
+
+      {/* Inner core — near-instant, fades under interactive targets */}
+      <motion.div
+        aria-hidden
+        style={{ x: scx, y: scy }}
+        className="pointer-events-none fixed left-0 top-0 z-[81] -translate-x-1/2 -translate-y-1/2"
+      >
+        <motion.div
+          animate={{
+            scale: active ? 0.6 : 1,
+            opacity: active ? 0.35 : 1,
+          }}
+          transition={{ type: "spring", stiffness: 320, damping: 24 }}
+          className="h-[3px] w-[3px] rounded-full"
           style={{ background: "var(--color-accent)" }}
         />
       </motion.div>
+
       <style>{`
         @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
           html, body { cursor: none; }

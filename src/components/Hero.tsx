@@ -119,12 +119,17 @@ export function Hero() {
           className="flex flex-wrap items-center gap-2"
         >
           <Badge tone="accent">
-            <span className="relative inline-flex h-1.5 w-1.5">
-              <span className="absolute inset-0 rounded-full bg-[var(--color-accent)] opacity-75 animate-ping" />
-              <span className="relative h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
+            <span aria-hidden className="relative inline-flex h-2.5 w-2.5 items-center justify-center">
+              <span
+                className="absolute inset-0 rounded-full border border-[var(--color-accent)] opacity-70"
+                style={{ animation: "ring-pulse 1.8s cubic-bezier(0.22,1,0.36,1) infinite" }}
+              />
+              <span className="relative h-[5px] w-[5px] rounded-full bg-[var(--color-accent)]" />
+              <span className="absolute inset-0 rounded-full border border-[var(--color-accent)] opacity-40" />
             </span>
             Available for senior roles · 2026
           </Badge>
+
           <Tag>Senior Product Designer</Tag>
           <Tag>{site?.location ?? "Mumbai, India"}</Tag>
         </motion.div>
