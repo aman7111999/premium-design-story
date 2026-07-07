@@ -297,7 +297,7 @@ export function SingleImageUpload({
           aspectClass,
         )}
       >
-        <img src={value} alt="" className="h-full w-full object-cover" />
+        <img src={value} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
         {busy && (
           <div className="absolute inset-0 grid place-items-center bg-black/40 text-white">
             <Loader2 className="animate-spin" />
