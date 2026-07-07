@@ -49,11 +49,16 @@ export function Navbar() {
               <li key={l.to}>
                 <NavLink
                   to={l.to} end={l.to === "/"}
-                  className={({ isActive }) => `text-sm tracking-wide transition-opacity ${isActive ? "opacity-100" : "opacity-60 hover:opacity-100"}`}
+                  className={({ isActive }) => `group/nav text-sm tracking-wide transition-opacity ${isActive ? "opacity-100" : "opacity-60 hover:opacity-100"}`}
                 >
                   {({ isActive }) => (
-                    <span className="relative">
+                    <span className="relative inline-block">
                       {l.label}
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-[var(--color-ink)] transition-transform duration-500 group-hover/nav:scale-x-100"
+                        style={{ transitionTimingFunction: "cubic-bezier(0.34, 1.56, 0.64, 1)" }}
+                      />
                       {isActive && <motion.span layoutId="nav-underline" className="absolute -bottom-1 left-0 right-0 h-px bg-[var(--color-ink)]" />}
                     </span>
                   )}
