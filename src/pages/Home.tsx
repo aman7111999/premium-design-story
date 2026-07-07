@@ -62,26 +62,42 @@ export default function Home() {
       </section>
 
       {/* ==================== FEATURED WORK ==================== */}
-      <section className="container-page py-24 md:py-32">
+      <section id="work" className="container-page py-24 md:py-32">
         <Reveal className="flex flex-wrap items-end justify-between gap-6 border-b border-hairline pb-8">
           <div>
             <p className="eyebrow">01 — Selected work</p>
             <h2 className="display-2 mt-4">Case studies</h2>
-            <p className="mt-3 max-w-lg text-[var(--color-muted)]">
-              Long-form deep dives into how the product changed, and what changed because of it.
+            <p className="mt-3 max-w-xl text-[var(--color-muted)]">
+              Long-form deep dives into how the product changed, and what changed
+              because of it — problem, decisions, tradeoffs, and measurable impact.
             </p>
           </div>
-          <Link to="/work" className="group inline-flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-text)]">
+          <Link
+            to="/work"
+            className="group inline-flex items-center gap-2 text-sm text-[var(--color-muted)] hover:text-[var(--color-text)]"
+          >
             All projects
-            <ArrowUpRight size={14} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <ArrowUpRight
+              size={14}
+              className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            />
           </Link>
         </Reveal>
 
-        <div className="mt-14 grid gap-x-8 gap-y-16 md:grid-cols-2">
-          {fLoading && [1, 2].map((i) => <Skeleton key={i} className="aspect-[4/3] w-full rounded-[var(--radius-lg)]" />)}
-          {featured?.map((p, i) => <ProjectCard key={p.slug} project={p} index={i} />)}
+        <div className="mt-16 flex flex-col gap-24 md:gap-32">
+          {fLoading &&
+            [1, 2].map((i) => (
+              <Skeleton
+                key={i}
+                className="aspect-[16/10] w-full rounded-[var(--radius-xl)]"
+              />
+            ))}
+          {featured?.map((p, i) => (
+            <ProjectCard key={p.slug} project={p} index={i} />
+          ))}
         </div>
       </section>
+
 
       {/* ==================== EXPERIENCE TEASER ==================== */}
       {(experience?.length ?? 0) > 0 && (
