@@ -68,6 +68,7 @@ export default function App() {
       <Routes>
         <Route path="/admin/*" element={<AdminLayout />}>
           <Route index element={<AdminOverview />} />
+          <Route path="overview" element={<AdminOverview />} />
           <Route path="projects" element={<AdminProjectsList />} />
           <Route path="projects/new" element={<AdminProjectEditor />} />
           <Route path="projects/:id" element={<AdminProjectEditor />} />
