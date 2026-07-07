@@ -31,8 +31,15 @@ export default function Home() {
         <DotGrid className="-z-0 opacity-40" />
         <div className="relative grid gap-12 md:grid-cols-12">
           <div className="md:col-span-8">
-            <motion.p initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-sm uppercase tracking-[0.2em] text-[var(--color-muted)]">
-              Product Designer{site?.location ? ` · ${site.location}` : ""}
+            <motion.p initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="flex items-center gap-2 text-sm uppercase tracking-[0.2em] text-[var(--color-muted)]">
+              <motion.span
+                aria-hidden
+                className="inline-block h-1.5 w-1.5 rounded-full"
+                style={{ background: "var(--color-accent)" }}
+                animate={reduce ? undefined : { opacity: [1, 0.35, 1], scale: [1, 1.2, 1] }}
+                transition={reduce ? undefined : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <span>Product Designer{site?.location ? ` · ${site.location}` : ""}</span>
             </motion.p>
             <h1 className="display-hero mt-8" style={{ fontSize: "clamp(3.5rem, 10.5vw, 9rem)" }}>
               {["Product", "you can", "feel."].map((word, i) => (
