@@ -54,5 +54,20 @@ export default defineConfig(({ mode }) => {
         env.VITE_SUPABASE_PUBLISHABLE_KEY || DEFAULT_SUPABASE_PUBLISHABLE_KEY
       ),
     },
+    build: {
+      target: "es2020",
+      cssCodeSplit: true,
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            "react-vendor": ["react", "react-dom", "react-router-dom"],
+            "motion-vendor": ["framer-motion"],
+            "supabase-vendor": ["@supabase/supabase-js"],
+            "query-vendor": ["@tanstack/react-query"],
+          },
+        },
+      },
+    },
   };
 });
