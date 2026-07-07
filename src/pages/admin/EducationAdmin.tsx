@@ -105,7 +105,7 @@ export default function EducationAdmin() {
     >
       {isLoading ? (
         <LoadingRows count={2} height={140} />
-      ) : data.length === 0 ? (
+      ) : (data ?? []).length === 0 ? (
         <EmptyState
           icon={GraduationCap}
           title="No entries yet"
@@ -115,7 +115,7 @@ export default function EducationAdmin() {
         />
       ) : (
         <SortableList
-          items={data.map((r) => ({ id: r.id, data: r }))}
+          items={(data ?? []).map((r) => ({ id: r.id, data: r }))}
           onReorder={(ids) => reorder.mutate(ids)}
           renderItem={({ data: row }, handle) => {
             const m = { ...row, ...drafts[row.id] };

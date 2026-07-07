@@ -106,7 +106,7 @@ export default function TestimonialsAdmin() {
     >
       {isLoading ? (
         <LoadingRows count={2} height={160} />
-      ) : data.length === 0 ? (
+      ) : (data ?? []).length === 0 ? (
         <EmptyState
           icon={MessageSquareQuote}
           title="No testimonials yet"
@@ -116,7 +116,7 @@ export default function TestimonialsAdmin() {
         />
       ) : (
         <SortableList
-          items={data.map((r) => ({ id: r.id, data: r }))}
+          items={(data ?? []).map((r) => ({ id: r.id, data: r }))}
           onReorder={(ids) => reorder.mutate(ids)}
           renderItem={({ data: row }, handle) => {
             const m = { ...row, ...drafts[row.id] };
