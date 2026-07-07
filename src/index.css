@@ -2,63 +2,201 @@
 @source "../src";
 
 /* ============================================================
-   Dual-theme tokens. Dark is default.
-   Legacy tokens (--color-ink, --color-paper) are aliased for
-   backwards compatibility with components not yet migrated.
+   DESIGN TOKENS — single source of truth.
+   All primitives read from these. Never hardcode a color, radius,
+   shadow, or duration in a component.
    ============================================================ */
 
+/* -------- Theme: DARK (default) -------- */
 :root,
 [data-theme="dark"] {
-  --color-bg: #0A0A0B;
-  --color-surface: #111114;
-  --color-card: #17171A;
-  --color-elevated: #1E1E22;
-  --color-text: #F5F5F7;
-  --color-muted: #9A9AA1;
-  --color-subtle: #6B6B70;
-  --color-hairline: rgba(255, 255, 255, 0.08);
+  /* Surfaces */
+  --color-bg:              #0A0A0B;
+  --color-surface:         #111114;
+  --color-card:            #17171A;
+  --color-elevated:        #1E1E22;
+  --color-overlay:         rgba(10, 10, 11, 0.72);
+
+  /* Ink */
+  --color-text:            #F5F5F7;
+  --color-muted:           #9A9AA1;
+  --color-subtle:          #6B6B70;
+  --color-inverse:         #0A0A0B;
+
+  /* Hairlines / borders */
+  --color-hairline:        rgba(255, 255, 255, 0.08);
   --color-hairline-strong: rgba(255, 255, 255, 0.14);
-  --color-accent: #3B82F6;
-  --color-accent-hover: #60A5FA;
-  --color-accent-glow: rgba(59, 130, 246, 0.35);
-  --color-accent-wash: rgba(59, 130, 246, 0.08);
+  --color-hairline-focus:  rgba(255, 255, 255, 0.28);
+
+  /* Accent */
+  --color-accent:          #3B82F6;
+  --color-accent-hover:    #60A5FA;
+  --color-accent-pressed:  #2563EB;
+  --color-accent-contrast: #FFFFFF;
+  --color-accent-glow:     rgba(59, 130, 246, 0.35);
+  --color-accent-wash:     rgba(59, 130, 246, 0.08);
+  --color-accent-ring:     rgba(59, 130, 246, 0.45);
+
+  /* Semantic states */
+  --color-success:         #22C55E;
+  --color-warning:         #F59E0B;
+  --color-danger:          #EF4444;
+
+  /* Elevation (dark) — cool shadows, negligible ambient */
+  --elevation-0: none;
+  --elevation-1: 0 1px 0 0 rgba(255,255,255,0.04) inset,
+                 0 1px 2px 0 rgba(0,0,0,0.4);
+  --elevation-2: 0 1px 0 0 rgba(255,255,255,0.05) inset,
+                 0 8px 24px -12px rgba(0,0,0,0.6);
+  --elevation-3: 0 1px 0 0 rgba(255,255,255,0.06) inset,
+                 0 24px 60px -30px rgba(0,0,0,0.7);
+  --elevation-4: 0 1px 0 0 rgba(255,255,255,0.06) inset,
+                 0 40px 100px -40px rgba(0,0,0,0.8);
+  --elevation-accent: 0 20px 60px -20px var(--color-accent-glow);
+
+  /* Glass */
+  --glass-bg:      color-mix(in oklab, var(--color-surface) 68%, transparent);
+  --glass-blur:    16px;
+  --glass-border:  var(--color-hairline);
 
   /* Legacy aliases */
-  --color-ink: var(--color-text);
+  --color-ink:   var(--color-text);
   --color-paper: var(--color-bg);
 
   color-scheme: dark;
 }
 
+/* -------- Theme: LIGHT -------- */
 [data-theme="light"] {
-  --color-bg: #FAFAF7;
-  --color-surface: #F3F1EC;
-  --color-card: #FFFFFF;
-  --color-elevated: #FFFFFF;
-  --color-text: #0A0A0B;
-  --color-muted: #52525B;
-  --color-subtle: #71717A;
-  --color-hairline: rgba(10, 10, 11, 0.08);
-  --color-hairline-strong: rgba(10, 10, 11, 0.14);
-  --color-accent: #2563EB;
-  --color-accent-hover: #1D4ED8;
-  --color-accent-glow: rgba(37, 99, 235, 0.22);
-  --color-accent-wash: rgba(37, 99, 235, 0.06);
+  --color-bg:              #FAFAF7;
+  --color-surface:         #F3F1EC;
+  --color-card:            #FFFFFF;
+  --color-elevated:        #FFFFFF;
+  --color-overlay:         rgba(250, 250, 247, 0.75);
 
-  --color-ink: var(--color-text);
+  --color-text:            #0A0A0B;
+  --color-muted:           #52525B;
+  --color-subtle:          #71717A;
+  --color-inverse:         #FFFFFF;
+
+  --color-hairline:        rgba(10, 10, 11, 0.08);
+  --color-hairline-strong: rgba(10, 10, 11, 0.14);
+  --color-hairline-focus:  rgba(10, 10, 11, 0.28);
+
+  --color-accent:          #2563EB;
+  --color-accent-hover:    #1D4ED8;
+  --color-accent-pressed:  #1E40AF;
+  --color-accent-contrast: #FFFFFF;
+  --color-accent-glow:     rgba(37, 99, 235, 0.22);
+  --color-accent-wash:     rgba(37, 99, 235, 0.06);
+  --color-accent-ring:     rgba(37, 99, 235, 0.35);
+
+  --color-success:         #16A34A;
+  --color-warning:         #D97706;
+  --color-danger:          #DC2626;
+
+  /* Elevation (light) — warm ambient shadows */
+  --elevation-0: none;
+  --elevation-1: 0 1px 2px 0 rgba(10,10,11,0.05);
+  --elevation-2: 0 8px 24px -12px rgba(10,10,11,0.12);
+  --elevation-3: 0 24px 60px -30px rgba(10,10,11,0.2);
+  --elevation-4: 0 40px 100px -40px rgba(10,10,11,0.28);
+  --elevation-accent: 0 20px 60px -20px var(--color-accent-glow);
+
+  --glass-bg:     color-mix(in oklab, var(--color-surface) 72%, transparent);
+  --glass-blur:   14px;
+  --glass-border: var(--color-hairline);
+
+  --color-ink:   var(--color-text);
   --color-paper: var(--color-bg);
 
   color-scheme: light;
 }
 
+/* -------- Non-color tokens (theme-independent) -------- */
+:root {
+  /* Radius scale */
+  --radius-xs:  4px;
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-2xl: 32px;
+  --radius-pill: 9999px;
+
+  /* Border widths */
+  --border-thin:    1px;
+  --border-regular: 1.5px;
+  --border-thick:   2px;
+
+  /* Spacing scale (4px base) */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Typography scale (fluid) */
+  --font-size-xs:   12px;
+  --font-size-sm:   13px;
+  --font-size-md:   14px;
+  --font-size-base: 16px;
+  --font-size-lg:   18px;
+  --font-size-xl:   20px;
+  --font-size-2xl:  clamp(1.5rem, 2.2vw, 2rem);
+  --font-size-3xl:  clamp(1.875rem, 3vw, 2.5rem);
+  --font-size-4xl:  clamp(2.25rem, 4.5vw, 3.5rem);
+  --font-size-5xl:  clamp(3rem, 6vw, 4.5rem);
+  --font-size-hero: clamp(2.75rem, 8.6vw, 6.75rem);
+
+  --leading-tight:  1.05;
+  --leading-snug:   1.2;
+  --leading-normal: 1.5;
+  --leading-loose:  1.7;
+
+  --tracking-tightest: -0.045em;
+  --tracking-tight:    -0.025em;
+  --tracking-normal:   0;
+  --tracking-wide:     0.02em;
+  --tracking-widest:   0.18em;
+
+  /* Motion — duration */
+  --dur-instant: 100ms;
+  --dur-fast:    180ms;
+  --dur-base:    260ms;
+  --dur-slow:    420ms;
+  --dur-slower:  700ms;
+  --dur-slowest: 1100ms;
+
+  /* Motion — easing */
+  --ease-out-quart: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out:    cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Container */
+  --container-page: 1280px;
+
+  /* Focus ring */
+  --focus-ring:   0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent-ring);
+}
+
 @theme {
   --color-background: var(--color-bg);
   --color-foreground: var(--color-text);
-  --color-border: var(--color-hairline);
+  --color-border:     var(--color-hairline);
 
   --font-display: "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans:    "Geist Variable", "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono:    "Geist Mono Variable", "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -78,58 +216,58 @@
     color: var(--color-text);
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "ss03", "cv11";
-    transition: background-color 400ms ease, color 400ms ease;
+    transition:
+      background-color var(--dur-slow) var(--ease-out-quart),
+      color            var(--dur-slow) var(--ease-out-quart);
   }
   ::selection {
     background: var(--color-accent);
-    color: #ffffff;
+    color: var(--color-accent-contrast);
   }
-  * {
-    border-color: var(--color-hairline);
-  }
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
+  * { border-color: var(--color-hairline); }
+  a { color: inherit; text-decoration: none; }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     font-weight: 500;
-    letter-spacing: -0.025em;
+    letter-spacing: var(--tracking-tight);
     font-feature-settings: "ss01", "ss03", "cv11";
     color: var(--color-text);
   }
   :focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 3px;
-    border-radius: 4px;
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: var(--radius-xs);
   }
 }
+
+/* ============================================================
+   Utilities
+   ============================================================ */
 
 @utility container-page {
   width: 100%;
   max-width: var(--container-page);
   margin-inline: auto;
-  padding-inline: 1.5rem;
+  padding-inline: var(--space-6);
 }
 
-@utility section-y {
-  padding-block: 8rem;
-}
+@utility section-y { padding-block: var(--space-32); }
 
 @utility display-1 {
   font-family: var(--font-display);
   font-weight: 500;
-  letter-spacing: -0.045em;
+  letter-spacing: var(--tracking-tightest);
   line-height: 0.94;
-  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-size: var(--font-size-5xl);
   font-feature-settings: "ss01", "ss03", "cv11";
 }
 
 @utility display-hero {
   font-family: var(--font-display);
   font-weight: 500;
-  letter-spacing: -0.045em;
+  letter-spacing: var(--tracking-tightest);
   line-height: 0.92;
+  font-size: var(--font-size-hero);
   font-feature-settings: "ss01", "ss03", "cv11";
 }
 
@@ -138,22 +276,22 @@
   font-weight: 500;
   letter-spacing: -0.03em;
   line-height: 1;
-  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-size: var(--font-size-4xl);
 }
 
 @utility display-3 {
   font-family: var(--font-display);
   font-weight: 500;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
   line-height: 1.1;
-  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-size: var(--font-size-3xl);
 }
 
 @utility eyebrow {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
   color: var(--color-muted);
 }
@@ -163,36 +301,35 @@
   font-feature-settings: "ss01";
 }
 
-@utility hairline-b {
-  border-bottom: 1px solid var(--color-hairline);
-}
+@utility hairline-b { border-bottom: var(--border-thin) solid var(--color-hairline); }
+@utility hairline-t { border-top:    var(--border-thin) solid var(--color-hairline); }
 
-@utility hairline-t {
-  border-top: 1px solid var(--color-hairline);
-}
-
-@utility surface {
-  background-color: var(--color-surface);
-}
+@utility surface { background-color: var(--color-surface); }
 
 @utility card-surface {
   background-color: var(--color-card);
-  border: 1px solid var(--color-hairline);
+  border: var(--border-thin) solid var(--color-hairline);
 }
 
 @utility glass {
-  background-color: color-mix(in oklab, var(--color-surface) 72%, transparent);
-  backdrop-filter: saturate(1.4) blur(16px);
-  -webkit-backdrop-filter: saturate(1.4) blur(16px);
-  border: 1px solid var(--color-hairline);
+  background-color: var(--glass-bg);
+  backdrop-filter: saturate(1.4) blur(var(--glass-blur));
+  -webkit-backdrop-filter: saturate(1.4) blur(var(--glass-blur));
+  border: var(--border-thin) solid var(--glass-border);
 }
+
+@utility elevation-1 { box-shadow: var(--elevation-1); }
+@utility elevation-2 { box-shadow: var(--elevation-2); }
+@utility elevation-3 { box-shadow: var(--elevation-3); }
+@utility elevation-4 { box-shadow: var(--elevation-4); }
+@utility elevation-accent { box-shadow: var(--elevation-accent); }
 
 @utility link-underline {
   background-image: linear-gradient(currentColor, currentColor);
   background-size: 100% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
-  transition: background-size 300ms ease;
+  transition: background-size var(--dur-base) var(--ease-out-quart);
   &:hover {
     background-size: 0% 1px;
     background-position: 100% 100%;
@@ -200,22 +337,31 @@
 }
 
 @utility accent-glow {
-  box-shadow: 0 0 0 1px var(--color-hairline),
+  box-shadow:
+    0 0 0 1px var(--color-hairline),
     0 20px 60px -30px var(--color-accent-glow);
 }
 
-/* Concentric ring pulse — signal indicator (not notification dot). */
+/* Concentric ring pulse — signal indicator */
 @keyframes ring-pulse {
   0%   { transform: scale(1);   opacity: 0.75; }
   70%  { transform: scale(2.4); opacity: 0;    }
   100% { transform: scale(2.4); opacity: 0;    }
 }
 
-/* View-transition for theme swap (Chromium). */
+/* View-transition (theme swap) */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 260ms;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-duration: var(--dur-base);
+  animation-timing-function: var(--ease-out-quart);
+}
+::view-transition-old(root) { animation: none; opacity: 1; }
+::view-transition-new(root) {
+  animation: theme-fade-in var(--dur-base) var(--ease-out-quart) both;
+}
+@keyframes theme-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
