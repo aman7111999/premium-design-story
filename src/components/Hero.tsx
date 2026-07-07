@@ -55,61 +55,32 @@ export function Hero() {
   return (
     <section
       ref={ref}
-      onPointerMove={onMove}
       className="relative isolate flex min-h-[100dvh] flex-col overflow-hidden pt-28 md:pt-36"
     >
-      {/* ============ Ambient background ============ */}
+      {/* ============ Ambient background — calm, static ============ */}
       <div aria-hidden className="absolute inset-0 -z-10">
-        <motion.div className="absolute inset-0" style={{ background: mesh }} />
-        <motion.div className="absolute inset-0" style={{ background: spotlight }} />
-
-        {/* Very subtle grid */}
+        {/* Single soft radial wash */}
         <div
-          className="absolute inset-0 opacity-[0.22]"
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(1100px 700px at 78% 18%, var(--color-accent-wash) 0%, transparent 60%)",
+          }}
+        />
+
+        {/* Very subtle grid, masked to fade at edges */}
+        <div
+          className="absolute inset-0 opacity-[0.18]"
           style={{
             backgroundImage:
               "linear-gradient(var(--color-hairline) 1px, transparent 1px)," +
               "linear-gradient(90deg, var(--color-hairline) 1px, transparent 1px)",
             backgroundSize: "80px 80px",
             maskImage:
-              "radial-gradient(ellipse 95% 75% at 50% 45%, black 30%, transparent 90%)",
+              "radial-gradient(ellipse 90% 70% at 50% 45%, black 30%, transparent 85%)",
             WebkitMaskImage:
-              "radial-gradient(ellipse 95% 75% at 50% 45%, black 30%, transparent 90%)",
+              "radial-gradient(ellipse 90% 70% at 50% 45%, black 30%, transparent 85%)",
           }}
-        />
-
-        {/* Animated grain */}
-        <div
-          className="absolute inset-0 opacity-[0.045] mix-blend-overlay"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
-            backgroundSize: "160px 160px",
-            animation: reduce ? undefined : "grain-shift 8s steps(6) infinite",
-          }}
-        />
-        <style>{`
-          @keyframes grain-shift {
-            0%   { transform: translate(0,0); }
-            20%  { transform: translate(-4%,3%); }
-            40%  { transform: translate(3%,-2%); }
-            60%  { transform: translate(-2%,4%); }
-            80%  { transform: translate(4%,2%); }
-            100% { transform: translate(0,0); }
-          }
-        `}</style>
-
-        {/* Breathing ambient orb */}
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute left-1/2 top-1/2 -z-[1] h-[70vh] w-[70vh] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{
-            background:
-              "radial-gradient(closest-side, var(--color-accent-glow), transparent 70%)",
-            filter: "blur(40px)",
-          }}
-          animate={reduce ? undefined : { scale: [1, 1.08, 1], opacity: [0.55, 0.85, 0.55] }}
-          transition={reduce ? undefined : { duration: 9, ease: "easeInOut", repeat: Infinity }}
         />
 
         {/* Bottom fade */}
@@ -120,6 +91,7 @@ export function Hero() {
           }}
         />
       </div>
+
 
       {/* ============ Content grid ============ */}
       <motion.div
