@@ -73,35 +73,35 @@ export function CursorFollower() {
         className="pointer-events-none fixed left-0 top-0 z-[80] -translate-x-1/2 -translate-y-1/2"
       >
         <motion.div
-          animate={{
-            scale: active ? 1.5 : 1,
-            opacity: active ? 0.9 : 0.55,
-          }}
+          animate={{ scale: active ? 1.5 : 1 }}
           transition={{ type: "spring", stiffness: 260, damping: 24 }}
-          className="h-[18px] w-[18px] rounded-full border"
+          className="h-8 w-8 rounded-full"
           style={{
-            borderColor: "var(--color-accent)",
-            boxShadow: "0 0 12px -2px var(--color-accent-glow)",
+            border: "1.5px solid var(--color-accent)",
+            boxShadow:
+              "inset 0 0 0 1px rgba(255,255,255,0.06), 0 0 22px -2px var(--color-accent-glow)",
           }}
         />
       </motion.div>
 
-      {/* Inner core — near-instant, fades under interactive targets */}
+      {/* Inner core — near-instant, always opaque */}
       <motion.div
         aria-hidden
         style={{ x: scx, y: scy }}
-        className="pointer-events-none fixed left-0 top-0 z-[81] -translate-x-1/2 -translate-y-1/2"
+        className="pointer-events-none fixed left-0 top-0 z-[82] -translate-x-1/2 -translate-y-1/2"
       >
         <motion.div
-          animate={{
-            scale: active ? 0.6 : 1,
-            opacity: active ? 0.35 : 1,
-          }}
+          animate={{ scale: active ? 1.4 : 1 }}
           transition={{ type: "spring", stiffness: 320, damping: 24 }}
-          className="h-[3px] w-[3px] rounded-full"
-          style={{ background: "var(--color-accent)" }}
+          className="h-1.5 w-1.5 rounded-full"
+          style={{
+            background: "var(--color-accent)",
+            boxShadow:
+              "0 0 0 1.5px rgba(255,255,255,0.9), 0 0 10px var(--color-accent-glow)",
+          }}
         />
       </motion.div>
+
 
       <style>{`
         @media (pointer: fine) and (prefers-reduced-motion: no-preference) {

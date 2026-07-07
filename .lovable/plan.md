@@ -1,38 +1,29 @@
-# Refinement: Premium brand mark + cursor treatment
+# Fix: Cursor visibility — premium but clearly visible
 
-Two small but high-signal fixes to the hero/nav so the first impression reads as senior and considered instead of "template with a blue dot."
+The current cursor is too faint (3px core + thin 18px ring at 55% opacity on a dark background) so it reads as invisible. Fix by making the reticle larger, higher contrast, and more sculpted — without losing the "quiet confidence" tone.
 
-## What changes
+## Changes to `src/components/CursorFollower.tsx`
 
-### 1. Name as a proper logo lockup (top-left of nav)
-Replace the current `• Aman Mishra` inline text with a real brand lockup:
+### Ring (trailing outer)
+- Size **18px → 32px**.
+- Border **1px → 1.5px**, color stays `--color-accent`.
+- Default opacity **0.55 → 1**; add a subtle inner shadow ring for depth: `box-shadow: 0 0 0 1px rgba(255,255,255,0.06) inset, 0 0 18px -2px var(--color-accent-glow)`.
+- Hover state: scale 1.5×, opacity stays 1, glow intensifies.
 
-- **Monogram mark** — a compact `AM` glyph set in Geist Display, tight tracking (`-0.06em`), rendered inside a 28×28 rounded-square tile with a hairline border and a subtle inner gradient (`--color-elevated` → `--color-surface`). Sits on a whisper of accent glow instead of a solid blue dot.
-- **Wordmark** — `Aman Mishra` beside the monogram, plus a muted `/ Product Designer` slug in mono (hidden on mobile). Uses `link-underline` on hover, not a color swap.
-- Alignment tuned so the lockup optically centers with the nav pill regardless of scrolled/expanded state.
+### Core (inner dot)
+- Size **3px → 6px**.
+- Solid `--color-accent` with a tight white halo (`box-shadow: 0 0 0 1.5px rgba(255,255,255,0.9)`) so it stays visible on both dark and light surfaces and on any background color.
+- Hover state: scales to **1.4×** and stays opaque (was fading to 35% — that's what made it disappear).
 
-### 2. Retire the blue dots — introduce a premium accent language
-The two "blue dots" (nav brand dot + hero "Available" pinging dot) both feel generic. Replace with a single, consistent motif used sparingly:
+### Contrast safety
+- Add `mix-blend-mode: normal` (was inherited); no blend tricks — pure additive glow is what keeps it readable on gradient hero backgrounds.
+- Increase z-index of core to sit above the ring's inner area.
 
-- **Nav** — drop the standalone dot entirely; the monogram tile carries the brand weight.
-- **Hero status badge** — swap the pinging solid dot for a **concentric ring pulse**: a 6px accent ring with a 2px filled core, and a slow outward ring that fades (1.6s, ease-out), not a hard ping. Reads as a signal indicator, not a notification dot.
-- **Cursor / interactive accents elsewhere** (scroll indicator arrow circle, CTA hover) — align to the same ring motif so the accent color appears as *linework*, not filled dots.
-
-### 3. Cursor follower polish
-The custom cursor is currently a solid accent dot with trail. Upgrade to match:
-
-- **Outer ring** (18px, 1px accent border, 40% opacity) trailing with soft spring.
-- **Inner core** (3px, filled accent) tracking near-instant.
-- Scales the outer ring to `1.5×` and drops the core opacity on link/button/card hover — creates a "focus reticle" feel instead of a blob.
-- Hidden on touch devices and when `prefers-reduced-motion` is set.
-
-## Files touched
-- `src/components/Navbar.tsx` — new lockup markup, remove brand dot
-- `src/components/Hero.tsx` — replace pinging dot with ring pulse in the availability badge
-- `src/components/CursorFollower.tsx` — split into ring + core, update hover targets
-- `src/index.css` — add `@keyframes ring-pulse` and a `.ring-pulse` utility so the motif is reusable
+### Untouched
+- Trailing spring stiffness/damping (feel stays the same).
+- Touch/reduced-motion guards.
+- `cursor: none` scope.
 
 ## Not in scope
-- No layout, color palette, font, or section-order changes
-- No changes to Work, About, Writing, Contact, Resume routes
-- No CMS / backend / Supabase changes
+- No changes to nav, hero content, or any other component.
+- No color/token additions.
