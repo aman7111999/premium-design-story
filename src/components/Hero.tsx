@@ -18,8 +18,8 @@ import { useSite } from "@/lib/cms";
 const HEADLINE_LINES = [
   { plain: "Designing digital", accent: null as string | null },
   { plain: "financial experiences", accent: null },
-  { plain: "that transform", accent: null },
-  { plain: "complexity into ", accent: "confidence." },
+  { plain: "that transform complexity", accent: null },
+  { plain: "into ", accent: "confidence." },
 ];
 
 const CHIPS = [
