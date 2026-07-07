@@ -204,7 +204,7 @@ export function ProjectCard({
         </motion.div>
 
         {/* ---------------- Meta rail below the media ---------------- */}
-        <div className="mt-[var(--space-6)] grid gap-[var(--space-6)] lg:grid-cols-[1.4fr_1fr]">
+        <div className="mt-[var(--space-6)] grid gap-[var(--space-6)]">
           {/* Left: description + facts */}
           <div className="min-w-0">
             {project.short_description && (
