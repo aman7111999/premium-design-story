@@ -141,7 +141,7 @@ export default function Contact() {
           </ul>
           {site?.location && (
             <div className="mt-12 rounded-lg border border-hairline p-6">
-              <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Based in</p>
+              <p className="eyebrow">Based in</p>
               <p className="mt-3 text-[15px]">{site.location}</p>
             </div>
           )}
