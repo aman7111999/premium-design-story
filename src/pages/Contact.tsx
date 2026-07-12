@@ -46,7 +46,7 @@ export default function Contact() {
 
       <section className="container-page pt-24 pb-16 md:pt-40">
         <Reveal>
-          <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Say hello</p>
+          <p className="eyebrow">Say hello</p>
           <h1 className="display-hero mt-6 max-w-[14ch] text-5xl leading-[1.02] md:text-[7.5rem] md:leading-[0.98]">
             Let's make{" "}
             <span className="italic text-[var(--color-accent)]">something</span>.
