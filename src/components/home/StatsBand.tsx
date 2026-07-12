@@ -1,6 +1,9 @@
 import { Reveal } from "@/components/Reveal";
 import { CountUp } from "@/components/CountUp";
 import { useSite } from "@/lib/cms";
+import portraitImg from "@/assets/portrait.jpg";
+import { Quote } from "lucide-react";
+
 
 export function StatsBand() {
   const { data: site } = useSite();
