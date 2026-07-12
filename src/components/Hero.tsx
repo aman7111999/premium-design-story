@@ -1,6 +1,8 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Figma, Framer, Diamond, Shield, PenTool } from "lucide-react";
 import { useSite } from "@/lib/cms";
+import portraitImg from "@/assets/portrait.jpg";
+
 
 /**
  * Boldex-style hero: portrait dominant right, clean sans headline left.
@@ -103,53 +105,71 @@ export function Hero() {
               initial={reduce ? false : { opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="relative mx-auto aspect-[4/5] w-full max-w-[440px]"
+              className="relative mx-auto aspect-[4/5] w-full max-w-[460px]"
             >
-              {/* Portrait card */}
-              <div className="relative h-full w-full overflow-hidden rounded-[32px] border border-[var(--color-hairline-strong)] bg-[var(--color-card)]">
-                {avatar ? (
-                  <img src={avatar} alt={name} className="h-full w-full object-cover" />
-                ) : (
-                  <div className="grid h-full w-full place-items-center bg-gradient-to-br from-[var(--color-elevated)] to-[var(--color-surface)]">
-                    <span className="text-[80px] font-bold text-[var(--color-accent)]">
-                      {name.split(" ").map((n) => n[0]).join("")}
-                    </span>
-                  </div>
-                )}
-                {/* subtle top gradient */}
+              {/* Radial spotlight behind portrait */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-8 -z-10 rounded-[50%]"
+                style={{
+                  background:
+                    "radial-gradient(closest-side, color-mix(in oklab, var(--color-accent) 22%, transparent), transparent 70%)",
+                  filter: "blur(30px)",
+                }}
+              />
+
+              {/* Portrait card — glass frame */}
+              <div className="liquid-glass relative h-full w-full overflow-hidden !rounded-[32px]">
+                <img
+                  src={avatar || portraitImg}
+                  alt={name}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  width={1024}
+                  height={1280}
+                />
+                {/* subtle bottom fade to blend with page */}
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute inset-0"
+                  className="pointer-events-none absolute inset-0 z-[1]"
                   style={{
                     background:
-                      "linear-gradient(180deg, transparent 40%, rgba(5,8,7,0.85) 100%)",
+                      "linear-gradient(180deg, transparent 55%, rgba(5,8,7,0.75) 100%)",
                   }}
                 />
               </div>
 
-              {/* Floating tool badges */}
+              {/* Floating tool badges — real icons */}
               {[
-                { label: "F", top: "8%", left: "-10%", delay: 0 },
-                { label: "A", top: "38%", right: "-12%", delay: 1 },
-                { label: "◆", top: "-6%", right: "10%", delay: 2 },
-              ].map((b, i) => (
-                <motion.div
-                  key={i}
-                  animate={reduce ? {} : { y: [0, -8, 0] }}
-                  transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut", delay: b.delay }}
-                  className="absolute grid h-14 w-14 place-items-center rounded-full border border-[var(--color-hairline-strong)] bg-[var(--color-surface)]/90 text-[18px] font-bold text-[var(--color-text)] backdrop-blur-sm"
-                  style={{
-                    top: b.top as string,
-                    left: (b as any).left,
-                    right: (b as any).right,
-                  }}
-                >
-                  {b.label}
-                </motion.div>
-              ))}
+                { Icon: Figma,   pos: { top: "6%",   left: "-14%" }, delay: 0,   size: 22, tint: "var(--color-accent)" },
+                { Icon: Diamond, pos: { top: "18%",  right: "-14%" }, delay: 0.6, size: 20, tint: "var(--color-text)" },
+                { Icon: Shield,  pos: { top: "48%",  right: "-18%" }, delay: 1.2, size: 22, tint: "var(--color-text)" },
+                { Icon: Framer,  pos: { top: "56%",  left: "-16%" }, delay: 1.8, size: 22, tint: "var(--color-accent)" },
+                { Icon: PenTool, pos: { bottom: "12%", left: "-8%" }, delay: 2.4, size: 20, tint: "var(--color-text)" },
+              ].map((b, i) => {
+                const { Icon } = b;
+                return (
+                  <motion.div
+                    key={i}
+                    animate={reduce ? {} : { y: [0, -10, 0] }}
+                    transition={{ duration: 5 + i * 0.6, repeat: Infinity, ease: "easeInOut", delay: b.delay }}
+                    className="absolute z-10 grid h-14 w-14 place-items-center rounded-full"
+                    style={{
+                      ...b.pos as React.CSSProperties,
+                      background: "color-mix(in oklab, var(--color-surface) 55%, transparent)",
+                      backdropFilter: "blur(16px) saturate(1.6)",
+                      WebkitBackdropFilter: "blur(16px) saturate(1.6)",
+                      border: "1px solid var(--color-hairline-strong)",
+                      boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.08), 0 12px 30px -12px rgba(0,0,0,0.6)",
+                      color: b.tint,
+                    }}
+                  >
+                    <Icon size={b.size} strokeWidth={1.75} />
+                  </motion.div>
+                );
+              })}
 
               {/* Circular text badge */}
-              <div className="absolute -bottom-6 -right-6 h-28 w-28">
+              <div className="absolute -bottom-6 -right-6 z-10 h-28 w-28">
                 <div className="animate-spin-slow relative h-full w-full">
                   <svg viewBox="0 0 100 100" className="h-full w-full text-[var(--color-text)]">
                     <defs>
@@ -163,7 +183,7 @@ export function Hero() {
                   </svg>
                 </div>
                 <div className="absolute inset-0 grid place-items-center">
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--color-accent)] text-[16px] font-bold text-[var(--color-accent-contrast)]">
+                  <span className="grid h-10 w-10 place-items-center rounded-full bg-[var(--color-accent)] text-[16px] font-bold text-[var(--color-accent-contrast)] shadow-[0_0_30px_-4px_var(--color-accent-glow)]">
                     ✦
                   </span>
                 </div>

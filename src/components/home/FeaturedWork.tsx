@@ -7,7 +7,7 @@ import { Reveal } from "@/components/Reveal";
 export function FeaturedWork() {
   const reduce = useReducedMotion();
   const { data: projects } = useProjects({ publishedOnly: true });
-  const items = (projects ?? []).slice(0, 4);
+  const items = (projects ?? []).slice(0, 6);
 
   return (
     <section className="container-page py-24 md:py-32">
@@ -19,8 +19,8 @@ export function FeaturedWork() {
               Selected Work
             </span>
             <h2 className="mt-5 text-4xl md:text-6xl leading-[1.05]">
-              Projects that shipped &<br />
-              <span className="font-serif italic text-[var(--color-accent)]">moved the needle.</span>
+              See How I Helped Businesses{" "}
+              <span className="font-serif italic text-[var(--color-accent)]">Stand</span> Online
             </h2>
           </div>
           <Link to="/work" className="glass-pill hover:text-[var(--color-accent)] transition-colors">
@@ -29,60 +29,57 @@ export function FeaturedWork() {
         </div>
       </Reveal>
 
-      <div className="mt-14 grid gap-6 md:grid-cols-2">
-        {items.map((p, i) => (
-          <motion.div
-            key={p.slug}
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Link
-              to={`/projects/${p.slug}`}
-              className="liquid-glass group block overflow-hidden p-5 md:p-6"
+      {/* Table-row list */}
+      <div className="mt-14 liquid-glass overflow-hidden">
+        <ul className="divide-y divide-[var(--color-hairline)]">
+          {items.map((p, i) => (
+            <motion.li
+              key={p.slug}
+              initial={reduce ? false : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.55, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+              className="group"
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-hairline)]">
-                {p.thumbnail_url ? (
-                  <img
-                    src={p.thumbnail_url}
-                    alt={p.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                    loading="lazy"
-                  />
-                ) : (
-                  <div
-                    aria-hidden
-                    className="h-full w-full"
-                    style={{
-                      background:
-                        "radial-gradient(120% 100% at 20% 10%, color-mix(in oklab, var(--color-accent) 35%, transparent) 0%, transparent 55%), linear-gradient(180deg, var(--color-elevated), var(--color-surface))",
-                    }}
-                  />
-                )}
-                <span className="glass-pill absolute left-4 top-4 !py-1 !px-3 text-[11px] uppercase tracking-[0.1em]">
-                  {p.category ?? "Case study"}
+              <Link
+                to={`/projects/${p.slug}`}
+                className="relative grid items-center gap-6 px-6 py-7 md:grid-cols-[160px_1fr_auto] md:gap-10 md:px-10 md:py-8"
+              >
+                {/* Hover glow wash */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "radial-gradient(60% 120% at 0% 50%, color-mix(in oklab, var(--color-accent) 14%, transparent) 0%, transparent 70%)",
+                  }}
+                />
+
+                <span className="relative text-xs uppercase tracking-[0.14em] text-[var(--color-muted)]">
+                  {p.category ?? "Case Study"}
                 </span>
-              </div>
-              <div className="mt-5 flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <h3 className="truncate text-xl md:text-2xl font-semibold">{p.title}</h3>
+
+                <div className="relative min-w-0">
+                  <h3 className="text-xl md:text-[26px] font-semibold leading-tight tracking-[-0.01em] text-[var(--color-text)] transition-colors group-hover:text-[var(--color-accent)]">
+                    {p.title}
+                  </h3>
                   {p.short_description && (
-                    <p className="mt-1 truncate text-sm text-[var(--color-muted)]">
+                    <p className="mt-2 line-clamp-2 max-w-xl text-[14px] leading-relaxed text-[var(--color-muted)]">
                       {p.short_description}
                     </p>
                   )}
                 </div>
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-accent)] text-[var(--color-accent-contrast)] transition-transform group-hover:rotate-45">
-                  <ArrowUpRight size={18} strokeWidth={2.5} />
+
+                <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-full border border-[var(--color-hairline-strong)] text-[var(--color-text)] transition-all duration-300 group-hover:-rotate-45 group-hover:border-[var(--color-accent)] group-hover:bg-[var(--color-accent)] group-hover:text-[var(--color-accent-contrast)]">
+                  <ArrowUpRight size={18} strokeWidth={2.2} />
                 </span>
-              </div>
-            </Link>
-          </motion.div>
-        ))}
-        {items.length === 0 && (
-          <p className="text-[var(--color-muted)]">No projects yet.</p>
-        )}
+              </Link>
+            </motion.li>
+          ))}
+          {items.length === 0 && (
+            <li className="px-10 py-10 text-[var(--color-muted)]">No projects yet.</li>
+          )}
+        </ul>
       </div>
     </section>
   );

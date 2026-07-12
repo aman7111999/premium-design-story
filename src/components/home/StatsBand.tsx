@@ -1,6 +1,9 @@
 import { Reveal } from "@/components/Reveal";
 import { CountUp } from "@/components/CountUp";
 import { useSite } from "@/lib/cms";
+import portraitImg from "@/assets/portrait.jpg";
+import { Quote } from "lucide-react";
+
 
 export function StatsBand() {
   const { data: site } = useSite();
@@ -42,15 +45,32 @@ export function StatsBand() {
         </Reveal>
 
         <Reveal className="md:col-span-6">
-          <div className="card-dark relative overflow-hidden p-3">
-            <div
-              className="aspect-[4/3] w-full rounded-[calc(var(--radius-lg)-6px)] bg-[var(--color-elevated)]"
-              style={
-                avatar
-                  ? { backgroundImage: `url(${avatar})`, backgroundSize: "cover", backgroundPosition: "center" }
-                  : undefined
-              }
-            />
+          <div className="liquid-glass relative overflow-hidden p-3">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[calc(var(--radius-lg)-6px)]">
+              <img
+                src={avatar || portraitImg}
+                alt={site?.name ?? "Portrait"}
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+              />
+              {/* bottom fade */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(180deg, transparent 40%, rgba(5,8,7,0.75) 100%)",
+                }}
+              />
+              {/* Quote overlay chip */}
+              <div className="absolute inset-x-4 bottom-4 flex items-start gap-3 rounded-2xl border border-[var(--color-hairline-strong)] bg-[color-mix(in_oklab,var(--color-surface)_70%,transparent)] p-4 backdrop-blur-md">
+                <Quote size={16} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+                <p className="text-[13px] leading-snug text-[var(--color-text)]">
+                  "Design is the bridge between a problem and a product people
+                  can love."
+                </p>
+              </div>
+            </div>
           </div>
         </Reveal>
       </div>
