@@ -26,14 +26,15 @@ function applyThemeToDom(theme: Theme) {
   const root = document.documentElement;
   root.setAttribute("data-theme", theme);
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", theme === "dark" ? "#1a1815" : "#faf8f5");
+  if (meta) meta.setAttribute("content", theme === "dark" ? "#0d0d0d" : "#faf8f5");
 }
 
-export function ThemeProvider({ children, defaultMode = "light" }: { children: ReactNode; defaultMode?: Mode }) {
+export function ThemeProvider({ children, defaultMode = "dark" }: { children: ReactNode; defaultMode?: Mode }) {
   const [mode, setModeState] = useState<Mode>(() => {
     if (typeof window === "undefined") return defaultMode;
     return (localStorage.getItem(STORAGE_KEY) as Mode | null) ?? defaultMode;
   });
+
   const [theme, setTheme] = useState<Theme>(() => resolveTheme(mode));
 
   useEffect(() => {

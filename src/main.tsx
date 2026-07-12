@@ -18,7 +18,7 @@ const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <HelmetProvider>
-      <ThemeProvider defaultMode="light">
+      <ThemeProvider defaultMode="dark">
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
             <BrowserRouter basename={basename}>
