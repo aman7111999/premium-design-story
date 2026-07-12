@@ -1,6 +1,8 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Figma, Framer, Diamond, Shield, PenTool } from "lucide-react";
 import { useSite } from "@/lib/cms";
+import portraitImg from "@/assets/portrait.jpg";
+
 
 /**
  * Boldex-style hero: portrait dominant right, clean sans headline left.
