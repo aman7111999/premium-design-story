@@ -1,9 +1,8 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, Mail, ArrowUpRight } from "lucide-react";
 import { useSite } from "@/lib/cms";
-import { ThemeToggle } from "@/components/design/ThemeToggle";
 
 type Link = { to: string; label: string; external?: boolean };
 
@@ -15,14 +14,12 @@ export function Navbar() {
   const { data: site } = useSite();
 
   const links: Link[] = [
-    { to: "/", label: "Home" },
-    { to: "/work", label: "Work" },
     { to: "/about", label: "About" },
+    { to: "/work", label: "Work" },
     { to: "/blog", label: "Blog" },
     ...(site?.resume_url
       ? [{ to: site.resume_url, label: "Resume", external: true } as Link]
       : []),
-    { to: "/contact", label: "Contact" },
   ];
 
   useEffect(() => {
@@ -32,50 +29,35 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    setOpen(false);
-  }, [location.pathname]);
+  useEffect(() => setOpen(false), [location.pathname]);
 
-  const initials = (site?.name ?? "Aman Mishra")
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("");
+  const brand = (site?.name ?? "Aman Mishra").split(" ")[0].toUpperCase();
 
   return (
     <motion.header
       initial={reduce ? false : { y: -12, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-0 z-50"
     >
-      <div className="container-page pt-4 md:pt-5">
+      <div className="container-page pt-4 md:pt-6">
         <nav
           aria-label="Primary"
           className={
-            "liquid-glass flex items-center justify-between gap-6 rounded-full pl-3 pr-3 py-2 transition-shadow duration-500 " +
-            (scrolled ? "shadow-[var(--elevation-3)]" : "")
+            "flex items-center justify-between gap-6 rounded-full border border-[var(--color-hairline-strong)] bg-[var(--color-card)]/85 pl-5 pr-2 py-2 backdrop-blur transition-shadow duration-500 " +
+            (scrolled ? "shadow-[var(--elevation-3)]" : "shadow-[var(--elevation-1)]")
           }
         >
-          {/* Subtle monogram logo */}
+          {/* Wordmark */}
           <NavLink
             to="/"
-            aria-label={`${site?.name ?? "Aman Mishra"} — Home`}
-            className="group flex items-center gap-3 pl-1"
+            className="font-heavy text-[13px] font-black uppercase tracking-[0.14em] text-[var(--color-text)]"
           >
-            <span
-              aria-hidden
-              className="grid h-8 w-8 place-items-center rounded-full border border-[var(--color-hairline-strong)] bg-[var(--color-bg)]/40 font-display text-[13px] italic leading-none text-[var(--color-text)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.6)] transition-transform duration-500 group-hover:rotate-[-6deg]"
-            >
-              {initials.toLowerCase()}
-            </span>
-            <span className="hidden font-display text-[15px] tracking-[-0.01em] text-[var(--color-text)] sm:inline">
-              {site?.name ?? "Aman Mishra"}
-            </span>
+            {brand}<span className="text-[var(--color-accent)]">.DESIGN</span>
           </NavLink>
 
           {/* Center links */}
-          <ul className="hidden items-center gap-7 md:flex">
+          <ul className="hidden items-center gap-8 md:flex">
             {links.map((l) =>
               l.external ? (
                 <li key={l.to}>
@@ -83,11 +65,11 @@ export function Navbar() {
                     href={l.to}
                     target="_blank"
                     rel="noreferrer"
-                    className="group inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--color-subtle)] transition-colors hover:text-[var(--color-text)]"
+                    className="group inline-flex items-center gap-1 font-heavy text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--color-muted)] transition-colors hover:text-[var(--color-text)]"
                   >
                     {l.label}
                     <ArrowUpRight
-                      size={11}
+                      size={12}
                       className="opacity-70 transition-transform group-hover:-translate-y-[1px] group-hover:translate-x-[1px]"
                     />
                   </a>
@@ -96,12 +78,11 @@ export function Navbar() {
                 <li key={l.to}>
                   <NavLink
                     to={l.to}
-                    end={l.to === "/"}
                     className={({ isActive }) =>
-                      "relative inline-block pb-1 text-[11px] uppercase tracking-[0.2em] transition-colors " +
+                      "relative inline-block font-heavy text-[12px] font-semibold uppercase tracking-[0.14em] transition-colors " +
                       (isActive
-                        ? "font-semibold text-[var(--color-text)]"
-                        : "font-medium text-[var(--color-subtle)] hover:text-[var(--color-text)]")
+                        ? "text-[var(--color-text)]"
+                        : "text-[var(--color-muted)] hover:text-[var(--color-text)]")
                     }
                   >
                     {({ isActive }) => (
@@ -109,15 +90,14 @@ export function Navbar() {
                         {l.label}
                         {isActive && (
                           <motion.span
-                            layoutId="nav-underline"
-                            className="absolute inset-x-0 -bottom-1 h-[2px] rounded-full bg-[var(--color-accent)]"
+                            layoutId="nav-dot"
+                            className="absolute -bottom-2 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-[var(--color-accent)]"
                             transition={{ type: "spring", stiffness: 380, damping: 32 }}
                           />
                         )}
                       </>
                     )}
                   </NavLink>
-
                 </li>
               ),
             )}
@@ -125,29 +105,28 @@ export function Navbar() {
 
           {/* Right cluster */}
           <div className="flex items-center gap-2">
-            <ThemeToggle className="hidden md:inline-flex" />
             <NavLink
               to="/contact"
-              className="hidden items-center gap-2 rounded-full bg-[var(--color-text)] px-4 py-2 text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--color-inverse)] transition-all hover:bg-[var(--color-accent)] md:inline-flex"
+              className="hidden items-center gap-2 rounded-full bg-[var(--color-accent)] px-5 py-2 font-heavy text-[12px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-contrast)] shadow-[var(--elevation-accent)] transition-transform hover:scale-[1.04] md:inline-flex"
             >
-              Let's Talk
+              Email me
+              <Mail size={13} />
             </NavLink>
             <NavLink
               to="/contact"
-              className="inline-flex items-center rounded-full bg-[var(--color-text)] px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-[var(--color-inverse)] transition-colors hover:bg-[var(--color-accent)] md:hidden"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-accent)] px-3 py-1.5 font-heavy text-[11px] font-bold uppercase tracking-[0.1em] text-[var(--color-accent-contrast)] md:hidden"
             >
-              Talk
+              Email <Mail size={11} />
             </NavLink>
             <button
               type="button"
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="grid h-9 w-9 place-items-center rounded-full border border-hairline text-[var(--color-text)] md:hidden"
+              className="grid h-9 w-9 place-items-center rounded-full border border-[var(--color-hairline-strong)] text-[var(--color-text)] md:hidden"
             >
               {open ? <X size={16} /> : <Menu size={16} />}
             </button>
-
           </div>
         </nav>
       </div>
@@ -162,21 +141,16 @@ export function Navbar() {
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             className="container-page md:hidden"
           >
-            <div className="mt-2 rounded-[var(--radius-lg)] border border-hairline bg-[var(--color-card)] p-3 shadow-[var(--elevation-2)]">
+            <div className="mt-2 rounded-[var(--radius-lg)] border border-[var(--color-hairline-strong)] bg-[var(--color-card)] p-3 shadow-[var(--elevation-3)]">
               <ul className="flex flex-col">
-                {links.map((l, i) => (
-                  <motion.li
-                    key={l.to}
-                    initial={{ opacity: 0, x: -6 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.04 + i * 0.04 }}
-                  >
+                {links.map((l) => (
+                  <li key={l.to}>
                     {l.external ? (
                       <a
                         href={l.to}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center justify-between rounded-md px-3 py-3 font-display text-lg text-[var(--color-muted)]"
+                        className="flex items-center justify-between rounded-md px-3 py-3 font-heavy text-sm font-bold uppercase tracking-[0.12em] text-[var(--color-muted)]"
                       >
                         {l.label}
                         <ArrowUpRight size={14} className="opacity-60" />
@@ -184,9 +158,8 @@ export function Navbar() {
                     ) : (
                       <NavLink
                         to={l.to}
-                        end={l.to === "/"}
                         className={({ isActive }) =>
-                          "block rounded-md px-3 py-3 font-display text-lg " +
+                          "block rounded-md px-3 py-3 font-heavy text-sm font-bold uppercase tracking-[0.12em] " +
                           (isActive
                             ? "bg-[var(--color-surface)] text-[var(--color-text)]"
                             : "text-[var(--color-muted)]")
@@ -195,18 +168,9 @@ export function Navbar() {
                         {l.label}
                       </NavLink>
                     )}
-                  </motion.li>
+                  </li>
                 ))}
               </ul>
-              <div className="mt-2 flex items-center justify-between border-t border-hairline p-2 pt-3">
-                <ThemeToggle />
-                <NavLink
-                  to="/contact"
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-hairline-strong)] px-4 py-2 text-[11px] font-medium uppercase tracking-[0.2em]"
-                >
-                  Let's Talk
-                </NavLink>
-              </div>
             </div>
           </motion.div>
         )}

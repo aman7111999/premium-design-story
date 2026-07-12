@@ -1,311 +1,158 @@
-import { useRef, type PointerEvent } from "react";
 import { Link } from "react-router-dom";
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-  useSpring,
-  useMotionValue,
-} from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowUpRight, Lock } from "lucide-react";
 import type { ProjectRow } from "@/lib/cms";
-import { projectGradient } from "@/lib/cms";
-import { Tag, Badge } from "@/components/design/Tag";
 
 /**
- * Premium project showcase card.
- * - Large media surface with parallax + zoom on hover
- * - Magnetic pointer tilt (subtle) on the media
- * - Accent glow depth on hover
- * - Rich meta rail: role · timeline · company · impact metrics · tech
- * - Animated CTA arrow-tile
- * - Scroll-reveal, stagger via `index`
- *
- * All data comes from ProjectRow (CMS). No hardcoded content.
+ * Salad-inspired project card.
+ * - Bold color block background per project
+ * - Title top-left in bold uppercase sans
+ * - Short description below title
+ * - "View Project" pill button
+ * - Image/collage area at bottom (placeholder gradient until thumbnail is uploaded)
+ * - Category sticker bottom-right
  */
+
+// Vibrant Salad-style backgrounds — high-saturation, distinct per index
+const CARD_PALETTES = [
+  { bg: "#2a2a2a", ink: "#fff6ea", accent: "#ff3e7f" }, // charcoal + pink
+  { bg: "#1c2f2c", ink: "#fff6ea", accent: "#7ee3a4" }, // deep teal + mint
+  { bg: "#2b1e3f", ink: "#fff6ea", accent: "#c4a5ff" }, // indigo + lavender
+  { bg: "#3a1e1e", ink: "#ffd6b3", accent: "#ff9d5a" }, // burgundy + peach
+  { bg: "#1e2a3f", ink: "#fff6ea", accent: "#5cbdff" }, // navy + sky
+  { bg: "#2f2611", ink: "#fff6ea", accent: "#ffd06b" }, // olive + gold
+];
+
 export function ProjectCard({
   project,
   index = 0,
+  size = "md",
 }: {
   project: ProjectRow;
   index?: number;
+  size?: "lg" | "md";
 }) {
   const reduce = useReducedMotion();
-  const ref = useRef<HTMLDivElement>(null);
-  const mediaRef = useRef<HTMLDivElement>(null);
+  const palette = CARD_PALETTES[index % CARD_PALETTES.length];
+  const locked = !!(project as { locked?: boolean }).locked;
 
-  // Parallax on the background image as the card scrolls through the viewport
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const rawY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
-  const parallaxY = useSpring(rawY, { stiffness: 80, damping: 20, mass: 0.4 });
-
-  // Magnetic pointer tilt on the media
-  const tiltX = useMotionValue(0);
-  const tiltY = useMotionValue(0);
-  const sTiltX = useSpring(tiltX, { stiffness: 200, damping: 22, mass: 0.6 });
-  const sTiltY = useSpring(tiltY, { stiffness: 200, damping: 22, mass: 0.6 });
-
-  const onMediaMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (reduce || !mediaRef.current) return;
-    const r = mediaRef.current.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    tiltY.set(px * 6); // rotateY
-    tiltX.set(-py * 5); // rotateX
-  };
-  const onMediaLeave = () => {
-    tiltX.set(0);
-    tiltY.set(0);
-  };
-
-  const bg = project.thumbnail_url
-    ? `center/cover no-repeat url(${project.thumbnail_url})`
-    : projectGradient(project.slug);
-
-  const tags = (project.tags ?? []).slice(0, 4);
-  const tools = (project.tools ?? []).slice(0, 5);
-  const metrics = (project.metrics ?? []).slice(0, 3);
+  const isLarge = size === "lg";
 
   return (
     <motion.article
-      ref={ref}
-      initial={reduce ? false : { opacity: 0, y: 40 }}
+      initial={reduce ? false : { opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      whileHover={reduce ? undefined : { scale: 1.02 }}
+      whileHover={reduce ? undefined : { y: -6 }}
       transition={{
-        duration: 0.9,
-        delay: index * 0.08,
+        duration: 0.7,
+        delay: index * 0.05,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative will-change-transform"
+      className="group relative"
     >
       <Link
         to={`/projects/${project.slug}`}
-        aria-label={`${project.title} — case study${
-          project.company ? ", " + project.company : ""
-        }`}
-        data-cursor="View case"
-        className="block"
+        aria-label={`${project.title} — case study`}
+        className="block h-full"
       >
-        {/* ---------------- Media surface ---------------- */}
-        <motion.div
-          ref={mediaRef}
-          onPointerMove={onMediaMove}
-          onPointerLeave={onMediaLeave}
-          style={{
-            perspective: 1200,
-            transformStyle: "preserve-3d",
-          }}
-          className={
-            "relative aspect-[16/10] w-full overflow-hidden " +
-            "rounded-[var(--radius-xl)] border border-hairline bg-[var(--color-card)] " +
-            "shadow-[var(--elevation-2)] " +
-            "transition-[border-color,box-shadow,border-radius] duration-[var(--dur-slow)] ease-[var(--ease-out-quart)] " +
-            "group-hover:rounded-[calc(var(--radius-xl)*1.35)] " +
-            "group-hover:border-[var(--color-hairline-strong)] " +
-            "group-hover:shadow-[0_60px_120px_-40px_var(--color-accent-glow),var(--elevation-3)]"
-          }
+        <div
+          className="relative flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] p-6 shadow-[var(--elevation-2)] transition-shadow duration-500 group-hover:shadow-[var(--elevation-4)] md:p-7"
+          style={{ backgroundColor: palette.bg, color: palette.ink, minHeight: isLarge ? 420 : 320 }}
         >
-          {/* Tilt wrapper */}
-          <motion.div
-            aria-hidden
-            style={{
-              rotateX: reduce ? 0 : sTiltX,
-              rotateY: reduce ? 0 : sTiltY,
-              transformStyle: "preserve-3d",
-            }}
-            className="absolute inset-0"
-          >
-            {/* Parallax + zoom media */}
-            <motion.div
-              aria-hidden
+          {/* Top: title + description + button */}
+          <div className="relative z-10 flex flex-col gap-4">
+            <h3
+              className="font-heavy uppercase leading-[1.05] tracking-[-0.01em]"
               style={{
-                y: reduce ? undefined : parallaxY,
-                background: bg,
+                fontWeight: 800,
+                fontSize: isLarge ? "clamp(1.5rem, 2.2vw, 2rem)" : "clamp(1.15rem, 1.7vw, 1.4rem)",
+                color: palette.ink,
               }}
-              className="absolute -inset-8 transition-transform duration-[var(--dur-slower)] ease-[var(--ease-out-quart)] group-hover:scale-[1.05]"
-            />
+            >
+              {project.title}
+            </h3>
 
-            {/* Subtle inner grid overlay for depth */}
-            <div
-              aria-hidden
-              className="absolute inset-0 opacity-[0.12] mix-blend-overlay"
-              style={{
-                backgroundImage:
-                  "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px)," +
-                  "linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-                backgroundSize: "48px 48px",
-              }}
-            />
-
-            {/* Bottom gradient for text legibility */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 45%, transparent 75%)",
-              }}
-            />
-
-            {/* Giant serif numeral watermark — distinguishes cards without thumbs */}
-            {!project.thumbnail_url && (
-              <span
-                aria-hidden
-                className="pointer-events-none absolute -left-2 -top-6 select-none font-display italic leading-none text-white/10"
-                style={{ fontSize: "clamp(9rem, 22vw, 18rem)" }}
-              >
-                {String(index + 1).padStart(2, "0")}
-              </span>
-            )}
-
-            {/* Sheen sweep on hover */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-x-1/2 -top-1/2 h-[200%] w-[200%] -translate-x-full rotate-12 bg-gradient-to-r from-transparent via-white/8 to-transparent opacity-0 transition-all duration-[900ms] ease-[var(--ease-out-quart)] group-hover:translate-x-1/3 group-hover:opacity-100"
-            />
-          </motion.div>
-
-
-          {/* ---------------- Overlay chrome ---------------- */}
-          <div className="relative flex h-full flex-col justify-between p-[var(--space-6)] md:p-[var(--space-8)]">
-            {/* Top row: category + index + CTA tile */}
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-[var(--space-2)]">
-                {project.category && (
-                  <span className="inline-flex items-center rounded-[var(--radius-pill)] border border-white/20 bg-black/40 px-[var(--space-3)] py-[var(--space-1)] font-mono text-[10px] uppercase tracking-[var(--tracking-widest)] text-white/85 backdrop-blur-sm">
-                    {project.category}
-                  </span>
-                )}
-                <span className="inline-flex items-center rounded-[var(--radius-pill)] border border-white/15 bg-black/30 px-[var(--space-3)] py-[var(--space-1)] font-mono text-[10px] uppercase tracking-[var(--tracking-widest)] text-white/70 backdrop-blur-sm">
-                  {String(index + 1).padStart(2, "0")} / Case
-                </span>
-              </div>
-
-              <span
-                aria-hidden
-                className="relative grid h-11 w-11 place-items-center overflow-hidden rounded-full border border-white/25 bg-black/40 text-white backdrop-blur-sm"
-              >
-                <span className="absolute inset-0 -translate-y-full bg-[var(--color-accent)] transition-transform duration-[var(--dur-slow)] ease-[var(--ease-out-quart)] group-hover:translate-y-0" />
-                <ArrowUpRight
-                  size={18}
-                  className="relative transition-transform duration-[var(--dur-slow)] ease-[var(--ease-out-quart)] group-hover:rotate-45"
-                />
-              </span>
-            </div>
-
-            {/* Bottom: company · timeline · title */}
-            <div className="text-white">
-              {(project.company || project.timeline) && (
-                <p className="flex flex-wrap items-center gap-x-[var(--space-3)] gap-y-1 font-mono text-[11px] uppercase tracking-[var(--tracking-widest)] text-white/70">
-                  {project.company && <span>{project.company}</span>}
-                  {project.company && project.timeline && (
-                    <span aria-hidden className="h-px w-6 bg-white/30" />
-                  )}
-                  {project.timeline && <span>{project.timeline}</span>}
-                </p>
-              )}
-              <h3 className="mt-[var(--space-3)] font-display text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.05] tracking-[var(--tracking-tight)]">
-                {project.title}
-              </h3>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* ---------------- Meta rail below the media ---------------- */}
-        <div className="mt-[var(--space-6)] grid gap-[var(--space-6)]">
-          {/* Left: description + facts */}
-          <div className="min-w-0">
             {project.short_description && (
-              <p className="max-w-xl text-[15px] leading-[var(--leading-normal)] text-[var(--color-muted)] line-clamp-3">
+              <p
+                className="max-w-md text-[13px] leading-[1.55] opacity-75"
+                style={{ color: palette.ink }}
+              >
                 {project.short_description}
               </p>
             )}
 
-            {(project.role || project.duration) && (
-              <dl className="mt-[var(--space-5)] flex flex-wrap gap-x-[var(--space-8)] gap-y-[var(--space-3)] text-[13px]">
-                {project.role && (
-                  <div className="flex flex-col">
-                    <dt className="eyebrow">Role</dt>
-                    <dd className="mt-1 text-[var(--color-text)]">{project.role}</dd>
-                  </div>
-                )}
-                {project.duration && (
-                  <div className="flex flex-col">
-                    <dt className="eyebrow">Duration</dt>
-                    <dd className="mt-1 text-[var(--color-text)]">{project.duration}</dd>
-                  </div>
-                )}
-                {project.company && (
-                  <div className="flex flex-col">
-                    <dt className="eyebrow">Company</dt>
-                    <dd className="mt-1 text-[var(--color-text)]">{project.company}</dd>
-                  </div>
-                )}
-              </dl>
-            )}
+            <div className="mt-1 flex flex-wrap items-center gap-2">
+              {locked ? (
+                <span
+                  className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.1em]"
+                  style={{
+                    borderColor: `${palette.ink}30`,
+                    color: palette.ink,
+                    backgroundColor: `${palette.ink}10`,
+                  }}
+                >
+                  <Lock size={11} /> Under NDA
+                </span>
+              ) : (
+                <span
+                  className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[11px] font-heavy font-bold uppercase tracking-[0.08em] transition-transform group-hover:scale-105"
+                  style={{
+                    backgroundColor: palette.ink,
+                    color: palette.bg,
+                  }}
+                >
+                  View Project
+                  <ArrowUpRight size={12} strokeWidth={2.5} />
+                </span>
+              )}
+            </div>
+          </div>
 
-            {(tags.length > 0 || tools.length > 0) && (
-              <div className="mt-[var(--space-5)] flex flex-wrap gap-[var(--space-2)]">
-                {tags.map((t) => (
-                  <Tag key={`tag-${t}`}>{t}</Tag>
-                ))}
-                {tools.map((t) => (
-                  <Badge key={`tool-${t}`} tone="accent" size="sm">
-                    {t}
-                  </Badge>
-                ))}
+          {/* Image/collage area — colored placeholder until thumbnail exists */}
+          <div
+            className="relative mt-auto flex-1 min-h-[140px]"
+          >
+            {project.thumbnail_url ? (
+              <div
+                className="absolute inset-x-[-24px] bottom-[-24px] top-6 rounded-t-[var(--radius-md)] bg-cover bg-center md:inset-x-[-28px] md:bottom-[-28px]"
+                style={{ backgroundImage: `url(${project.thumbnail_url})` }}
+              />
+            ) : (
+              <div
+                aria-hidden
+                className="absolute inset-x-[-24px] bottom-[-24px] top-8 overflow-hidden rounded-t-[var(--radius-md)] md:inset-x-[-28px] md:bottom-[-28px]"
+                style={{
+                  background: `radial-gradient(120% 100% at 20% 10%, ${palette.accent}44 0%, transparent 55%), linear-gradient(180deg, ${palette.bg} 0%, ${palette.accent}22 100%)`,
+                }}
+              >
+                {/* Giant numeral watermark */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -bottom-6 -right-4 select-none font-heavy leading-none opacity-[0.14]"
+                  style={{
+                    fontSize: "clamp(9rem, 20vw, 16rem)",
+                    color: palette.ink,
+                    fontWeight: 900,
+                  }}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                {/* Category sticker inside media */}
+                {project.category && (
+                  <span
+                    className="absolute right-6 top-4 inline-flex items-center rounded-full px-3 py-1 text-[10px] font-heavy font-bold uppercase tracking-[0.12em]"
+                    style={{
+                      backgroundColor: palette.accent,
+                      color: palette.bg,
+                    }}
+                  >
+                    {project.category}
+                  </span>
+                )}
               </div>
             )}
           </div>
-
-          {/* Right: impact metrics */}
-          {metrics.length > 0 && (
-            <div className="grid grid-cols-1 gap-[var(--space-4)] rounded-[var(--radius-lg)] border border-hairline bg-[var(--color-surface)] p-[var(--space-4)] sm:grid-cols-3 md:p-[var(--space-5)]">
-              {metrics.map((m, i) => (
-                <motion.div
-                  key={`${m.label}-${i}`}
-                  initial={reduce ? false : { opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.6, delay: 0.15 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                  className="min-w-0 border-b border-hairline pb-[var(--space-3)] last:border-none last:pb-0 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-[var(--space-3)] sm:last:pr-0"
-                >
-                  <p className="font-display text-[clamp(1.25rem,2vw,1.75rem)] leading-none tracking-[var(--tracking-tight)] text-[var(--color-text)]">
-                    {m.value}
-                  </p>
-                  <p className="mt-[var(--space-2)] text-[10px] uppercase leading-[1.4] tracking-[0.08em] text-[var(--color-muted)]">
-                    {m.label}
-                  </p>
-                  {m.hint && (
-                    <p className="mt-1 text-[11px] leading-[1.4] text-[var(--color-subtle)]">
-                      {m.hint}
-                    </p>
-                  )}
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* ---------------- Read case CTA ---------------- */}
-        <div className="mt-[var(--space-6)] flex items-center gap-[var(--space-3)] border-t border-hairline pt-[var(--space-5)]">
-          <span
-            aria-hidden
-            className="h-px flex-1 origin-left scale-x-0 bg-[var(--color-accent)] transition-transform duration-[var(--dur-slower)] ease-[var(--ease-out-quart)] group-hover:scale-x-100"
-          />
-          <span className="inline-flex items-center gap-[var(--space-2)] text-[13px] text-[var(--color-muted)] transition-colors duration-[var(--dur-base)] group-hover:text-[var(--color-text)]">
-            Read the case study
-            <ArrowUpRight
-              size={14}
-              className="transition-transform duration-[var(--dur-base)] ease-[var(--ease-out-quart)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-            />
-          </span>
         </div>
       </Link>
     </motion.article>
