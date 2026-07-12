@@ -62,7 +62,7 @@ export default function Home() {
           >
             Featured Projects
           </h2>
-          <p className="mx-auto mt-4 max-w-lg text-[14px] leading-relaxed text-[var(--color-muted)]">
+          <p className="mx-auto mt-4 max-w-lg text-[15px] leading-relaxed text-[var(--color-muted)]">
             A handful of the products, systems, and 0→1 experiments I've shipped recently.
           </p>
         </Reveal>
