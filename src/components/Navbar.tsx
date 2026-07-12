@@ -7,7 +7,6 @@ import { ThemeToggle } from "@/components/design/ThemeToggle";
 
 const LINKS = [
   { to: "/about", label: "About" },
-  { to: "/work", label: "Services" },
   { to: "/work", label: "Projects" },
   { to: "/blog", label: "Blog" },
 ];
