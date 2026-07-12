@@ -82,10 +82,10 @@ export function Hero() {
 
             {/* Editorial headline */}
             <h1
-              className="mt-10 max-w-[16ch] leading-[0.92] tracking-[-0.015em] text-[var(--color-text)] md:mt-14"
+              className="mt-6 max-w-[16ch] leading-[0.95] tracking-[-0.015em] text-[var(--color-text)] md:mt-8"
               style={{
                 fontFamily: "'Instrument Serif', Georgia, serif",
-                fontSize: "clamp(2.75rem, 8.6vw, 7rem)",
+                fontSize: "clamp(2.5rem, 7.6vw, 6rem)",
                 fontWeight: 400,
               }}
             >
@@ -107,7 +107,7 @@ export function Hero() {
               initial={reduce ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.75, ease: EASE }}
-              className="mt-12 max-w-[58ch] text-[17px] leading-[1.65] text-[var(--color-muted)] md:mt-16"
+              className="mt-8 max-w-[58ch] text-[17px] leading-[1.65] text-[var(--color-muted)] md:mt-10"
             >
               <span className="text-[var(--color-text)]">Senior Product Designer</span>{" "}
               with <span className="text-[var(--color-text)]">4.5+ years</span> simplifying
@@ -120,7 +120,7 @@ export function Hero() {
               initial={reduce ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.95, ease: EASE }}
-              className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4"
+              className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4"
             >
               <Link
                 to="/work"
@@ -163,7 +163,7 @@ export function Hero() {
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 1.15, ease: EASE }}
-              className="mt-20 liquid-glass rounded-[var(--radius-xl)] p-6 md:p-8 max-w-2xl"
+              className="mt-12 liquid-glass rounded-[var(--radius-xl)] p-6 md:p-8 max-w-2xl"
             >
               <dl className="grid grid-cols-3 gap-6">
                 {STATS.map((s) => (
@@ -181,6 +181,7 @@ export function Hero() {
                 ))}
               </dl>
             </motion.div>
+
           </div>
         </div>
       </motion.div>

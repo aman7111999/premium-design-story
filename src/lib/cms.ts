@@ -166,12 +166,25 @@ export async function uploadFile(bucket: string, file: File, prefix = "") {
 // Fallback gradient for projects without a thumbnail
 export const projectGradient = (seed: string) => {
   const gradients = [
-    "radial-gradient(120% 100% at 10% 0%, #F1EDE4 0%, #D9D3C4 45%, #B8AF9C 100%)",
-    "radial-gradient(120% 100% at 80% 20%, #F5E9E2 0%, #E5C7B8 40%, #8C6A5C 100%)",
-    "radial-gradient(120% 100% at 20% 80%, #E7EDE7 0%, #B6C5BE 40%, #3F5A55 100%)",
-    "radial-gradient(120% 100% at 60% 30%, #EDEAF3 0%, #C6BEDA 40%, #4E4570 100%)",
+    // Warm sand → clay
+    "radial-gradient(120% 100% at 12% 8%, #F5EFE3 0%, #D8C4A5 45%, #8A6B47 100%)",
+    // Terracotta → rust
+    "linear-gradient(135deg, #F2D7C4 0%, #C97B5A 55%, #6B2E1F 100%)",
+    // Sage → forest
+    "radial-gradient(130% 100% at 78% 18%, #E3EBE0 0%, #9AB3A2 45%, #2F4A3F 100%)",
+    // Indigo → deep navy
+    "linear-gradient(155deg, #E4E1EE 0%, #7C7CAE 50%, #1F2247 100%)",
+    // Ochre → oxblood
+    "radial-gradient(120% 100% at 25% 85%, #F0DDB5 0%, #C89A4A 45%, #5B2A1E 100%)",
+    // Slate → charcoal
+    "linear-gradient(140deg, #E8E6E0 0%, #7A7B78 50%, #1A1A1A 100%)",
+    // Mauve → plum
+    "radial-gradient(120% 100% at 68% 25%, #F0E4EA 0%, #B58AA0 45%, #4A2540 100%)",
+    // Ink teal
+    "linear-gradient(145deg, #DCE7E6 0%, #4E7A78 55%, #123032 100%)",
   ];
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
   return gradients[h % gradients.length];
 };
+
