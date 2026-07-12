@@ -129,7 +129,7 @@ export default function Contact() {
         </Reveal>
 
         <Reveal className="md:col-span-4 md:col-start-9">
-          <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Elsewhere</p>
+          <p className="eyebrow">Elsewhere</p>
           <ul className="mt-4 space-y-3">
             {(site?.socials ?? []).map((s) => (
               <li key={s.url}>
