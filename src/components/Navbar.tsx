@@ -1,10 +1,9 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { useSite } from "@/lib/cms";
 import { ThemeToggle } from "@/components/design/ThemeToggle";
-import { Button } from "@/components/design/Button";
 
 type Link = { to: string; label: string; external?: boolean };
 
@@ -14,9 +13,6 @@ export function Navbar() {
   const location = useLocation();
   const reduce = useReducedMotion();
   const { data: site } = useSite();
-
-  const { scrollY } = useScroll();
-  const shellPad = useTransform(scrollY, [0, 120], [10, 4]);
 
   const links: Link[] = [
     { to: "/", label: "Home" },
@@ -36,61 +32,43 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => { setOpen(false); }, [location.pathname]);
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   return (
     <motion.header
-      initial={reduce ? false : { y: -24, opacity: 0 }}
+      initial={reduce ? false : { y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-50"
-      style={{ paddingTop: shellPad }}
+      className={
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-500 ease-[var(--ease-out-quart)] " +
+        (scrolled
+          ? "border-b border-hairline bg-[var(--color-bg)]/85 backdrop-blur-md"
+          : "border-b border-transparent bg-transparent")
+      }
     >
       <div className="container-page">
         <nav
           aria-label="Primary"
-          className={
-            "mx-auto flex items-center justify-between gap-2 rounded-[var(--radius-pill)] border transition-[max-width,padding,box-shadow,background-color,border-color] duration-500 ease-[var(--ease-out-quart)] " +
-            (scrolled
-              ? "glass max-w-[860px] border-[var(--color-hairline-strong)] px-2 py-1.5 pl-4 shadow-[0_10px_50px_-24px_rgba(0,0,0,0.55)]"
-              : "max-w-[1140px] border-transparent bg-transparent px-3 py-2.5 pl-5")
-          }
+          className="flex items-baseline justify-between gap-6 py-5 md:py-6"
         >
           {/* Wordmark */}
           <NavLink
             to="/"
             aria-label={`${site?.name ?? "Aman Mishra"} — Home`}
-            className="group flex items-center gap-2.5"
+            className="group flex items-baseline gap-3"
           >
-            <span
-              aria-hidden
-              className="relative grid h-7 w-7 place-items-center overflow-hidden rounded-[9px] border border-[var(--color-hairline-strong)] font-display text-[11px] font-medium tracking-[-0.06em] text-[var(--color-text)]"
-              style={{
-                background:
-                  "linear-gradient(140deg, var(--color-elevated) 0%, var(--color-surface) 100%)",
-              }}
-            >
-              <span
-                className="pointer-events-none absolute -inset-px opacity-70"
-                style={{
-                  background:
-                    "radial-gradient(120% 120% at 30% 0%, var(--color-accent-glow) 0%, transparent 60%)",
-                }}
-              />
-              <span className="relative">AM</span>
+            <span className="font-display text-xl tracking-[-0.01em] text-[var(--color-text)]">
+              {site?.name ?? "Aman Mishra"}
             </span>
-            <span className="flex items-baseline gap-2">
-              <span className="font-display text-[14.5px] tracking-[-0.01em] text-[var(--color-text)]">
-                {site?.name ?? "Aman Mishra"}
-              </span>
-              <span className="mono hidden text-[10px] uppercase tracking-[0.18em] text-[var(--color-subtle)] lg:inline">
-                / Product Designer
-              </span>
+            <span className="mono hidden text-[10px] uppercase tracking-[0.22em] text-[var(--color-subtle)] lg:inline">
+              / Product Designer
             </span>
           </NavLink>
 
           {/* Center links */}
-          <ul className="hidden items-center gap-0.5 md:flex">
+          <ul className="hidden items-baseline gap-8 md:flex">
             {links.map((l) =>
               l.external ? (
                 <li key={l.to}>
@@ -98,12 +76,12 @@ export function Navbar() {
                     href={l.to}
                     target="_blank"
                     rel="noreferrer"
-                    className="group inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-[13px] text-[var(--color-muted)] transition-colors hover:text-[var(--color-text)]"
+                    className="group inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--color-subtle)] transition-colors hover:text-[var(--color-text)]"
                   >
                     {l.label}
                     <ArrowUpRight
                       size={11}
-                      className="opacity-60 transition-transform group-hover:-translate-y-[1px] group-hover:translate-x-[1px]"
+                      className="opacity-70 transition-transform group-hover:-translate-y-[1px] group-hover:translate-x-[1px]"
                     />
                   </a>
                 </li>
@@ -113,22 +91,22 @@ export function Navbar() {
                     to={l.to}
                     end={l.to === "/"}
                     className={({ isActive }) =>
-                      "relative rounded-full px-3 py-1.5 text-[13px] transition-colors " +
+                      "relative inline-block pb-1 text-[11px] font-medium uppercase tracking-[0.2em] transition-colors " +
                       (isActive
                         ? "text-[var(--color-text)]"
-                        : "text-[var(--color-muted)] hover:text-[var(--color-text)]")
+                        : "text-[var(--color-subtle)] hover:text-[var(--color-text)]")
                     }
                   >
                     {({ isActive }) => (
                       <>
+                        {l.label}
                         {isActive && (
                           <motion.span
-                            layoutId="nav-pill"
-                            className="absolute inset-0 -z-10 rounded-full bg-[var(--color-elevated)]"
+                            layoutId="nav-underline"
+                            className="absolute inset-x-0 -bottom-0.5 h-px bg-[var(--color-accent)]"
                             transition={{ type: "spring", stiffness: 380, damping: 32 }}
                           />
                         )}
-                        {l.label}
                       </>
                     )}
                   </NavLink>
@@ -138,11 +116,14 @@ export function Navbar() {
           </ul>
 
           {/* Right cluster */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <ThemeToggle className="hidden md:inline-flex" />
-            <Button to="/contact" variant="accent" size="sm" className="hidden md:inline-flex">
+            <NavLink
+              to="/contact"
+              className="hidden items-center gap-2 rounded-full border border-[var(--color-hairline-strong)] px-4 py-2 text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--color-text)] transition-all hover:border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-[var(--color-inverse)] md:inline-flex"
+            >
               Let's Talk
-            </Button>
+            </NavLink>
             <button
               type="button"
               aria-label={open ? "Close menu" : "Open menu"}
@@ -166,7 +147,7 @@ export function Navbar() {
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             className="container-page md:hidden"
           >
-            <div className="mt-2 rounded-[var(--radius-xl)] glass p-3 shadow-[0_20px_60px_-30px_rgba(0,0,0,0.5)]">
+            <div className="mt-2 rounded-[var(--radius-lg)] border border-hairline bg-[var(--color-card)] p-3 shadow-[var(--elevation-2)]">
               <ul className="flex flex-col">
                 {links.map((l, i) => (
                   <motion.li
@@ -180,7 +161,7 @@ export function Navbar() {
                         href={l.to}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center justify-between rounded-lg px-3 py-3 font-display text-lg text-[var(--color-muted)]"
+                        className="flex items-center justify-between rounded-md px-3 py-3 font-display text-lg text-[var(--color-muted)]"
                       >
                         {l.label}
                         <ArrowUpRight size={14} className="opacity-60" />
@@ -190,9 +171,9 @@ export function Navbar() {
                         to={l.to}
                         end={l.to === "/"}
                         className={({ isActive }) =>
-                          "block rounded-lg px-3 py-3 font-display text-lg " +
+                          "block rounded-md px-3 py-3 font-display text-lg " +
                           (isActive
-                            ? "bg-[var(--color-elevated)] text-[var(--color-text)]"
+                            ? "bg-[var(--color-surface)] text-[var(--color-text)]"
                             : "text-[var(--color-muted)]")
                         }
                       >
@@ -204,7 +185,12 @@ export function Navbar() {
               </ul>
               <div className="mt-2 flex items-center justify-between border-t border-hairline p-2 pt-3">
                 <ThemeToggle />
-                <Button to="/contact" variant="accent" size="sm">Let's Talk</Button>
+                <NavLink
+                  to="/contact"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-hairline-strong)] px-4 py-2 text-[11px] font-medium uppercase tracking-[0.2em]"
+                >
+                  Let's Talk
+                </NavLink>
               </div>
             </div>
           </motion.div>
