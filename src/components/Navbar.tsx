@@ -131,6 +131,12 @@ export function Navbar() {
             >
               Let's Talk
             </NavLink>
+            <NavLink
+              to="/contact"
+              className="inline-flex items-center rounded-full bg-[var(--color-text)] px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-[var(--color-inverse)] transition-colors hover:bg-[var(--color-accent)] md:hidden"
+            >
+              Talk
+            </NavLink>
             <button
               type="button"
               aria-label={open ? "Close menu" : "Open menu"}
@@ -140,6 +146,7 @@ export function Navbar() {
             >
               {open ? <X size={16} /> : <Menu size={16} />}
             </button>
+
           </div>
         </nav>
       </div>

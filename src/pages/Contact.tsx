@@ -47,12 +47,13 @@ export default function Contact() {
       <section className="container-page pt-24 pb-16 md:pt-40">
         <Reveal>
           <p className="text-xs uppercase tracking-widest text-[var(--color-muted)]">Say hello</p>
-          <h1 className="display-hero mt-6 text-6xl leading-[0.95] md:text-[10rem]">
-            Let's<br />make<br />
-            <span className="italic underline decoration-[var(--color-accent)] decoration-4 underline-offset-8">something</span>.
+          <h1 className="display-hero mt-6 max-w-[14ch] text-5xl leading-[1.02] md:text-[7.5rem] md:leading-[0.98]">
+            Let's make{" "}
+            <span className="italic text-[var(--color-accent)]">something</span>.
           </h1>
         </Reveal>
       </section>
+
 
       <section className="container-page grid gap-16 pb-32 md:grid-cols-12">
         <Reveal className="md:col-span-7">

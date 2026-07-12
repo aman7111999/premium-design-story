@@ -5,19 +5,14 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
 import { Hero } from "@/components/Hero";
 import { Button } from "@/components/design/Button";
-import { Metric } from "@/components/design/Metric";
 import { QuoteBlock } from "@/components/design/QuoteBlock";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 
+
 const HERO_SUB =
   "Senior Product Designer with 4.5+ years crafting AI-powered investment experiences, scalable design systems, and 0→1 products for modern financial platforms.";
 
-const HEADLINE_METRICS = [
-  { value: "4.5+", label: "Years shipping", hint: "Fintech · AI · Design Systems" },
-  { value: "12", label: "Products launched", hint: "From research to release" },
-  { value: "3", label: "Design systems", hint: "Scaled across product teams" },
-];
 
 export default function Home() {
   const { data: site } = useSite();
@@ -49,17 +44,6 @@ export default function Home() {
       {/* ==================== HERO ==================== */}
       <Hero />
 
-
-      {/* ==================== METRICS STRIP ==================== */}
-      <section className="container-page py-24 md:py-32">
-        <div className="grid gap-10 border-y border-hairline py-14 md:grid-cols-3">
-          {HEADLINE_METRICS.map((m, i) => (
-            <Reveal key={m.label} delay={i * 0.08}>
-              <Metric value={m.value} label={m.label} hint={m.hint} size="md" />
-            </Reveal>
-          ))}
-        </div>
-      </section>
 
       {/* ==================== FEATURED WORK ==================== */}
       <section id="work" className="container-page py-24 md:py-32">

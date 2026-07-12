@@ -7,28 +7,40 @@ export function PortraitFrame({ src, alt }: { src?: string | null; alt?: string 
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["-8%", "8%"]);
 
+  // No image → render a quiet typographic card, not fake camera chrome.
+  if (!src) {
+    return (
+      <div
+        ref={ref}
+        className="relative aspect-[3/4] w-full overflow-hidden rounded-[var(--radius-lg)] border border-hairline bg-[var(--color-surface)]"
+      >
+        <div className="absolute inset-0 flex flex-col justify-between p-[var(--space-6)]">
+          <p className="eyebrow">Portrait</p>
+          <div>
+            <p className="font-display text-4xl italic leading-[1.05] text-[var(--color-text)]">
+              {alt ?? "Aman Mishra"}
+            </p>
+            <p className="mt-[var(--space-2)] text-sm text-[var(--color-muted)]">
+              Designer, Bengaluru
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       ref={ref}
       className="relative aspect-[3/4] w-full overflow-hidden rounded-[var(--radius-lg)] border border-hairline"
       style={{ boxShadow: "var(--elevation-3)" }}
     >
-      {src ? (
-        <motion.div
-          style={{ y, background: `center/cover url(${src})` }}
-          className="absolute inset-[-8%]"
-          aria-label={alt}
-          role="img"
-        />
-      ) : (
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(120% 100% at 20% 10%, #E7EDE7 0%, #B6C5BE 55%, #3F5A55 100%)",
-          }}
-        />
-      )}
+      <motion.div
+        style={{ y, background: `center/cover url(${src})` }}
+        className="absolute inset-[-8%]"
+        aria-label={alt}
+        role="img"
+      />
       {/* Grain */}
       <span
         aria-hidden
@@ -46,3 +58,4 @@ export function PortraitFrame({ src, alt }: { src?: string | null; alt?: string 
     </div>
   );
 }
+
