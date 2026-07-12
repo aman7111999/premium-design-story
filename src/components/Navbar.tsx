@@ -54,10 +54,11 @@ export function Navbar() {
           <NavLink
             to="/"
             aria-label={fullName}
-            className="font-display italic text-[20px] leading-none tracking-[-0.01em] text-[var(--color-text)]"
+            className="font-display italic text-[22px] md:text-[24px] leading-none tracking-[-0.01em] text-[var(--color-text)]"
           >
             {fullName}
           </NavLink>
+
 
 
           {/* Center links */}
