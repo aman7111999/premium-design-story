@@ -101,7 +101,7 @@ export default function Contact() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="contact-message" className="text-[11px] uppercase tracking-[0.2em] text-[var(--color-subtle)]">Message</Label>
+              <Label htmlFor="contact-message" className="eyebrow">Message</Label>
               <Textarea
                 id="contact-message"
                 name="message"
