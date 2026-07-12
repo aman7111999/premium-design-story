@@ -1,84 +1,66 @@
-# Typography audit + fixes
+# Redesign Homepage — Dark Emerald Portfolio
 
-## What I found
+Rebuild the site's look and homepage structure to match the attached reference. Portfolio-only (no pricing/marketplace). Also add light and dark theme toggle 
 
-Font sizes are inconsistent across pages. The site uses a mix of hardcoded pixel values (`text-[10px]` through `text-[15px]`), Tailwind presets (`text-xs`, `text-lg`, `text-3xl`…), and design-token utilities (`display-hero`, `eyebrow`). Similar UI elements use different sizes on different pages.
+## Design tokens (update `src/index.css`)
 
-**Navbar (top widget bar)**
-- Logo: `text-[20px]` italic serif — reads slightly small next to the 12px caps links.
-- Nav links / Email button: `text-[12px]` uppercase — OK.
-- Mobile "Email" pill: `text-[11px]` — should match desktop `12px`.
-- Mobile menu items: `text-sm` (14px) — fine.
-- Theme toggle icon: 15px — fine.
+- Background: `#0A0F0D` (near-black with green tint); surface `#0F1613`; card `#111A16`; hairlines `#1E2A24`
+- Accent: `#00E28A` (neon emerald); accent-contrast `#001A10`
+- Text: `#E8F1EC`; muted `#8A9A92`
+- Glow: `0 0 40px rgba(0,226,138,0.35)` for CTAs and accent orbs
+- Keep Instrument Serif for italic accents; body sans stays
 
-**Cross-page inconsistencies**
-- Eyebrow labels: mix of `text-xs` (12px), `text-[10px]`, `text-[11px]`. The `eyebrow` utility (11px, uppercase, tracking-widest) already exists — should be the only one used.
-- Body copy on Hero/Home intro: `text-[14px]`, About uses `text-lg` (18px), Contact/Work use `text-lg`. Should standardize to one lead size + one body size.
-- Section H2s: About and others use `text-4xl md:text-6xl` — fine, but `display-2`/`display-3` utilities already define these.
-- Small pill buttons: 10.5px / 11px / 12px / 13px — pick two: 11px chip, 12px CTA.
-- Form inputs: `text-[15px]` — fine, keep as body input size.
+## Homepage sections (`src/pages/Home.tsx` + new components)
 
-## Proposed unified scale (used everywhere)
+1. **Hero — "Meet the Expert"**
+  - Top pill: avatar + name on left, small "Available" status pill (green dot), CTA button on right — all inside one liquid-glass rounded pill (like reference top bar)
+  - Big headline: "Meet the Expert **Product Designer**" (mix bold sans + italic serif emerald word)
+  - Sub copy + primary CTA "Let's Talk" (emerald with glow) and secondary "See Work"
+  - Right side: circular portrait with orbiting dotted ring + small floating icon chips (Figma, Framer badges)
+  - Faint grid background + emerald radial glow
+2. **"Crafting Next-Horizon Experiences" — services grid**
+  - 6 cards in bento layout (2 large + 4 small) on dark surface with subtle hairline
+  - Cards: UI/UX Design, Framer Development, Webflow / No-code, Design Systems, Motion, Prototyping (map to your actual skills)
+  - Each card: eyebrow, title, short copy, small illustrated visual (emerald line-art / icon), hover lift + emerald edge glow
+3. **Featured Projects** (keep existing `ProjectCard` grid, restyle to dark cards with emerald hover ring)
+4. **"Designing Websites that Inspire & Convert" — stats + portrait band**
+  - Left: eyebrow + heading + 3 metrics (years, projects, satisfaction)
+  - Right: portrait card with quote overlay
+5. **Testimonials** — 3-column card grid, dark cards, 5-star row, avatar + name/role
+6. **FAQ** — accordion, left heading + right questions column
+7. **Final CTA — "Let's Build Something Amazing"**
+  - Full-width dark band with emerald glow, big centered headline, email CTA
+  - Faint browser-mockup collage strip along the bottom edge
+8. **Footer** — restyle to match (dark, emerald accent links)
 
-```
-eyebrow / mono caps ....... 11px  (use .eyebrow)
-chip / tag pill ........... 11px
-nav link + CTA caps ....... 12px
-supporting body / hint .... 13px
-body base ................. 15px
-lead paragraph ............ 18px  (text-lg)
-input text ................ 15px
-section H2 ................ display-2 (uses --font-size-4xl clamp)
-page H1 / hero ............ display-hero
-card title ................ inherits from ProjectCard
-```
+## Motion (referencing the attached video)
 
-## Changes
+- Hero portrait: subtle continuous float (y ±6px, 6s ease-in-out) + dotted ring slow rotate (40s linear)
+- Section reveals: `Reveal` component with y:24 → 0, blur 8→0, 0.7s cubic-bezier(0.22,1,0.36,1), staggered by index
+- Service cards: on hover, scale 1.02 + emerald border glow ease-out 300ms; icon does small y-lift
+- CTA buttons: emerald glow pulse (opacity 0.6→1 loop 2.6s) + magnetic hover
+- Numbers in stats: `CountUp` on in-view
+- Testimonial row: horizontal auto-marquee (pauses on hover)
+- Page transitions: existing `PageTransition` keeps fade+scale
 
-**Navbar (`src/components/Navbar.tsx`)**
-- Logo: bump to `text-[22px]` md `text-[24px]` for stronger presence.
-- Mobile Email pill: `text-[11px]` → `text-[12px]` to match desktop.
+## Files to change
 
-**Hero (`src/components/Hero.tsx`)**
-- Greeting sticker eyebrow `text-[10px]` → `text-[11px]` (matches eyebrow scale).
-- "Currently designing at" eyebrow already 11px — keep.
-- Buttons already 13px — keep (hero-scale CTA is intentionally 1px larger than nav).
+- `src/index.css` — swap palette to dark emerald tokens; add `.glow-emerald`, `.card-dark`, marquee keyframes
+- `src/pages/Home.tsx` — rebuild section order
+- `src/components/Hero.tsx` — rebuild as "Meet the Expert" layout with portrait
+- New: `src/components/home/ServicesBento.tsx`, `StatsBand.tsx`, `TestimonialsRow.tsx`, `FaqSection.tsx`, `FinalCta.tsx`
+- `src/components/Navbar.tsx` — tighten to match reference top pill (avatar left, links center, emerald CTA right)
+- `src/components/Footer.tsx` — dark restyle
+- Force dark theme as default in `src/lib/theme.tsx`
 
-**Home (`src/pages/Home.tsx`)**
-- Intro paragraph `text-[14px]` → `text-[15px]` (body base).
-- Buttons `text-[12px]` — keep.
+## Out of scope
 
-**Footer (`src/components/Footer.tsx`)**
-- Chip buttons `text-[11px]` → `text-[12px]` for parity with nav CTA size.
-- Legal row `text-[11px]` — keep (metadata is intentionally smaller).
+- Pricing tiers / template marketplace (per your answer)
+- No new backend, no CMS schema changes
 
-**Work (`src/pages/Work.tsx`)**
-- Replace `text-xs uppercase tracking-widest` with the `.eyebrow` utility.
-- Lead `text-lg` — keep.
+## Technical notes
 
-**About (`src/pages/About.tsx`)**
-- Replace loose `text-4xl md:text-6xl` section headings with `.display-2` utility for consistency with the token scale.
-- Metadata `text-lg` labels — keep.
-- Body `text-lg leading-relaxed` — keep.
-
-**Contact (`src/pages/Contact.tsx`)**
-- Replace three `text-xs uppercase tracking-widest` labels with `.eyebrow`.
-- Form field labels `text-[11px]` → use `.eyebrow` (same 11px, same tracking).
-- Submit button `text-[12px]` — keep.
-
-**Project (`src/pages/Project.tsx`)**
-- Consolidate `text-[10.5px]` / `text-[10px]` chips → `text-[11px]`.
-- Body `text-lg leading-relaxed` — keep.
-
-**ProjectCard (`src/components/ProjectCard.tsx`)**
-- Chips already at 10–11px on colored cards — bump the `10px` category sticker to `11px` for consistency.
-- Body `text-[13px]` — keep (supporting hint size).
-
-## Not touched
-- `display-hero`, `display-1..3` utilities in `index.css` — the scale itself is well-tuned; only usage is being normalized.
-- Admin pages (out of scope for user-facing typography).
-- Case-study `.prose-editorial` — self-contained, already consistent.
-
-## Verification
-- Screenshot Home, About, Work, Contact in both light and dark themes at desktop (1280px) after changes.
-- Confirm nav, hero eyebrows, and section headings visually align across pages.
+- All colors go through CSS vars — no hardcoded hex in components
+- Reuse existing `Reveal`, `CountUp`, `MagneticButton`, `liquid-glass` utility
+- Portrait: uses `site.profile_image_url` from CMS; fallback to initials
+- Services/FAQ content: hardcoded initially (can be moved to CMS later)
