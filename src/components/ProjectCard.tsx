@@ -198,7 +198,8 @@ export function ProjectCard({
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
+
       </Link>
     </motion.article>
   );
