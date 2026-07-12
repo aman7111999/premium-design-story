@@ -1,8 +1,8 @@
 import { Seo } from "@/lib/seo";
 import { useSite } from "@/lib/cms";
 import { Hero } from "@/components/Hero";
-import { ServicesBento } from "@/components/home/ServicesBento";
-import { VisionBento } from "@/components/home/VisionBento";
+import { FeaturedWork } from "@/components/home/FeaturedWork";
+import { Experience } from "@/components/home/Experience";
 import { StatsBand } from "@/components/home/StatsBand";
 import { TestimonialsGrid } from "@/components/home/TestimonialsRow";
 import { FaqSection } from "@/components/home/FaqSection";
@@ -33,8 +33,8 @@ export default function Home() {
       />
 
       <Hero />
-      <ServicesBento />
-      <VisionBento />
+      <FeaturedWork />
+      <Experience />
       <StatsBand />
       <TestimonialsGrid />
       <FaqSection />
