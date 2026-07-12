@@ -37,7 +37,6 @@ export default function Home() {
     : undefined;
 
   const featuredArr = featured ?? [];
-  const featuredTagline = featuredArr[0]?.short_description;
   const large = featuredArr.slice(0, 2);
   const small = featuredArr.slice(2, 6);
 
@@ -63,12 +62,11 @@ export default function Home() {
           >
             Featured Projects
           </h2>
-          {featuredTagline && (
-            <p className="mx-auto mt-4 max-w-lg text-[14px] leading-relaxed text-[var(--color-muted)]">
-              {featuredTagline}
-            </p>
-          )}
+          <p className="mx-auto mt-4 max-w-lg text-[14px] leading-relaxed text-[var(--color-muted)]">
+            A handful of the products, systems, and 0→1 experiments I've shipped recently.
+          </p>
         </Reveal>
+
 
         {/* 2 large hero cards */}
         <div className="mt-14 grid gap-6 md:grid-cols-2 md:gap-7">
