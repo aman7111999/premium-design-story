@@ -105,7 +105,8 @@ export function ProjectCard({
             "relative aspect-[16/10] w-full overflow-hidden " +
             "rounded-[var(--radius-xl)] border border-hairline bg-[var(--color-card)] " +
             "shadow-[var(--elevation-2)] " +
-            "transition-[border-color,box-shadow] duration-[var(--dur-slow)] ease-[var(--ease-out-quart)] " +
+            "transition-[border-color,box-shadow,border-radius] duration-[var(--dur-slow)] ease-[var(--ease-out-quart)] " +
+            "group-hover:rounded-[calc(var(--radius-xl)*1.35)] " +
             "group-hover:border-[var(--color-hairline-strong)] " +
             "group-hover:shadow-[0_60px_120px_-40px_var(--color-accent-glow),var(--elevation-3)]"
           }
