@@ -213,33 +213,3 @@ function RevealLine({
   );
 }
 
-function CompanyRow({
-  label,
-  name,
-  sub,
-  active = false,
-}: {
-  label: string;
-  name: string;
-  sub: string;
-  active?: boolean;
-}) {
-  return (
-    <div className="flex items-baseline gap-4">
-      <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-[var(--color-subtle)]">
-        <span
-          className={`h-1.5 w-1.5 rounded-full ${
-            active ? "bg-[var(--color-success)]" : "bg-[var(--color-subtle)]"
-          }`}
-        />
-        {label}
-      </span>
-      <span className="flex-1">
-        <span className="block font-display text-xl leading-none text-[var(--color-text)]">
-          {name}
-        </span>
-        <span className="mt-1 block text-[12px] text-[var(--color-muted)]">{sub}</span>
-      </span>
-    </div>
-  );
-}
