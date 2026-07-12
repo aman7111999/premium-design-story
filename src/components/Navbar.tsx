@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X, Mail, ArrowUpRight } from "lucide-react";
 import { useSite } from "@/lib/cms";
+import { ThemeToggle } from "@/components/design/ThemeToggle";
+
 
 type Link = { to: string; label: string; external?: boolean };
 
@@ -105,7 +107,9 @@ export function Navbar() {
 
           {/* Right cluster */}
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <NavLink
+
               to="/contact"
               className="hidden items-center gap-2 rounded-full bg-[var(--color-accent)] px-5 py-2 font-heavy text-[12px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-contrast)] shadow-[var(--elevation-accent)] transition-transform hover:scale-[1.04] md:inline-flex"
             >
