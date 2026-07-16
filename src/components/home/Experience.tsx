@@ -12,40 +12,31 @@ type Role = {
 
 const ROLES: Role[] = [
   {
-    company: "Freelance",
-    role: "Product & Framer Designer",
-    period: "2024 — Present",
-    location: "Remote",
+    company: "Motilal Oswal Financial Services",
+    role: "Assistant Manager, Product Design",
+    period: "Aug 2025 — Present",
+    location: "Mumbai, India",
     summary:
-      "Partnering with startups and agencies to design and ship high-converting product surfaces, marketing sites, and design systems in Framer and Figma.",
-    tags: ["Product", "Framer", "Design Systems"],
+      "Leading the end-to-end UX revamp of the Riise investment platform across Stocks, F&O, Mutual Funds, US Stocks, and Algo Trading. Architecting ‘Mira AI’ and the 0-to-1 ‘Screener’ product line.",
+    tags: ["Fintech", "AI", "Design Systems"],
   },
   {
-    company: "Studio Nord",
-    role: "Senior Product Designer",
-    period: "2022 — 2024",
-    location: "Berlin, DE",
-    summary:
-      "Led end-to-end product design for B2B SaaS clients — from discovery and prototyping through motion and hand-off to engineering.",
-    tags: ["SaaS", "Prototyping", "Motion"],
-  },
-  {
-    company: "Northlane",
+    company: "Trinkerr",
     role: "Product Designer",
-    period: "2020 — 2022",
-    location: "Amsterdam, NL",
+    period: "Feb 2023 — Apr 2025",
+    location: "Bangalore, India",
     summary:
-      "Shipped onboarding, billing, and dashboard experiences used by 40k+ teams. Built the first version of the internal design system.",
-    tags: ["Dashboard", "Onboarding", "DS v1"],
+      "Designed SEBI-registered advisory flows driving 30% adoption uplift. Revamped Portfolio Health Report and Feed for a 60% engagement lift. Co-architected the TIQS 2.0 Design System across iOS and Android.",
+    tags: ["SEBI", "Data Storytelling", "TIQS 2.0"],
   },
   {
-    company: "Kernel Labs",
-    role: "UI/UX Designer",
-    period: "2018 — 2020",
-    location: "Bengaluru, IN",
+    company: "Trinkerr",
+    role: "Associate Product Designer",
+    period: "Jan 2022 — Feb 2023",
+    location: "Bangalore, India",
     summary:
-      "Designed mobile-first fintech and consumer apps. Ran usability testing sprints and defined the visual language for two flagship products.",
-    tags: ["Mobile", "Fintech", "Research"],
+      "Redesigned the portfolio import flow with progressive disclosure — a 90% lift in successful completions. Shipped watchlist, portfolio, and transaction features driving 60% feature adoption.",
+    tags: ["Mobile", "Research", "Investing"],
   },
 ];
 
