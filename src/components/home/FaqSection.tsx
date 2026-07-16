@@ -26,7 +26,7 @@ export function FaqSection() {
             Commonly <span className="text-[var(--color-accent)]">Asked</span>
             <br /> Questions
           </h2>
-          <p className="mt-5 max-w-sm text-[14px] leading-relaxed text-[var(--color-muted)]">
+          <p className="mt-5 max-w-sm text-[15px] leading-[1.65] text-[var(--color-muted)]">
             Answers to what people ask before we start. Have another? Ping me.
           </p>
         </Reveal>
@@ -39,14 +39,14 @@ export function FaqSection() {
                 <li key={i} className="liquid-glass overflow-hidden">
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
-                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                    className="flex min-h-[68px] w-full items-center justify-between gap-4 px-6 py-5 text-left"
                   >
-                    <span className="text-[15px] font-semibold text-[var(--color-text)]">{item.q}</span>
+                    <span className="text-[17px] font-semibold text-[var(--color-text)]">{item.q}</span>
                     <span
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-[var(--color-hairline-strong)] text-[var(--color-accent)] transition-transform duration-300"
+                      className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[var(--color-hairline-strong)] text-[var(--color-accent)] transition-transform duration-300"
                       style={{ transform: isOpen ? "rotate(45deg)" : "rotate(0)" }}
                     >
-                      <Plus size={14} />
+                      <Plus size={15} />
                     </span>
                   </button>
                   <AnimatePresence initial={false}>
@@ -57,7 +57,7 @@ export function FaqSection() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       >
-                        <p className="px-5 pb-5 text-[13.5px] leading-relaxed text-[var(--color-muted)]">
+                        <p className="px-6 pb-6 text-[15px] leading-[1.65] text-[var(--color-muted)]">
                           {item.a}
                         </p>
                       </motion.div>

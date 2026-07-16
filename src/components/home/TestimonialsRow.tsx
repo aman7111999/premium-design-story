@@ -24,22 +24,22 @@ export function TestimonialsGrid() {
         </h2>
       </Reveal>
 
-      <div className="mt-14 grid gap-5 md:grid-cols-3">
+      <div className="mt-14 grid gap-6 md:grid-cols-3">
         {TESTIMONIALS.map((t) => (
-          <div key={t.name} className="liquid-glass p-6">
+          <div key={t.name} className="liquid-glass p-8">
             <div className="flex gap-0.5 text-[var(--color-accent)]">
               {Array.from({ length: 5 }).map((_, k) => (
-                <Star key={k} size={13} fill="currentColor" strokeWidth={0} />
+                <Star key={k} size={14} fill="currentColor" strokeWidth={0} />
               ))}
             </div>
-            <p className="mt-4 text-[14px] leading-relaxed text-[var(--color-text)]">"{t.quote}"</p>
-            <div className="mt-6 flex items-center gap-3 border-t border-[var(--color-hairline)] pt-4">
-              <div className="grid h-9 w-9 place-items-center rounded-full bg-[var(--color-accent)] text-[12px] font-bold text-[var(--color-accent-contrast)]">
+            <p className="mt-5 text-[16px] leading-[1.65] text-[var(--color-text)]">"{t.quote}"</p>
+            <div className="mt-7 flex items-center gap-3.5 border-t border-[var(--color-hairline)] pt-5">
+              <div className="grid h-11 w-11 place-items-center rounded-full bg-[var(--color-accent)] text-[13px] font-bold text-[var(--color-accent-contrast)]">
                 {t.name.split(" ").map((n) => n[0]).join("")}
               </div>
               <div>
-                <div className="text-[13px] font-semibold text-[var(--color-text)]">{t.name}</div>
-                <div className="text-[11px] text-[var(--color-muted)]">{t.role}</div>
+                <div className="text-[14px] font-semibold text-[var(--color-text)]">{t.name}</div>
+                <div className="text-[12px] text-[var(--color-muted)]">{t.role}</div>
               </div>
             </div>
           </div>

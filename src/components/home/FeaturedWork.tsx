@@ -65,11 +65,11 @@ export function FeaturedWork() {
                   {p.category ?? "Case study"}
                 </span>
               </div>
-              <div className="mt-5 flex items-center justify-between gap-4">
+              <div className="mt-6 flex items-center justify-between gap-4">
                 <div className="min-w-0">
-                  <h3 className="truncate text-xl md:text-2xl font-semibold">{p.title}</h3>
+                  <h3 className="truncate text-[22px] md:text-[24px] font-semibold tracking-[-0.015em]">{p.title}</h3>
                   {p.short_description && (
-                    <p className="mt-1 truncate text-sm text-[var(--color-muted)]">
+                    <p className="mt-1.5 truncate text-[15px] leading-relaxed text-[var(--color-muted)]">
                       {p.short_description}
                     </p>
                   )}

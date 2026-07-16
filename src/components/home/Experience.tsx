@@ -62,24 +62,24 @@ export function Experience() {
             <div className="liquid-glass p-6 md:p-8">
               <div className="grid gap-6 md:grid-cols-[240px_1fr] md:items-start">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.14em] text-[var(--color-muted)]">
+                  <p className="text-[12px] uppercase tracking-[0.16em] text-[var(--color-muted)]">
                     {r.period}
                   </p>
-                  <p className="mt-2 text-xl font-semibold">{r.company}</p>
-                  <p className="mt-1 flex items-center gap-1.5 text-xs text-[var(--color-muted)]">
-                    <MapPin size={11} /> {r.location}
+                  <p className="mt-2 text-[22px] font-semibold tracking-[-0.015em] text-[var(--color-text)]">{r.company}</p>
+                  <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-[var(--color-muted)]">
+                    <MapPin size={12} /> {r.location}
                   </p>
                 </div>
                 <div>
-                  <p className="text-lg font-medium text-[var(--color-accent)]">{r.role}</p>
-                  <p className="mt-2 text-[15px] leading-relaxed text-[var(--color-muted)]">
+                  <p className="text-[17px] font-medium text-[var(--color-accent)]">{r.role}</p>
+                  <p className="mt-2.5 text-[16px] leading-[1.65] text-[var(--color-muted)]">
                     {r.summary}
                   </p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {r.tags.map((t) => (
                       <span
                         key={t}
-                        className="rounded-full border border-[var(--color-hairline-strong)] px-3 py-1 text-[11px] text-[var(--color-text)]"
+                        className="rounded-full border border-[var(--color-hairline-strong)] px-3 py-1 text-[12px] text-[var(--color-text)]"
                       >
                         {t}
                       </span>
