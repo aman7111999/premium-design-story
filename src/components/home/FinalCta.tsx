@@ -1,8 +1,23 @@
 import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
-import { useSite } from "@/lib/cms";
+import { useSite, useContent } from "@/lib/cms";
 
-// Faux browser-mockup collage using colored placeholder cards
+type Data = {
+  heading_line1: string;
+  heading_accent: string;
+  heading_line2: string;
+  subline: string;
+  cta_label: string;
+};
+
+const FALLBACK: Data = {
+  heading_line1: "Let's",
+  heading_accent: "Build",
+  heading_line2: "Something Amazing!",
+  subline: "Ready to elevate your brand with stunning, user-friendly design? Get started today and bring your vision to life!",
+  cta_label: "Start New Project",
+};
+
 const MOCKS = [
   { hue: 340, top: "5%",  left: "-2%",  rot: -6 },
   { hue: 200, top: "12%", left: "18%",  rot: 3 },
@@ -17,10 +32,11 @@ const MOCKS = [
 
 export function FinalCta() {
   const { data: site } = useSite();
+  const { data: c } = useContent<Data>("home_cta", FALLBACK);
+  const d = c ?? FALLBACK;
 
   return (
     <section className="relative overflow-hidden py-24 md:py-40">
-      {/* Collage background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         {MOCKS.map((m, i) => (
           <div
@@ -42,10 +58,7 @@ export function FinalCta() {
         ))}
         <div
           className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 20%, var(--color-bg) 70%)",
-          }}
+          style={{ background: "radial-gradient(ellipse at center, transparent 20%, var(--color-bg) 70%)" }}
         />
       </div>
 
@@ -55,12 +68,11 @@ export function FinalCta() {
             className="font-semibold leading-[1.02] tracking-[-0.03em] text-[var(--color-text)]"
             style={{ fontSize: "clamp(2.4rem, 5.4vw, 4.5rem)" }}
           >
-            Let's <span className="text-[var(--color-accent)]">Build</span>
-            <br /> Something Amazing!
+            {d.heading_line1} <span className="text-[var(--color-accent)]">{d.heading_accent}</span>
+            <br /> {d.heading_line2}
           </h2>
           <p className="mx-auto mt-5 max-w-md text-[15px] leading-relaxed text-[var(--color-muted)]">
-            Ready to elevate your brand with stunning, user-friendly design?
-            Get started today and bring your vision to life!
+            {d.subline}
           </p>
 
           {site?.email && (
@@ -68,7 +80,7 @@ export function FinalCta() {
               <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--color-accent-contrast)] text-[var(--color-accent)]">
                 <ArrowRight size={15} />
               </span>
-              Start New Project
+              {d.cta_label}
             </a>
           )}
         </Reveal>

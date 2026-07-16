@@ -30,6 +30,7 @@ const AdminResume = lazy(() => import("@/pages/admin/ResumeAdmin"));
 const AdminMedia = lazy(() => import("@/pages/admin/MediaAdmin"));
 const AdminSeo = lazy(() => import("@/pages/admin/SeoAdmin"));
 const AdminSettings = lazy(() => import("@/pages/admin/SettingsAdmin"));
+const AdminContent = lazy(() => import("@/pages/admin/ContentAdmin"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -90,6 +91,7 @@ export default function App() {
             <Route path="media" element={<AdminMedia />} />
             <Route path="seo" element={<AdminSeo />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="content" element={<AdminContent />} />
           </Route>
         </Routes>
       </Suspense>

@@ -2,38 +2,50 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
+import { useContent } from "@/lib/cms";
 
-const FAQ = [
-  { q: "What kind of projects do you take on?", a: "0→1 product design, marketing sites, Framer builds, and design systems for founders and small teams." },
-  { q: "How long does a typical project take?", a: "A landing site: 2–3 weeks. A full product redesign: 6–10 weeks depending on scope." },
-  { q: "Do you work with existing teams?", a: "Yes — I embed with product & engineering, running design sprints, reviews, and shipping polished handoff." },
-  { q: "What's your pricing model?", a: "Fixed-fee per project or a weekly retainer. Ballpark shared after a short discovery call." },
-  { q: "Can you build the site too?", a: "Absolutely — Framer, Webflow, or React/Tailwind. Design and dev under one roof." },
-];
+type Data = {
+  eyebrow: string;
+  heading_line1: string;
+  heading_accent: string;
+  heading_line2: string;
+  subline: string;
+  items: { q: string; a: string }[];
+};
+
+const FALLBACK: Data = {
+  eyebrow: "FAQ",
+  heading_line1: "Commonly",
+  heading_accent: "Asked",
+  heading_line2: "Questions",
+  subline: "Answers to what people ask before we start. Have another? Ping me.",
+  items: [],
+};
 
 export function FaqSection() {
+  const { data: c } = useContent<Data>("home_faq", FALLBACK);
+  const d = c ?? FALLBACK;
   const [open, setOpen] = useState<number | null>(0);
+  const faq = d.items ?? [];
 
   return (
     <section className="container-page py-24 md:py-32">
       <div className="grid gap-12 md:grid-cols-12">
         <Reveal className="md:col-span-5">
-          <p className="eyebrow">FAQ</p>
+          <p className="eyebrow">{d.eyebrow}</p>
           <h2
             className="mt-3 font-semibold leading-[1.05] tracking-[-0.025em] text-[var(--color-text)]"
             style={{ fontSize: "clamp(2rem, 4.2vw, 3.25rem)" }}
           >
-            Commonly <span className="text-[var(--color-accent)]">Asked</span>
-            <br /> Questions
+            {d.heading_line1} <span className="text-[var(--color-accent)]">{d.heading_accent}</span>
+            <br /> {d.heading_line2}
           </h2>
-          <p className="mt-5 max-w-sm text-[15px] leading-[1.65] text-[var(--color-muted)]">
-            Answers to what people ask before we start. Have another? Ping me.
-          </p>
+          <p className="mt-5 max-w-sm text-[15px] leading-[1.65] text-[var(--color-muted)]">{d.subline}</p>
         </Reveal>
 
         <div className="md:col-span-7">
           <ul className="space-y-3">
-            {FAQ.map((item, i) => {
+            {faq.map((item, i) => {
               const isOpen = open === i;
               return (
                 <li key={i} className="liquid-glass overflow-hidden">
@@ -57,9 +69,7 @@ export function FaqSection() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       >
-                        <p className="px-6 pb-6 text-[15px] leading-[1.65] text-[var(--color-muted)]">
-                          {item.a}
-                        </p>
+                        <p className="px-6 pb-6 text-[15px] leading-[1.65] text-[var(--color-muted)]">{item.a}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>

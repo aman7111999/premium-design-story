@@ -83,6 +83,24 @@ export type Database = {
         }
         Relationships: []
       }
+      content_blocks: {
+        Row: {
+          data: Json
+          key: string
+          updated_at: string
+        }
+        Insert: {
+          data?: Json
+          key: string
+          updated_at?: string
+        }
+        Update: {
+          data?: Json
+          key?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       education: {
         Row: {
           created_at: string

@@ -42,6 +42,45 @@ export type SiteSettings = {
   socials: { label: string; url: string }[];
 };
 
+// ─────────────────────── Editable content blocks ───────────────────────
+export type ContentKey =
+  | "nav" | "footer" | "hero"
+  | "home_featured" | "home_experience" | "home_stats"
+  | "home_testimonials" | "home_faq" | "home_cta"
+  | "about_hero" | "about_timeline" | "about_experience" | "about_education"
+  | "about_tools" | "about_philosophy" | "about_working_style"
+  | "about_books" | "about_values" | "about_fun_facts"
+  | "contact_page";
+
+export function useContent<T = any>(key: ContentKey, fallback?: T) {
+  const q = useQuery({
+    queryKey: ["content_block", key],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("content_blocks" as any)
+        .select("data")
+        .eq("key", key)
+        .maybeSingle();
+      if (error) throw error;
+      return ((data as any)?.data ?? null) as T | null;
+    },
+  });
+  return { ...q, data: (q.data ?? fallback ?? null) as T };
+}
+
+export function useAllContent() {
+  return useQuery({
+    queryKey: ["content_blocks_all"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("content_blocks" as any).select("*");
+      if (error) throw error;
+      const map: Record<string, any> = {};
+      for (const row of (data ?? []) as any[]) map[row.key] = row.data;
+      return map;
+    },
+  });
+}
+
 export function useSite() {
   return useQuery({
     queryKey: ["site"],

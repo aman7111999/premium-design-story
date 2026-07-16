@@ -2,24 +2,38 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
-import { useSite } from "@/lib/cms";
+import { useSite, useContent } from "@/lib/cms";
 import { ThemeToggle } from "@/components/design/ThemeToggle";
 
-const LINKS = [
-  { to: "/about", label: "About" },
-  { to: "/work", label: "Projects" },
-  { to: "/blog", label: "Blog" },
-];
+type NavData = {
+  links: { label: string; to: string }[];
+  cta_label: string;
+  cta_to: string;
+  role_line: string;
+};
+
+const NAV_FALLBACK: NavData = {
+  links: [
+    { to: "/about", label: "About" },
+    { to: "/work", label: "Projects" },
+    { to: "/blog", label: "Blog" },
+  ],
+  cta_label: "Let's Talk",
+  cta_to: "/contact",
+  role_line: "Product Designer",
+};
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const { data: site } = useSite();
+  const { data: nav } = useContent<NavData>("nav", NAV_FALLBACK);
 
   useEffect(() => setOpen(false), [location.pathname]);
 
   const name = site?.name ?? "Aman Mishra";
   const initials = name.split(" ").map((n) => n[0]).slice(0, 2).join("");
+  const links = nav?.links ?? NAV_FALLBACK.links;
 
   return (
     <motion.header
@@ -34,7 +48,6 @@ export function Navbar() {
           aria-label="Primary"
           className="nav-pill mx-auto flex h-[72px] w-full items-center justify-between gap-2 py-2 pl-2 pr-2 md:w-fit md:justify-start"
         >
-          {/* Avatar + name */}
           <NavLink to="/" className="flex items-center gap-3 rounded-full pl-1 pr-4 py-1">
             <span className="grid h-[38px] w-[38px] place-items-center overflow-hidden rounded-full bg-[var(--color-accent)] text-[12px] font-bold text-[var(--color-accent-contrast)]">
               {site?.profile_image_url ? (
@@ -43,14 +56,13 @@ export function Navbar() {
             </span>
             <span className="hidden text-left leading-tight sm:block">
               <span className="block text-[16px] font-medium text-[var(--color-text)]">{name}</span>
-              <span className="block text-[11px] text-[var(--color-muted)]">Product Designer</span>
+              <span className="block text-[11px] text-[var(--color-muted)]">{nav?.role_line ?? NAV_FALLBACK.role_line}</span>
             </span>
           </NavLink>
 
-          {/* Center links */}
           <ul className="hidden items-center gap-[28px] px-2 md:flex lg:gap-[36px]">
-            {LINKS.map((l) => (
-              <li key={l.label}>
+            {links.map((l) => (
+              <li key={l.label + l.to}>
                 <NavLink
                   to={l.to}
                   className={({ isActive }) =>
@@ -68,11 +80,11 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <NavLink to="/contact" className="btn-primary !py-1.5 !pr-5 !text-[14px]" style={{ minHeight: 44 }}>
+            <NavLink to={nav?.cta_to ?? NAV_FALLBACK.cta_to} className="btn-primary !py-1.5 !pr-5 !text-[14px]" style={{ minHeight: 44 }}>
               <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--color-accent-contrast)] text-[var(--color-accent)]">
                 <ArrowRight size={15} />
               </span>
-              <span>Let's Talk</span>
+              <span>{nav?.cta_label ?? NAV_FALLBACK.cta_label}</span>
             </NavLink>
             <button
               type="button"
@@ -86,8 +98,6 @@ export function Navbar() {
         </nav>
         </div>
       </div>
-
-
 
       <AnimatePresence>
         {open && (
@@ -103,8 +113,8 @@ export function Navbar() {
               style={{ background: "var(--color-surface)" }}
             >
               <ul className="flex flex-col gap-1">
-                {LINKS.map((l) => (
-                  <li key={l.label}>
+                {links.map((l) => (
+                  <li key={l.label + l.to}>
                     <NavLink
                       to={l.to}
                       onClick={() => setOpen(false)}
@@ -121,11 +131,11 @@ export function Navbar() {
                 ))}
                 <li className="mt-1 border-t border-[var(--color-hairline)] pt-2">
                   <NavLink
-                    to="/contact"
+                    to={nav?.cta_to ?? NAV_FALLBACK.cta_to}
                     onClick={() => setOpen(false)}
                     className="block rounded-2xl px-5 py-3.5 text-[16px] font-medium text-[var(--color-accent)]"
                   >
-                    Contact
+                    {nav?.cta_label ?? NAV_FALLBACK.cta_label}
                   </NavLink>
                 </li>
               </ul>

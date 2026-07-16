@@ -1,13 +1,31 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { useProjects } from "@/lib/cms";
+import { useProjects, useContent } from "@/lib/cms";
 import { Reveal } from "@/components/Reveal";
+
+type Data = {
+  eyebrow: string;
+  heading_line1: string;
+  heading_line2: string;
+  view_all_label: string;
+  view_all_to: string;
+};
+
+const FALLBACK: Data = {
+  eyebrow: "Selected Work",
+  heading_line1: "Projects that shipped &",
+  heading_line2: "moved the needle.",
+  view_all_label: "View all projects",
+  view_all_to: "/work",
+};
 
 export function FeaturedWork() {
   const reduce = useReducedMotion();
   const { data: projects } = useProjects({ publishedOnly: true });
+  const { data: c } = useContent<Data>("home_featured", FALLBACK);
   const items = (projects ?? []).slice(0, 4);
+  const d = c ?? FALLBACK;
 
   return (
     <section className="container-page py-24 md:py-32">
@@ -16,15 +34,15 @@ export function FeaturedWork() {
           <div className="max-w-2xl">
             <span className="glass-pill">
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-              Selected Work
+              {d.eyebrow}
             </span>
             <h2 className="mt-5 text-4xl md:text-6xl leading-[1.05]">
-              Projects that shipped &<br />
-              <span className="font-serif italic text-[var(--color-accent)]">moved the needle.</span>
+              {d.heading_line1}<br />
+              <span className="font-serif italic text-[var(--color-accent)]">{d.heading_line2}</span>
             </h2>
           </div>
-          <Link to="/work" className="glass-pill hover:text-[var(--color-accent)] transition-colors">
-            View all projects <ArrowUpRight size={14} />
+          <Link to={d.view_all_to} className="glass-pill hover:text-[var(--color-accent)] transition-colors">
+            {d.view_all_label} <ArrowUpRight size={14} />
           </Link>
         </div>
       </Reveal>
