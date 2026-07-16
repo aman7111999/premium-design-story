@@ -34,6 +34,7 @@ const navGroups: { title: string; items: NavItem[] }[] = [
   {
     title: "Content",
     items: [
+      { to: "/admin/content", label: "Site content", icon: Type },
       { to: "/admin/projects", label: "Projects", icon: FolderKanban },
       { to: "/admin/blog", label: "Blog", icon: Newspaper },
       { to: "/admin/testimonials", label: "Testimonials", icon: MessageSquareQuote },
