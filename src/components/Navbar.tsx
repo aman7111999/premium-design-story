@@ -98,13 +98,8 @@ export function Navbar() {
             className="container-page md:hidden"
           >
             <div
-              className="nav-pill mx-auto mt-3 w-full max-w-sm rounded-3xl p-3"
-              style={{
-                background:
-                  "linear-gradient(150deg, color-mix(in oklab, var(--color-surface) 96%, transparent), color-mix(in oklab, var(--color-bg) 94%, transparent))",
-                backdropFilter: "blur(48px) saturate(1.8)",
-                WebkitBackdropFilter: "blur(48px) saturate(1.8)",
-              }}
+              className="mx-auto mt-3 w-full max-w-sm rounded-3xl border border-[var(--color-hairline-strong)] p-3"
+              style={{ background: "var(--color-surface)" }}
             >
               <ul className="flex flex-col gap-1">
                 {LINKS.map((l) => (
