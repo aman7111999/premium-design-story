@@ -224,68 +224,90 @@
     0 20px 60px -20px rgba(0,0,0,0.6);
 }
 
-/* ---------- Liquid Glass ---------- */
+/* ---------- Liquid Glass — refractive, specular, alive ---------- */
 @utility liquid-glass {
   position: relative;
-  background: color-mix(in oklab, var(--color-surface) 45%, transparent);
-  backdrop-filter: blur(22px) saturate(1.6);
-  -webkit-backdrop-filter: blur(22px) saturate(1.6);
-  border: 1px solid var(--color-hairline-strong);
+  isolation: isolate;
+  background:
+    radial-gradient(120% 80% at 8% 0%, color-mix(in oklab, var(--color-accent) 8%, transparent) 0%, transparent 55%),
+    radial-gradient(140% 100% at 100% 100%, color-mix(in oklab, var(--color-accent) 6%, transparent) 0%, transparent 60%),
+    linear-gradient(155deg,
+      color-mix(in oklab, var(--color-surface) 58%, transparent) 0%,
+      color-mix(in oklab, var(--color-bg) 62%, transparent) 100%);
+  backdrop-filter: blur(28px) saturate(1.8);
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+  border: 1px solid color-mix(in oklab, var(--color-hairline-strong) 80%, transparent);
   border-radius: var(--radius-lg);
   box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.09),
-    inset 0 -1px 0 0 rgba(0,0,0,0.35),
-    0 24px 70px -30px rgba(0,0,0,0.75);
+    inset 0 1px 0 0 rgba(255,255,255,0.14),
+    inset 0 0 0 1px rgba(255,255,255,0.02),
+    inset 0 -1px 0 0 rgba(0,0,0,0.45),
+    0 1px 0 0 rgba(255,255,255,0.03),
+    0 30px 80px -32px rgba(0,0,0,0.85);
   transition:
     border-color var(--dur-base) var(--ease-out-quart),
-    box-shadow var(--dur-base) var(--ease-out-quart),
-    transform var(--dur-base) var(--ease-out-quart);
+    box-shadow var(--dur-slow) var(--ease-out-quart),
+    transform var(--dur-slow) var(--ease-out-quart),
+    background var(--dur-slow) var(--ease-out-quart);
 }
+/* Specular sheen — soft top-left highlight, drifting bottom-right accent bloom */
 .liquid-glass::before {
   content: "";
   position: absolute; inset: 0;
   border-radius: inherit;
   pointer-events: none;
   background:
-    radial-gradient(120% 60% at 50% -20%, rgba(255,255,255,0.10), transparent 60%),
-    radial-gradient(80% 60% at 0% 0%, color-mix(in oklab, var(--color-accent) 10%, transparent), transparent 55%);
+    radial-gradient(60% 40% at 20% -5%, rgba(255,255,255,0.22), transparent 60%),
+    radial-gradient(50% 40% at 100% 110%, color-mix(in oklab, var(--color-accent) 22%, transparent), transparent 65%),
+    linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.06) 48%, transparent 56%);
   mix-blend-mode: screen;
-  opacity: 0.9;
+  opacity: 0.95;
+  transition: opacity var(--dur-slow) var(--ease-out-quart), transform var(--dur-slow) var(--ease-out-quart);
 }
+/* Rim light — gradient border stroke */
 .liquid-glass::after {
   content: "";
   position: absolute; inset: 0;
   border-radius: inherit; padding: 1px;
-  background: linear-gradient(180deg,
-    rgba(255,255,255,0.18),
-    color-mix(in oklab, var(--color-accent) 20%, transparent) 40%,
-    transparent 70%);
+  background: linear-gradient(140deg,
+    rgba(255,255,255,0.35) 0%,
+    rgba(255,255,255,0.05) 25%,
+    color-mix(in oklab, var(--color-accent) 32%, transparent) 55%,
+    rgba(255,255,255,0.02) 75%,
+    rgba(255,255,255,0.18) 100%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
   pointer-events: none;
-  opacity: 0.7;
+  opacity: 0.85;
 }
 .liquid-glass:hover {
-  border-color: color-mix(in oklab, var(--color-accent) 45%, var(--color-hairline-strong));
-  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--color-accent) 55%, var(--color-hairline-strong));
+  transform: translateY(-3px);
   box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.12),
-    inset 0 -1px 0 0 rgba(0,0,0,0.35),
-    0 30px 80px -30px var(--color-accent-glow);
+    inset 0 1px 0 0 rgba(255,255,255,0.18),
+    inset 0 -1px 0 0 rgba(0,0,0,0.45),
+    0 40px 100px -32px var(--color-accent-glow),
+    0 12px 40px -20px rgba(0,0,0,0.6);
 }
+.liquid-glass:hover::before { opacity: 1; transform: translate3d(0, -1px, 0); }
 
 /* Small glass pill (chips, badges, tags) */
 @utility glass-pill {
+  position: relative;
   display: inline-flex; align-items: center; gap: 8px;
   padding: 6px 14px;
   border-radius: 9999px;
-  background: color-mix(in oklab, var(--color-surface) 55%, transparent);
-  backdrop-filter: blur(16px) saturate(1.5);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  border: 1px solid var(--color-hairline-strong);
+  background:
+    linear-gradient(145deg,
+      color-mix(in oklab, var(--color-surface) 65%, transparent),
+      color-mix(in oklab, var(--color-bg) 55%, transparent));
+  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  border: 1px solid color-mix(in oklab, var(--color-hairline-strong) 90%, transparent);
   box-shadow:
-    inset 0 1px 0 0 rgba(255,255,255,0.08),
-    0 8px 24px -12px rgba(0,0,0,0.5);
+    inset 0 1px 0 0 rgba(255,255,255,0.14),
+    inset 0 -1px 0 0 rgba(0,0,0,0.35),
+    0 10px 28px -14px rgba(0,0,0,0.6);
   font-size: 12px; font-weight: 500;
   color: var(--color-text);
 }
