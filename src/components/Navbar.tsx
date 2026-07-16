@@ -28,10 +28,11 @@ export function Navbar() {
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="fixed inset-x-0 top-4 z-50 md:top-6"
     >
-      <div className="px-5">
+      <div className="px-5 md:px-0">
+        <div className="container-page md:!px-10">
         <nav
           aria-label="Primary"
-          className="nav-pill mx-auto flex h-[72px] w-full items-center justify-between gap-2 py-2 pl-2 pr-2"
+          className="nav-pill mx-auto flex h-[72px] w-full items-center justify-between gap-2 py-2 pl-2 pr-2 md:w-fit md:justify-start"
         >
           {/* Avatar + name */}
           <NavLink to="/" className="flex items-center gap-3 rounded-full pl-1 pr-4 py-1">
@@ -83,6 +84,7 @@ export function Navbar() {
             </button>
           </div>
         </nav>
+        </div>
       </div>
 
 
