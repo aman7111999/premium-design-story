@@ -1,66 +1,83 @@
-# Redesign Homepage — Dark Emerald Portfolio
+## Goal
 
-Rebuild the site's look and homepage structure to match the attached reference. Portfolio-only (no pricing/marketplace). Also add light and dark theme toggle 
+Make every piece of visible copy, imagery, and structured content on the public site editable from the existing admin dashboard — no hardcoded strings left in section components.
 
-## Design tokens (update `src/index.css`)
+## Current State
 
-- Background: `#0A0F0D` (near-black with green tint); surface `#0F1613`; card `#111A16`; hairlines `#1E2A24`
-- Accent: `#00E28A` (neon emerald); accent-contrast `#001A10`
-- Text: `#E8F1EC`; muted `#8A9A92`
-- Glow: `0 0 40px rgba(0,226,138,0.35)` for CTAs and accent orbs
-- Keep Instrument Serif for italic accents; body sans stays
+**Already CMS-driven (in DB + admin UI):** site settings (name, tagline, bio, email, location, profile image, resume, socials), projects, blogs, testimonials, experience, education, skills, SEO per-route.
 
-## Homepage sections (`src/pages/Home.tsx` + new components)
+**Currently hardcoded in components (needs to move):**
+- **Hero:** headline (`Meet the Expert Product Designer`), highlighted word (`Expert`), subline, availability chip text, CTA labels, marquee brand list, orbiting tool icons/labels, badge sticker
+- **Home / Featured Work:** eyebrow, heading, italic accent, "View all projects" link
+- **Home / Experience section:** entire 3-role hardcoded list (DB `experience` exists but this section ignores it), heading, eyebrow
+- **Home / StatsBand:** stat values + labels
+- **Home / Testimonials:** 6 hardcoded testimonials + heading (DB table exists but section ignores it)
+- **Home / FAQ:** 5 hardcoded Q&A + heading + subline
+- **Home / FinalCta:** heading + subline + CTA
+- **About page:** hero heading, meta chips, `PHILOSOPHY` (4), `WORKING_STYLE` (4), `BOOKS` (6), `FUN_FACTS` (5), `VALUES` (4), all section badges + headings
+- **Contact page:** hero heading, italic accent, section labels, "Based in" card copy
+- **Footer:** copyright suffix
+- **Navbar:** link labels (About / Projects / Blog), CTA label
 
-1. **Hero — "Meet the Expert"**
-  - Top pill: avatar + name on left, small "Available" status pill (green dot), CTA button on right — all inside one liquid-glass rounded pill (like reference top bar)
-  - Big headline: "Meet the Expert **Product Designer**" (mix bold sans + italic serif emerald word)
-  - Sub copy + primary CTA "Let's Talk" (emerald with glow) and secondary "See Work"
-  - Right side: circular portrait with orbiting dotted ring + small floating icon chips (Figma, Framer badges)
-  - Faint grid background + emerald radial glow
-2. **"Crafting Next-Horizon Experiences" — services grid**
-  - 6 cards in bento layout (2 large + 4 small) on dark surface with subtle hairline
-  - Cards: UI/UX Design, Framer Development, Webflow / No-code, Design Systems, Motion, Prototyping (map to your actual skills)
-  - Each card: eyebrow, title, short copy, small illustrated visual (emerald line-art / icon), hover lift + emerald edge glow
-3. **Featured Projects** (keep existing `ProjectCard` grid, restyle to dark cards with emerald hover ring)
-4. **"Designing Websites that Inspire & Convert" — stats + portrait band**
-  - Left: eyebrow + heading + 3 metrics (years, projects, satisfaction)
-  - Right: portrait card with quote overlay
-5. **Testimonials** — 3-column card grid, dark cards, 5-star row, avatar + name/role
-6. **FAQ** — accordion, left heading + right questions column
-7. **Final CTA — "Let's Build Something Amazing"**
-  - Full-width dark band with emerald glow, big centered headline, email CTA
-  - Faint browser-mockup collage strip along the bottom edge
-8. **Footer** — restyle to match (dark, emerald accent links)
+## Plan
 
-## Motion (referencing the attached video)
+### 1. Schema — add missing CMS surfaces
 
-- Hero portrait: subtle continuous float (y ±6px, 6s ease-in-out) + dotted ring slow rotate (40s linear)
-- Section reveals: `Reveal` component with y:24 → 0, blur 8→0, 0.7s cubic-bezier(0.22,1,0.36,1), staggered by index
-- Service cards: on hover, scale 1.02 + emerald border glow ease-out 300ms; icon does small y-lift
-- CTA buttons: emerald glow pulse (opacity 0.6→1 loop 2.6s) + magnetic hover
-- Numbers in stats: `CountUp` on in-view
-- Testimonial row: horizontal auto-marquee (pauses on hover)
-- Page transitions: existing `PageTransition` keeps fade+scale
+Single migration:
 
-## Files to change
+- **`home_sections`** — one row per section on `/`, editable JSON payload keyed by section id (`hero`, `featured_work`, `stats`, `faq`, `final_cta`, `experience_intro`, `testimonials_intro`). Each row: `section_id (pk)`, `enabled`, `sort_order`, `data jsonb`, timestamps.
+- **`about_sections`** — same pattern for `/about` (`hero`, `philosophy`, `working_style`, `books`, `fun_facts`, `values`, section badges).
+- **`contact_page`** — single-row (id=1) table: `heading`, `heading_accent`, `eyebrow`, `elsewhere_label`, `based_in_label`.
+- **`nav_settings`** — single-row: `links jsonb` (array of {label, to}), `cta_label`, `mobile_cta_label`.
+- **`footer_settings`** — single-row: `copyright_suffix`, `back_to_top_label`.
+- **`hero_brands`** — many rows: `label`, `sort_order`, `enabled`.
+- **`hero_tools`** — many rows: `label`, `icon_key` (matches an icon registry), `angle`, `orbit_radius`, `sort_order`, `enabled`.
+- **`site_stats`** — many rows: `value`, `label`, `suffix`, `sort_order`, `enabled` (replaces hardcoded StatsBand).
 
-- `src/index.css` — swap palette to dark emerald tokens; add `.glow-emerald`, `.card-dark`, marquee keyframes
-- `src/pages/Home.tsx` — rebuild section order
-- `src/components/Hero.tsx` — rebuild as "Meet the Expert" layout with portrait
-- New: `src/components/home/ServicesBento.tsx`, `StatsBand.tsx`, `TestimonialsRow.tsx`, `FaqSection.tsx`, `FinalCta.tsx`
-- `src/components/Navbar.tsx` — tighten to match reference top pill (avatar left, links center, emerald CTA right)
-- `src/components/Footer.tsx` — dark restyle
-- Force dark theme as default in `src/lib/theme.tsx`
+All tables get: `GRANT SELECT ... TO anon, authenticated`, write access via `has_role(auth.uid(),'admin')`, `updated_at` trigger. Seed rows with the current hardcoded values so first render is unchanged.
 
-## Out of scope
+### 2. Data layer
 
-- Pricing tiers / template marketplace (per your answer)
-- No new backend, no CMS schema changes
+- Extend `src/lib/cms.ts` with typed hooks: `useHomeSection(id)`, `useAboutSection(id)`, `useContactPage()`, `useNavSettings()`, `useFooterSettings()`, `useHeroBrands()`, `useHeroTools()`, `useSiteStats()`.
+- Wire each into `TanStack Query` with the existing query client.
+- Types generated from Supabase after migration is approved.
 
-## Technical notes
+### 3. Rewire public components
 
-- All colors go through CSS vars — no hardcoded hex in components
-- Reuse existing `Reveal`, `CountUp`, `MagneticButton`, `liquid-glass` utility
-- Portrait: uses `site.profile_image_url` from CMS; fallback to initials
-- Services/FAQ content: hardcoded initially (can be moved to CMS later)
+Replace every hardcoded string/array with the corresponding CMS hook. Every section keeps its exact current layout, motion, and design tokens — only the data source changes. Loading states use existing `Skeleton` component; empty state falls back to the seeded defaults so the site never looks broken during editing.
+
+Files touched: `Hero.tsx`, `Navbar.tsx`, `Footer.tsx`, `components/home/*`, `pages/About.tsx`, `pages/Contact.tsx`.
+
+### 4. Admin UI
+
+Add to the existing `AdminLayout` sidebar. All editors reuse existing patterns (`RichEditor`, `ImageUploader`, `SortableList`, shadcn form components):
+
+- **Home Sections** editor — accordion per section with fields matching that section's JSON schema; live preview link.
+- **About Sections** editor — same pattern.
+- **Hero** editor — headline, accent word, subline, availability chip, CTA labels, plus sortable Brands and Tools lists.
+- **Stats** editor — sortable list of value/label/suffix rows.
+- **FAQ** editor — sortable Q&A list (part of Home Sections).
+- **Contact Page** editor — single form.
+- **Navigation** editor — sortable link list + CTA labels.
+- **Footer** editor — single form.
+
+### 5. Verification
+
+- Green build after each phase.
+- Playwright snapshot of `/`, `/about`, `/contact` before → after; confirm pixel/text parity with seeded defaults.
+- Manual admin flow: edit hero headline in admin → refresh public site → change visible.
+
+## Technical Notes
+
+- All new public-schema tables follow the required order: `CREATE TABLE` → `GRANT` → `ALTER ... ENABLE RLS` → `CREATE POLICY`. Anon gets `SELECT` only; writes gated by `has_role`.
+- JSON payloads validated in the admin editor with `zod` before insert.
+- Icon registry (`src/lib/iconRegistry.ts`) maps `icon_key` strings from `hero_tools` to `lucide-react` components so admins pick from a known set.
+- Single migration approval, then all TS/TSX edits land in one pass.
+- Rollout order to avoid partial-broken states: migration → hooks → rewire one section at a time (Hero → Home sections → About → Contact → chrome) → admin editors last.
+
+## Scope Guardrails
+
+- No visual redesign. Layout, colors, motion, spacing stay identical.
+- No changes to existing tables' schemas (projects, blogs, testimonials, experience, education, skills, seo_settings, site_settings).
+- Blog rendering, project case-study rendering, and admin auth flow are already CMS-driven — untouched.
+- Icons in Hero orbit stay drawn from `lucide-react`; admins pick from a curated list (avoids arbitrary SVG uploads in v1).
