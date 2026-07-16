@@ -1,24 +1,60 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, Figma, Framer, Diamond, Shield, PenTool } from "lucide-react";
-import { useSite } from "@/lib/cms";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useSite, useContent } from "@/lib/cms";
+import { getIcon } from "@/lib/iconRegistry";
 import portraitImg from "@/assets/portrait.jpg";
 
+type HeroTool = {
+  icon: string;
+  tint?: "accent" | "text";
+  pos: React.CSSProperties;
+};
 
-/**
- * Boldex-style hero: portrait dominant right, clean sans headline left.
- */
+type HeroData = {
+  available_label: string;
+  headline_before: string;
+  headline_accent: string;
+  headline_after: string;
+  subline: string;
+  cta_label: string;
+  cta_to: string;
+  brands: string[];
+  tools: HeroTool[];
+  badge_text: string;
+};
+
+const FALLBACK: HeroData = {
+  available_label: "Available for Projects",
+  headline_before: "Meet the",
+  headline_accent: "Expert",
+  headline_after: "Product Designer",
+  subline: "I focus on delivering seamless navigation, responsive layouts, and pixel-perfect designs — from 0→1 product to launch.",
+  cta_label: "View Projects",
+  cta_to: "/work",
+  brands: ["Figma", "Framer", "Webflow", "Linear", "Notion"],
+  tools: [
+    { icon: "Figma",   tint: "accent", pos: { top: "6%",   left: "-14%" } },
+    { icon: "Diamond", tint: "text",   pos: { top: "18%",  right: "-14%" } },
+    { icon: "Shield",  tint: "text",   pos: { top: "48%",  right: "-18%" } },
+    { icon: "Framer",  tint: "accent", pos: { top: "56%",  left: "-16%" } },
+    { icon: "PenTool", tint: "text",   pos: { bottom: "12%", left: "-8%" } },
+  ],
+  badge_text: "OFFICIAL FRAMER PARTNER • CREATOR •",
+};
+
 export function Hero() {
   const reduce = useReducedMotion();
   const { data: site } = useSite();
+  const { data: hero } = useContent<HeroData>("hero", FALLBACK);
+  const h = hero ?? FALLBACK;
 
   const name = site?.name ?? "Aman Mishra";
   const avatar = site?.profile_image_url;
 
   return (
     <section className="relative isolate overflow-hidden pt-32 pb-16 md:pt-40 md:pb-24">
-      {/* Grid */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-30" />
-      {/* Emerald glow behind portrait */}
       <div
         aria-hidden
         className="pointer-events-none absolute right-[10%] top-1/3 -z-10 h-[500px] w-[500px] rounded-full"
@@ -30,9 +66,7 @@ export function Hero() {
 
       <div className="container-page relative">
         <div className="grid items-center gap-10 md:grid-cols-12 md:gap-6">
-          {/* Left: copy */}
           <div className="md:col-span-6 lg:col-span-7">
-            {/* Available pill */}
             <motion.div
               initial={reduce ? false : { opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -44,10 +78,9 @@ export function Hero() {
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--color-accent)]" />
               </span>
               <span className="text-[12px] font-medium text-[var(--color-muted)]">
-                Available for Projects
+                {h.available_label}
               </span>
             </motion.div>
-
 
             <motion.h1
               initial={reduce ? false : { opacity: 0, y: 20 }}
@@ -56,9 +89,9 @@ export function Hero() {
               className="mt-6 font-semibold leading-[1.02] tracking-[-0.03em] text-[var(--color-text)]"
               style={{ fontSize: "clamp(2.6rem, 6.4vw, 5.5rem)" }}
             >
-              Meet the <span className="text-[var(--color-accent)]">Expert</span>
+              {h.headline_before} <span className="text-[var(--color-accent)]">{h.headline_accent}</span>
               <br />
-              Product Designer
+              {h.headline_after}
             </motion.h1>
 
             <motion.p
@@ -67,8 +100,7 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="mt-6 max-w-md text-[15px] leading-relaxed text-[var(--color-muted)]"
             >
-              I focus on delivering seamless navigation, responsive layouts,
-              and pixel-perfect designs — from 0→1 product to launch.
+              {h.subline}
             </motion.p>
 
             <motion.div
@@ -77,22 +109,21 @@ export function Hero() {
               transition={{ duration: 0.7, delay: 0.45 }}
               className="mt-8 flex flex-wrap items-center gap-3"
             >
-              <a href="/work" className="btn-primary">
+              <Link to={h.cta_to} className="btn-primary">
                 <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--color-accent-contrast)] text-[var(--color-accent)]">
                   <ArrowRight size={15} />
                 </span>
-                View Projects
-              </a>
+                {h.cta_label}
+              </Link>
             </motion.div>
 
-            {/* Logo strip */}
             <motion.div
               initial={reduce ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.7 }}
               className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-[var(--color-subtle)]"
             >
-              {["Figma", "Framer", "Webflow", "Linear", "Notion"].map((b) => (
+              {(h.brands ?? []).map((b) => (
                 <span key={b} className="text-[13px] font-semibold tracking-tight opacity-70">
                   {b}
                 </span>
@@ -100,7 +131,6 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Right: portrait with orbit badges */}
           <div className="md:col-span-6 lg:col-span-5">
             <motion.div
               initial={reduce ? false : { opacity: 0, scale: 0.95 }}
@@ -108,7 +138,6 @@ export function Hero() {
               transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
               className="relative mx-auto aspect-[4/5] w-full max-w-[460px]"
             >
-              {/* Radial spotlight behind portrait */}
               <div
                 aria-hidden
                 className="pointer-events-none absolute -inset-8 -z-10 rounded-[50%]"
@@ -118,8 +147,6 @@ export function Hero() {
                   filter: "blur(30px)",
                 }}
               />
-
-              {/* Portrait card — glass frame */}
               <div className="liquid-glass relative h-full w-full overflow-hidden !rounded-[32px]">
                 <img
                   src={avatar || portraitImg}
@@ -128,7 +155,6 @@ export function Hero() {
                   width={1024}
                   height={1280}
                 />
-                {/* subtle bottom fade to blend with page */}
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-0 z-[1]"
@@ -139,37 +165,31 @@ export function Hero() {
                 />
               </div>
 
-              {/* Floating tool badges — real icons */}
-              {[
-                { Icon: Figma,   pos: { top: "6%",   left: "-14%" }, delay: 0,   size: 22, tint: "var(--color-accent)" },
-                { Icon: Diamond, pos: { top: "18%",  right: "-14%" }, delay: 0.6, size: 20, tint: "var(--color-text)" },
-                { Icon: Shield,  pos: { top: "48%",  right: "-18%" }, delay: 1.2, size: 22, tint: "var(--color-text)" },
-                { Icon: Framer,  pos: { top: "56%",  left: "-16%" }, delay: 1.8, size: 22, tint: "var(--color-accent)" },
-                { Icon: PenTool, pos: { bottom: "12%", left: "-8%" }, delay: 2.4, size: 20, tint: "var(--color-text)" },
-              ].map((b, i) => {
-                const { Icon } = b;
+              {(h.tools ?? []).map((b, i) => {
+                const Icon = getIcon(b.icon);
+                if (!Icon) return null;
+                const tint = b.tint === "accent" ? "var(--color-accent)" : "var(--color-text)";
                 return (
                   <motion.div
                     key={i}
                     animate={reduce ? {} : { y: [0, -10, 0] }}
-                    transition={{ duration: 5 + i * 0.6, repeat: Infinity, ease: "easeInOut", delay: b.delay }}
+                    transition={{ duration: 5 + i * 0.6, repeat: Infinity, ease: "easeInOut", delay: i * 0.6 }}
                     className="absolute z-10 grid h-14 w-14 place-items-center rounded-full"
                     style={{
-                      ...b.pos as React.CSSProperties,
+                      ...(b.pos as React.CSSProperties),
                       background: "color-mix(in oklab, var(--color-surface) 55%, transparent)",
                       backdropFilter: "blur(16px) saturate(1.6)",
                       WebkitBackdropFilter: "blur(16px) saturate(1.6)",
                       border: "1px solid var(--color-hairline-strong)",
                       boxShadow: "inset 0 1px 0 0 rgba(255,255,255,0.08), 0 12px 30px -12px rgba(0,0,0,0.6)",
-                      color: b.tint,
+                      color: tint,
                     }}
                   >
-                    <Icon size={b.size} strokeWidth={1.75} />
+                    <Icon size={22} strokeWidth={1.75} />
                   </motion.div>
                 );
               })}
 
-              {/* Circular text badge */}
               <div className="absolute -bottom-6 -right-6 z-10 h-28 w-28">
                 <div className="animate-spin-slow relative h-full w-full">
                   <svg viewBox="0 0 100 100" className="h-full w-full text-[var(--color-text)]">
@@ -177,9 +197,7 @@ export function Hero() {
                       <path id="circ" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" />
                     </defs>
                     <text fontSize="9" fontWeight="600" letterSpacing="2" fill="currentColor">
-                      <textPath href="#circ">
-                        OFFICIAL FRAMER PARTNER • CREATOR •
-                      </textPath>
+                      <textPath href="#circ">{h.badge_text}</textPath>
                     </text>
                   </svg>
                 </div>
