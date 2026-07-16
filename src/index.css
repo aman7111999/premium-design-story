@@ -140,6 +140,8 @@
     color: var(--color-text);
     font-family: var(--font-sans);
     font-feature-settings: "ss01", "cv11";
+    font-size: 16px;
+    line-height: 1.65;
     overflow-x: hidden;
     transition:
       background-color var(--dur-slow) var(--ease-out-quart),
@@ -180,8 +182,9 @@
 
 @utility eyebrow {
   font-family: var(--font-sans);
-  font-size: 12px; font-weight: 500;
-  letter-spacing: 0.02em;
+  font-size: 13px; font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-muted);
 }
 
