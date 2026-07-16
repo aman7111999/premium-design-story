@@ -91,6 +91,7 @@ export default function App() {
             <Route path="media" element={<AdminMedia />} />
             <Route path="seo" element={<AdminSeo />} />
             <Route path="settings" element={<AdminSettings />} />
+            <Route path="content" element={<AdminContent />} />
           </Route>
         </Routes>
       </Suspense>
