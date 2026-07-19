@@ -16,6 +16,7 @@ const NAV_FALLBACK: NavData = {
   links: [
     { to: "/about", label: "About" },
     { to: "/work", label: "Projects" },
+    { to: "/resume", label: "Resume" },
     { to: "/blog", label: "Blog" },
   ],
   cta_label: "Let's Talk",
