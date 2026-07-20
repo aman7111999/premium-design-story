@@ -76,7 +76,7 @@ export function StatsBand() {
               />
               <div className="absolute inset-x-4 bottom-4 flex items-start gap-3 rounded-2xl border border-[var(--color-hairline-strong)] bg-[color-mix(in_oklab,var(--color-surface)_70%,transparent)] p-4 backdrop-blur-md">
                 <Quote size={16} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
-                <p className="text-[13px] leading-snug text-[var(--color-text)]">"{d.quote}"</p>
+                <p className="text-[14px] leading-[1.5] text-[var(--color-text)]">"{d.quote}"</p>
               </div>
             </div>
           </div>
