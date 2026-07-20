@@ -83,16 +83,16 @@ export function FeaturedWork() {
                   {p.category ?? "Case study"}
                 </span>
               </div>
-              <div className="mt-6 flex items-center justify-between gap-4">
-                <div className="min-w-0">
-                  <h3 className="truncate text-[22px] md:text-[24px] font-semibold tracking-[-0.015em]">{p.title}</h3>
+              <div className="mt-6 flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-[19px] md:text-[21px] font-semibold tracking-[-0.015em] leading-tight">{p.title}</h3>
                   {p.short_description && (
-                    <p className="mt-1.5 truncate text-[15px] leading-relaxed text-[var(--color-muted)]">
+                    <p className="mt-2 text-[15px] leading-[1.6] text-[var(--color-muted)]">
                       {p.short_description}
                     </p>
                   )}
                 </div>
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-accent)] text-[var(--color-accent-contrast)] transition-transform group-hover:rotate-45">
+                <span className="mt-1 grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-accent)] text-[var(--color-accent-contrast)] transition-transform group-hover:rotate-45">
                   <ArrowUpRight size={18} strokeWidth={2.5} />
                 </span>
               </div>
