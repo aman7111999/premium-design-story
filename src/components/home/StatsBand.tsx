@@ -52,12 +52,12 @@ export function StatsBand() {
                 <div className="text-[42px] font-semibold leading-none tracking-[-0.02em] text-[var(--color-text)]">
                   <CountUp value={m.v} />
                 </div>
-                <div className="mt-2 text-[12px] text-[var(--color-muted)]">{m.l}</div>
+                <div className="mt-2 text-[13px] text-[var(--color-muted)]">{m.l}</div>
               </div>
             ))}
           </div>
 
-          <p className="mt-8 max-w-md text-[14px] leading-relaxed text-[var(--color-muted)]">{body}</p>
+          <p className="mt-8 max-w-md text-[15px] leading-[1.65] text-[var(--color-muted)]">{body}</p>
         </Reveal>
 
         <Reveal className="md:col-span-6">
