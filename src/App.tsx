@@ -42,7 +42,17 @@ function ScrollToTop() {
 }
 
 function RouteFallback() {
-  return <div className="min-h-[60vh]" aria-busy="true" aria-live="polite" />;
+  return (
+    <div
+      className="min-h-[60vh] grid place-items-center text-[13px] text-[var(--color-muted)]"
+      role="status"
+      aria-busy="true"
+      aria-live="polite"
+    >
+      <span className="sr-only">Loading…</span>
+      <span aria-hidden className="h-2 w-2 animate-pulse rounded-full bg-[var(--color-accent)]" />
+    </div>
+  );
 }
 
 function PublicShell({ children }: { children: React.ReactNode }) {
@@ -50,7 +60,7 @@ function PublicShell({ children }: { children: React.ReactNode }) {
     <>
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded focus:bg-[var(--color-ink)] focus:px-3 focus:py-2 focus:text-[var(--color-paper)]"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-md focus:bg-[var(--color-text)] focus:px-3 focus:py-2 focus:text-[var(--color-bg)]"
       >
         Skip to content
       </a>
@@ -58,7 +68,7 @@ function PublicShell({ children }: { children: React.ReactNode }) {
       <CursorFollower />
       <ReadingProgress />
       <Navbar />
-      <main id="main" className="pt-16">
+      <main id="main" className="pt-[88px] md:pt-[104px]">
         {children}
       </main>
       <Footer />
