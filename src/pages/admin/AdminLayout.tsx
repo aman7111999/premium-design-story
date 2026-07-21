@@ -22,7 +22,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import AdminLogin from "./AdminLogin";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { clsx } from "clsx";
 
 type NavItem = { to: string; label: string; icon: any };
@@ -65,11 +65,6 @@ export default function AdminLayout() {
   const loc = useLocation();
   const [drawer, setDrawer] = useState(false);
 
-  useState(() => undefined);
-  // Lock scroll + Escape close for mobile drawer
-  if (typeof window !== "undefined") {
-    // effect-in-render is fine here; we use a hook alias
-  }
 
   if (loading || (user && roleLoading)) {
     return (
