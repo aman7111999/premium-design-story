@@ -7,9 +7,10 @@ type Props = {
   ogType?: "website" | "article";
   jsonLd?: Record<string, unknown>;
   siteName?: string;
+  noindex?: boolean;
 };
 
-export function Seo({ title, description, path, ogType = "website", jsonLd, siteName = "Portfolio" }: Props) {
+export function Seo({ title, description, path, ogType = "website", jsonLd, siteName = "Portfolio", noindex }: Props) {
   const fullTitle = title.includes(siteName) ? title : `${title} — ${siteName}`;
   const desc = description ?? "";
   return (
@@ -17,13 +18,14 @@ export function Seo({ title, description, path, ogType = "website", jsonLd, site
       <title>{fullTitle}</title>
       {desc && <meta name="description" content={desc} />}
       <link rel="canonical" href={path} />
+      {noindex && <meta name="robots" content="noindex, nofollow" />}
       <meta property="og:title" content={fullTitle} />
       {desc && <meta property="og:description" content={desc} />}
       <meta property="og:type" content={ogType} />
       <meta property="og:url" content={path} />
       <meta name="twitter:title" content={fullTitle} />
       {desc && <meta name="twitter:description" content={desc} />}
-      {jsonLd ? (
+      {jsonLd && !noindex ? (
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       ) : null}
     </Helmet>
