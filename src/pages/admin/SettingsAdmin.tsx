@@ -161,9 +161,163 @@ export default function SettingsAdmin() {
               aspect="portrait"
             />
           </Section>
+          <ProjectAccessSection />
         </aside>
       </div>
     </AdminPage>
+  );
+}
+
+function ProjectAccessSection() {
+  const qc = useQueryClient();
+  const { data: status, isLoading, refetch } = useQuery({
+    queryKey: ["project-access-status"],
+    queryFn: fetchAccessStatus,
+  });
+  const [enabled, setEnabled] = useState<boolean>(true);
+  const [duration, setDuration] = useState<number>(24);
+  const [pw1, setPw1] = useState("");
+  const [pw2, setPw2] = useState("");
+  const [show, setShow] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (status) {
+      setEnabled(status.enabled);
+      setDuration(status.session_duration_hours);
+    }
+  }, [status?.enabled, status?.session_duration_hours]);
+
+  async function saveSettings() {
+    setBusy(true);
+    const res = await setProjectPassword({ enabled, session_duration_hours: duration });
+    setBusy(false);
+    if (res.ok) {
+      toast.success("Access settings updated");
+      qc.invalidateQueries({ queryKey: ["project-access-status"] });
+      refetch();
+    } else {
+      toast.error(res.error ?? "Failed to update");
+    }
+  }
+
+  async function savePassword() {
+    if (pw1.length < 8) return toast.error("Password must be at least 8 characters");
+    if (pw1 !== pw2) return toast.error("Passwords do not match");
+    setBusy(true);
+    const res = await setProjectPassword({ password: pw1, enabled, session_duration_hours: duration });
+    setBusy(false);
+    if (res.ok) {
+      toast.success("Password updated. All previous sessions invalidated.");
+      setPw1(""); setPw2("");
+      qc.invalidateQueries({ queryKey: ["project-access-status"] });
+      refetch();
+    } else {
+      toast.error(res.error ?? "Failed to update");
+    }
+  }
+
+  return (
+    <section className="rounded-xl border border-neutral-200 bg-white">
+      <header className="border-b border-neutral-100 px-5 py-4">
+        <h2 className="text-sm font-semibold text-neutral-900 flex items-center gap-2">
+          <Lock size={14} /> Project Access
+        </h2>
+        <p className="mt-0.5 text-xs text-neutral-500">
+          Password protection for all project case studies.
+        </p>
+      </header>
+      <div className="space-y-4 p-5">
+        {isLoading ? (
+          <div className="text-xs text-neutral-500">Loading…</div>
+        ) : (
+          <>
+            <div className="rounded-md bg-neutral-50 p-3 text-xs text-neutral-700">
+              {status?.configured
+                ? "Password protection is active."
+                : "No project password has been configured."}
+              {status?.updated_at && (
+                <div className="mt-1 text-[11px] text-neutral-500">
+                  Last updated {new Date(status.updated_at).toLocaleString()}
+                </div>
+              )}
+            </div>
+
+            <label className="flex items-center justify-between text-xs">
+              <span className="font-medium text-neutral-800">Enable password protection</span>
+              <input
+                type="checkbox"
+                checked={enabled}
+                onChange={(e) => setEnabled(e.target.checked)}
+                className="h-4 w-4"
+              />
+            </label>
+
+            <div className="space-y-1">
+              <Label className="text-xs">Session duration</Label>
+              <select
+                value={duration}
+                onChange={(e) => setDuration(Number(e.target.value))}
+                className="w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm"
+              >
+                <option value={1}>1 hour</option>
+                <option value={8}>8 hours</option>
+                <option value={24}>24 hours</option>
+                <option value={72}>72 hours</option>
+              </select>
+            </div>
+
+            <Button size="sm" onClick={saveSettings} disabled={busy} className="w-full">
+              {busy ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
+              Save settings
+            </Button>
+
+            <div className="border-t pt-4 space-y-3">
+              <p className="text-xs font-semibold text-neutral-900">Change password</p>
+              <p className="text-[11px] text-neutral-500">
+                Setting a new password invalidates every existing visitor session.
+              </p>
+              <div className="space-y-2">
+                <div className="relative">
+                  <Input
+                    type={show ? "text" : "password"}
+                    placeholder="New password (min 8 chars)"
+                    value={pw1}
+                    onChange={(e) => setPw1(e.target.value)}
+                    autoComplete="new-password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShow((s) => !s)}
+                    aria-label={show ? "Hide" : "Show"}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700"
+                  >
+                    {show ? <EyeOff size={14} /> : <Eye size={14} />}
+                  </button>
+                </div>
+                <Input
+                  type={show ? "text" : "password"}
+                  placeholder="Confirm password"
+                  value={pw2}
+                  onChange={(e) => setPw2(e.target.value)}
+                  autoComplete="new-password"
+                />
+              </div>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={savePassword}
+                disabled={busy || !pw1 || !pw2}
+                className="w-full"
+              >
+                {busy ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
+                Save new password
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+    </section>
   );
 }
 
