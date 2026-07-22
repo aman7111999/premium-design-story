@@ -35,7 +35,7 @@ import { clsx } from "clsx";
 type Filter = "all" | "published" | "draft" | "featured";
 
 export default function ProjectsList() {
-  const { data: projects, isLoading } = useProjects();
+  const { data: projects, isLoading } = useProjects({ admin: true });
   const qc = useQueryClient();
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
