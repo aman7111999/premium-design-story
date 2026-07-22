@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import bcrypt from "npm:bcryptjs@2.4.3";
 import { signAccessToken, hashKey } from "../_shared/token.ts";
 
 const MAX_ATTEMPTS = 5;
@@ -34,7 +35,6 @@ Deno.serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
 
-  // Rate limit key: hashed IP + UA (anonymised)
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? "unknown";
   const ua = req.headers.get("user-agent") ?? "";
   const keyHash = await hashKey(`${ip}|${ua}`, secret);
@@ -62,42 +62,23 @@ Deno.serve(async (req) => {
     .eq("id", 1)
     .maybeSingle();
 
+  const now = Math.floor(Date.now() / 1000);
+
   if (!settings?.enabled) {
-    // Protection disabled — issue a token so the client can proceed.
-    const now = Math.floor(Date.now() / 1000);
+    const exp = now + 3600;
     const token = await signAccessToken(
-      { scope: "portfolio_projects", iat: now, exp: now + 3600, pv: settings?.password_version ?? 1 },
+      { scope: "portfolio_projects", iat: now, exp, pv: settings?.password_version ?? 1 },
       secret,
     );
-    return json({ token, expires_at: (now + 3600) * 1000, disabled: true });
+    return json({ token, expires_at: exp * 1000, disabled: true });
   }
 
   if (!settings.password_hash) return json({ error: "not_configured" }, 503);
 
-  // Compare using pgcrypto crypt()
-  const { data: match } = await admin.rpc as unknown as never; // placeholder to satisfy TS
-  const { data: cmp, error: cmpErr } = await admin
-    .from("project_access_settings")
-    .select("id")
-    .eq("id", 1)
-    .filter("password_hash", "eq", `__unused__`)
-    .maybeSingle();
-  void cmp; void cmpErr; void match;
-
-  // Use raw SQL via rpc helper: create a temporary comparison via a Postgres function.
-  // We'll call a helper SQL via .rpc — but we didn't define one. Use direct SQL through PostgREST is not possible.
-  // Instead, use crypt() by selecting where password_hash = crypt(password, password_hash) using .rpc.
-  // Simpler: call a security-definer function we'll add below. Fallback: compare in Deno using a bcrypt lib.
-
-  // Use bcrypt via npm (works in Deno).
-  const bcrypt = await import("npm:bcryptjs@2.4.3");
-  const ok = await bcrypt.default.compare(password, settings.password_hash);
-
+  const ok = await bcrypt.compare(password, settings.password_hash);
   await admin.from("project_access_attempts").insert({ key_hash: keyHash, success: ok });
-
   if (!ok) return json({ error: "invalid_password" }, 401);
 
-  const now = Math.floor(Date.now() / 1000);
   const exp = now + settings.session_duration_hours * 3600;
   const token = await signAccessToken(
     { scope: "portfolio_projects", iat: now, exp, pv: settings.password_version },
