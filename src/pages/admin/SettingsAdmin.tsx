@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useSite, type SiteSettings } from "@/lib/cms";
+import { fetchAccessStatus, setProjectPassword } from "@/lib/projectAccess";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, Plus, Save, Trash2, CheckCircle2 } from "lucide-react";
+import { Loader2, Plus, Save, Trash2, CheckCircle2, Eye, EyeOff, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { SingleImageUpload } from "@/components/admin/ImageUploader";
 import { AdminPage } from "@/components/admin/AdminPage";
