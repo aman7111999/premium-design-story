@@ -188,6 +188,57 @@ export type Database = {
         }
         Relationships: []
       }
+      project_access_attempts: {
+        Row: {
+          created_at: string
+          id: string
+          key_hash: string
+          success: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key_hash: string
+          success?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key_hash?: string
+          success?: boolean
+        }
+        Relationships: []
+      }
+      project_access_settings: {
+        Row: {
+          enabled: boolean
+          id: number
+          password_hash: string | null
+          password_version: number
+          session_duration_hours: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          enabled?: boolean
+          id?: number
+          password_hash?: string | null
+          password_version?: number
+          session_duration_hours?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          enabled?: boolean
+          id?: number
+          password_hash?: string | null
+          password_version?: number
+          session_duration_hours?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
           category: string | null
@@ -436,9 +487,57 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_projects_index: {
+        Row: {
+          category: string | null
+          featured: boolean | null
+          id: string | null
+          published: boolean | null
+          short_description: string | null
+          slug: string | null
+          sort_order: number | null
+          tags: string[] | null
+          thumbnail_url: string | null
+          title: string | null
+        }
+        Insert: {
+          category?: string | null
+          featured?: boolean | null
+          id?: string | null
+          published?: boolean | null
+          short_description?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string | null
+        }
+        Update: {
+          category?: string | null
+          featured?: boolean | null
+          id?: string | null
+          published?: boolean | null
+          short_description?: string | null
+          slug?: string | null
+          sort_order?: number | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          title?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      get_project_access_status: {
+        Args: never
+        Returns: {
+          configured: boolean
+          enabled: boolean
+          password_version: number
+          session_duration_hours: number
+          updated_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
