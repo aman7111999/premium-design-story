@@ -1,0 +1,1 @@
+UPDATE public.project_access_settings SET password_hash = '$2b$10$dAbISDFa7PRTk76/hbN2RegoOf9I1GmXNlKcZXmjoOJLpd/a0n8bu', password_version = password_version + 1, enabled = true WHERE id = 1;
