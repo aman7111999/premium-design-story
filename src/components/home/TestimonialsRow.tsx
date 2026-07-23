@@ -35,13 +35,13 @@ export function TestimonialsGrid() {
         </h2>
       </Reveal>
 
-      <div className="mt-14 grid gap-6 md:grid-cols-3">
+      <div className="mt-10 grid gap-5 sm:mt-14 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {items.map((t) => {
           const displayName = t.author ?? "";
           const initials = displayName.split(" ").map((n: string) => n[0]).join("");
           const secondary = [t.role, t.company].filter(Boolean).join(", ");
           return (
-            <div key={t.id} className="liquid-glass p-8">
+            <div key={t.id} className="liquid-glass p-6 sm:p-8">
               <div className="flex gap-0.5 text-[var(--color-accent)]">
                 {Array.from({ length: 5 }).map((_, k) => (
                   <Star key={k} size={14} fill="currentColor" strokeWidth={0} />
