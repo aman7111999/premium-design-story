@@ -46,13 +46,16 @@ export function StatsBand() {
             <br /> <span className="text-[var(--color-accent)]">{d.heading_accent}</span>
           </h2>
 
-          <div className="mt-8 grid grid-cols-3 gap-4">
+          <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-4">
             {(d.items ?? []).map((m) => (
-              <div key={m.l}>
-                <div className="text-[42px] font-semibold leading-none tracking-[-0.02em] text-[var(--color-text)]">
+              <div key={m.l} className="min-w-0">
+                <div
+                  className="font-semibold leading-none tracking-[-0.02em] text-[var(--color-text)]"
+                  style={{ fontSize: "clamp(1.75rem, 6vw, 2.625rem)" }}
+                >
                   <CountUp value={m.v} />
                 </div>
-                <div className="mt-2 text-[13px] text-[var(--color-muted)]">{m.l}</div>
+                <div className="mt-2 text-[12px] leading-snug text-[var(--color-muted)] sm:text-[13px]">{m.l}</div>
               </div>
             ))}
           </div>
