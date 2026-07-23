@@ -83,8 +83,7 @@ export async function fetchProtectedProject(
   const token = getStoredAccessToken();
   try {
     const { data, error } = await supabase.functions.invoke("get-protected-project", {
-      body: { slug },
-      headers: token ? { "x-project-access-token": token } : {},
+      body: { slug, token: token ?? undefined },
     });
     if (error) {
       const status = (error as { context?: { status?: number } }).context?.status;
